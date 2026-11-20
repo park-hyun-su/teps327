@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b2a4a">
+<title>TEPS 327 공부 계획</title>
+<style>
+:root{--navy:#1b2a4a;--blue:#2f6fde;--bg:#f4f6fa;--card:#fff;--line:#e1e6ef;--text:#1d2433;--sub:#667085;--done:#9aa4b5;--ok:#1f8a4c;--warn:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;word-break:keep-all;line-height:1.5}
+header{background:var(--navy);color:#fff;padding:14px 16px 0;position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:18px}
+header .sub{font-size:13px;color:#c9d3e6;margin-top:2px}
+.sync{font-size:12px;color:#c9d3e6;margin-top:4px}
+nav{display:flex;gap:4px;margin-top:10px;overflow-x:auto}
+nav button{flex:1;min-width:64px;background:transparent;border:0;color:#c9d3e6;padding:10px 6px;font-size:14px;border-bottom:3px solid transparent;cursor:pointer;font-family:inherit}
+nav button.on{color:#fff;border-bottom-color:#6ea0ff;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:14px 12px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.card h2{font-size:16px;margin:0 0 8px}
+.card h3{font-size:14px;margin:12px 0 6px;color:var(--sub)}
+.daynav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.daynav button{background:#eef2fa;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:15px;cursor:pointer;font-family:inherit}
+.daynav .date{font-weight:700;font-size:16px;text-align:center}
+.daynav .phase{font-size:12px;color:var(--sub);text-align:center}
+.task{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-top:1px solid var(--line);cursor:pointer}
+.task:first-of-type{border-top:0}
+.task input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--blue)}
+.task>div{min-width:0}
+.task .t{font-size:15px}
+.task .k{font-size:12px;color:var(--sub)}
+.task.done .t{color:var(--done);text-decoration:line-through}
+.bar{font-family:Consolas,monospace;font-size:14px;letter-spacing:-1px}
+.pct{font-weight:700;color:var(--blue)}
+.mini{font-size:13px;color:var(--sub)}
+.week .d{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
+.week .d.today{font-weight:700;color:var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:center}
+th{color:var(--sub);font-weight:600}
+td.l{text-align:left}
+input[type=text],input[type=date],input[type=number],input[type=password]{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit}
+label{display:block;font-size:13px;color:var(--sub);margin:8px 0 4px}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn.gray{background:#e7ebf3;color:var(--text)}
+.pass{color:var(--ok);font-weight:700}
+.fail{color:var(--warn);font-weight:700}
+.note{font-size:13px;color:var(--sub)}
+</style>
+</head>
+<body>
+<header>
+  <h1>TEPS 327 공부 계획</h1>
+  <div class="sub">2026-11-20 ~ 2027-03-14 · 목표 뉴텝스 327점</div>
+  <div class="sync" id="syncLine">이 기기에만 저장 중</div>
+  <nav>
+    <button data-v="today" class="on">오늘</button>
+    <button data-v="week">이번 주</button>
+    <button data-v="all">전체</button>
+    <button data-v="score">점수</button>
+    <button data-v="set">설정</button>
+  </nav>
+</header>
+<main id="main"></main>
+<script>
+"use strict";
+const START="2026-11-20", END="2027-03-14", LS="teps327_state_v1", LSTOK="teps327_token", LSGIST="teps327_gist";
+const FILE="teps_progress.json";
+const TARGET={L:[130,240],V:[30,60],G:[37,60],R:[130,240]};
+const NAME={L:"청해",V:"어휘",G:"문법",R:"독해"};
+const DEF={exam1:"",exam2:"",exam3:"",vocabDays:"30",vocabStart:"2026-11-19"};
+
+/* ---------- date ---------- */
+function p2(n){return String(n).padStart(2,"0")}
+function ymd(d){return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())}
+function parse(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
+function add(s,n){const d=parse(s);d.setDate(d.getDate()+n);return ymd(d)}
+function diff(a,b){return Math.round((parse(b)-parse(a))/864e5)}
+function dow(s){return parse(s).getDay()}
+const WD=["일","월","화","수","목","금","토"];
+function label(s){const d=parse(s);return (d.getMonth()+1)+"월 "+d.getDate()+"일 ("+WD[d.getDay()]+")"}
+function todayStr(){return ymd(new Date())}
+
+/* ---------- state ---------- */
+function blank(){return {items:{},cfg:{},scores:{}}}
+let S=load();
+function load(){try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.items)return s}catch(e){}return blank()}
+function saveLocal(){localStorage.setItem(LS,JSON.stringify(S))}
+function cfg(k){const c=S.cfg[k];return c?c.v:DEF[k]}
+function setCfg(k,v){S.cfg[k]={v:v,t:Date.now()};changed()}
+function isDone(key){const it=S.items[key];return !!(it&&it.v)}
+function setDone(key,v){S.items[key]={v:v,t:Date.now()};changed()}
+function scoresList(){return Object.entries(S.scores).filter(([,s])=>!s.del).map(([id,s])=>Object.assign({id},s)).sort((a,b)=>a.date<b.date?-1:1)}
+
+/* ---------- plan ---------- */
+function phaseOf(d){
+  const e1=cfg("exam1"),e2=cfg("exam2");
+  if(d<"2026-11-23")return "0단계 · 진단";
+  if(d<="2026-12-20")return "1단계 · 기본기 (문법 1회독 · 청해책 앞 절반)";
+  if(d<="2027-01-17")return "2단계 · 다지기 (문법 2회독 · 청해책 뒤 절반)";
+  if(!e1||d<=e1)return "3단계 · 1차 응시 준비";
+  if(!e2||d<=e2)return "4단계 · 약점 보강 · 2차 응시 준비";
+  return "예비 · 3월 첫 주 회차";
+}
+function weakest(){
+  const l=scoresList().filter(s=>s.L!==""&&s.L!=null);if(!l.length)return null;
+  const s=l[l.length-1];let best=null,min=9;
+  for(const k of ["L","V","G","R"]){const r=Number(s[k])/TARGET[k][0];if(r<min){min=r;best=k}}
+  return best;
+}
+function vocabTask(d){
+  if(dow(d)===0)return {id:"voc",k:"매일",t:"보카 주간 복습: 이번 주 분량을 한 번에 다시 보기"};
+  const vs=cfg("vocabStart"),n0=Math.max(1,Number(cfg("vocabDays"))||30);
+  if(d<vs)return null;
+  let n=0;for(let x=vs;x<=d;x=add(x,1))if(dow(x)!==0)n++;
+  const day=((n-1)%n0)+1,round=Math.floor((n-1)/n0)+1;
+  return {id:"voc",k:"매일 · 파고다 뉴텝스 보카",t:"보카 "+round+"회독 Day "+day+" 새로 외우기 + 전날 분량 복습"};
+}
+function tasksFor(d){
+  const T=[],w=dow(d),wk=w>=1&&w<=5;
+  const push=(id,t,k)=>T.push({id,t,k:k||""});
+  const v=vocabTask(d);if(v)T.push(v);
+  push("dict","청해 받아쓰기 20분: 그날 틀린 문제 음원을 받아쓰고 따라 읽기","매일");
+  const e1=cfg("exam1"),e2=cfg("exam2"),e3=cfg("exam3");
+  const mock=(id,n)=>{push(id,"기출 "+n+"회 실전 풀이: 청해 40분 → 어휘·문법 25분 → 독해 40분, 한 번에","공식 기출 5회분");push(id+"s","기출 "+n+"회 점수를 「점수」 탭에 기록","기록")};
+  const review=(id,n)=>push(id,"기출 "+n+"회 오답 정리: 모르는 단어는 보카 빈칸에, 틀린 청해는 받아쓰기","공식 기출 5회분");
+  if(d==="2026-11-20")push("p","진단 준비: 기출 1회 풀 시간(105분)을 정하고 음원·답안지 준비","0단계");
+  else if(d==="2026-11-21")mock("m1",1);
+  else if(d==="2026-11-22")review("r1",1);
+  else if(d<="2026-12-20"){
+    const n=Math.floor(diff("2026-11-23",d)/7)+1;
+    if(d==="2026-11-23")push("reg1","1차 시험 접수 (1월 하순 회차) 후 「설정」에 시험일 입력","할 일");
+    if(wk){push("g","문법책 1회독: 이번 주 목차 "+n+"/4 구간 (하루 1/5씩)","해커스 텝스 중급 문법");push("l","청해책 앞 절반: 이번 주 "+n+"/4 구간 (하루 1/5씩)","뉴텝스 기본편 실전 300+ 청해")}
+    else if(w===6){push("r","독해: 기출 1회 지문 다시 읽기, 모르는 단어 적기","독해");push("c","이번 주 문법·청해 밀린 분량 채우기","주말")}
+    else push("c","한 주 점검: 이번 주 체크 안 된 항목 확인","주말");
+  }
+  else if(d<="2027-01-17"){
+    const n=Math.floor(diff("2026-12-21",d)/7)+1;
+    if(d==="2027-01-16")mock("m2",2);
+    else if(d==="2027-01-17"){review("r2",2);push("cmp","진단과 기출 2회를 영역별로 비교: 오른 영역과 안 오른 영역","기록")}
+    else if(wk){push("g","문법 2회독: 1회독에서 틀린 문제만 (이번 주 "+n+"/4 구간)","해커스 텝스 중급 문법");push("l","청해책 뒤 절반: 이번 주 "+n+"/4 구간 (하루 1/5씩)","뉴텝스 기본편 실전 300+ 청해")}
+    else if(w===6){push("r","독해: 지난 회차 지문을 시간 재고 다시 풀기, 모르는 문제는 넘기기 연습","독해");push("c","이번 주 밀린 분량 채우기","주말")}
+    else push("c","한 주 점검: 이번 주 체크 안 된 항목 확인","주말");
+  }
+  else if(!e1||d<=e1){
+    if(d==="2027-01-18")push("reg2","2차 시험 접수 (2월 하순 회차) 후 「설정」에 시험일 입력","할 일");
+    if(!e1){push("set1","「설정」에서 1차 시험일을 입력하면 이 기간 계획이 채워집니다","할 일");return T}
+    const k=diff(d,e1);
+    if(k===0){T.length=0;push("x1","1차 시험: 신분증 챙기기, 시험장 도착 시간 확인","시험")}
+    else if(k===7)mock("m3",3);
+    else if(k===6)review("r3",3);
+    else if(k>=1&&k<=5){push("f","새 진도 없이 오답 노트와 보카만 다시 보기","시험 주간");if(k===1)push("idc","내일 준비물: 신분증, 수험표 출력","시험 주간")}
+    else{push("g","문법·청해 오답 복습","복습");push("w","약한 영역 보충 (기출 2회 점수 기준 가장 낮은 영역)","복습")}
+  }
+  else if(!e2||d<=e2){
+    const k1=diff(e1,d);
+    if(k1===6)push("res1","1차 성적 확인 → 「점수」 탭에 기록. 327 넘었으면 2차 취소 검토","기록");
+    if(!e2){push("set2","「설정」에서 2차 시험일을 입력하면 이 기간 계획이 채워집니다","할 일");return T}
+    const k=diff(d,e2),wkk=weakest();
+    if(k===0){T.length=0;push("x2","2차 시험: 신분증 챙기기, 시험장 도착 시간 확인","시험")}
+    else if(k===14)mock("m4",4);
+    else if(k===13)review("r4",4);
+    else if(k===7)mock("m5",5);
+    else if(k===6)review("r5",5);
+    else if(k>=1&&k<=5){push("f","새 진도 없이 오답 노트와 보카만 다시 보기","시험 주간");if(k===1)push("idc","내일 준비물: 신분증, 수험표 출력","시험 주간")}
+    else push("w","약점 집중 (공부 시간의 절반): "+(wkk?NAME[wkk]+" (최근 기록 기준 목표 대비 가장 낮음)":"「점수」 탭의 가장 낮은 영역"),"약점 보강");
+  }
+  else{
+    const k2=diff(e2,d);
+    if(k2===6)push("res2","2차 성적 확인 → 「점수」 탭에 기록. 넘지 못했으면 예비 회차 응시","기록");
+    if(e3){const k=diff(d,e3);if(k===0){T.length=0;push("x3","예비 시험: 신분증 챙기기","시험")}else if(k>0)push("w","기출 오답과 보카 2회독째 집중","예비")}
+  }
+  return T;
+}
+function key(d,id){return d+"|"+id}
+function dayProgress(d){const t=tasksFor(d);const n=t.filter(x=>isDone(key(d,x.id))).length;return [n,t.length]}
+function bar(p,w){w=w||20;const f=Math.round(p*w);return "["+"█".repeat(f)+"░".repeat(w-f)+"]"}
+
+/* ---------- views ---------- */
+let view="today",cur=clamp(todayStr());
+function clamp(d){return d<START?START:d>END?END:d}
+const M=document.getElementById("main");
+function render(){({today:vToday,week:vWeek,all:vAll,score:vScore,set:vSet})[view]()}
+function vToday(){
+  const t=tasksFor(cur),[n,c]=dayProgress(cur),isT=cur===todayStr();
+  let h=`<div class="card"><div class="daynav"><button id="prev">◀</button><div><div class="date">${label(cur)}${isT?" · 오늘":""}</div><div class="phase">${phaseOf(cur)}</div></div><button id="next">▶</button></div>
+  <div style="margin-top:10px"><span class="bar">${bar(c?n/c:0)}</span> <span class="pct">${c?Math.round(n/c*100):0}%</span> <span class="mini">${n}/${c}</span></div>`;
+  if(!isT)h+=`<div style="margin-top:6px"><button class="btn gray" id="goT" style="margin:0;padding:6px 10px;font-size:13px">오늘로</button></div>`;
+  h+=`</div><div class="card">`;
+  for(const x of t){const k=key(cur,x.id),dn=isDone(k);h+=`<label class="task${dn?" done":""}" data-k="${k}"><input type="checkbox"${dn?" checked":""}><div><div class="t">${x.t}</div><div class="k">${x.k}</div></div></label>`}
+  h+=`</div>`;M.innerHTML=h;
+  M.querySelectorAll(".task input").forEach(i=>i.onchange=e=>{setDone(e.target.closest(".task").dataset.k,e.target.checked);render()});
+  document.getElementById("prev").onclick=()=>{cur=clamp(add(cur,-1));render()};
+  document.getElementById("next").onclick=()=>{cur=clamp(add(cur,1));render()};
+  const g=document.getElementById("goT");if(g)g.onclick=()=>{cur=clamp(todayStr());render()};
+}
+function vWeek(){
+  const base=clamp(todayStr()),mon=add(base,-((dow(base)+6)%7));
+  let h=`<div class="card week"><h2>이번 주</h2>`;
+  for(let i=0;i<7;i++){const d=add(mon,i);if(d<START||d>END)continue;const [n,c]=dayProgress(d);
+    h+=`<div class="d${d===todayStr()?" today":""}" data-d="${d}"><span>${label(d)}</span><span><span class="bar">${bar(c?n/c:0,8)}</span> ${n}/${c}</span></div>`}
+  h+=`</div>`;M.innerHTML=h;
+  M.querySelectorAll(".d").forEach(e=>e.onclick=()=>{cur=e.dataset.d;view="today";setNav();render()});
+}
+function vAll(){
+  const ph={};let tn=0,tc=0,pn=0,pc=0;const td=todayStr();
+  for(let d=START;d<=END;d=add(d,1)){const [n,c]=dayProgress(d),p=phaseOf(d);(ph[p]=ph[p]||[0,0,d,d]);ph[p][0]+=n;ph[p][1]+=c;ph[p][3]=d;tn+=n;tc+=c;if(d<=td){pn+=n;pc+=c}}
+  let h=`<div class="card"><h2>전체 진행률</h2><div><span class="bar">${bar(tc?tn/tc:0)}</span> <span class="pct">${tc?Math.round(tn/tc*100):0}%</span> <span class="mini">${tn}/${tc}</span></div>
+  <div class="mini" style="margin-top:6px">오늘까지 할 것 중 완료: ${pc?Math.round(pn/pc*100):0}% (${pn}/${pc})</div></div><div class="card"><h2>단계별</h2>`;
+  for(const [p,[n,c,a,b]] of Object.entries(ph))h+=`<h3>${p} · ${label(a)} ~ ${label(b)}</h3><div><span class="bar">${bar(c?n/c:0,16)}</span> <span class="pct">${c?Math.round(n/c*100):0}%</span> <span class="mini">${n}/${c}</span></div>`;
+  h+=`</div><div class="card"><h2>밀린 날 (오늘 전, 다 못 한 날)</h2>`;
+  let miss=0;for(let d=START;d<td&&d<=END;d=add(d,1)){const [n,c]=dayProgress(d);if(n<c){miss++;h+=`<div class="week"><div class="d" data-d="${d}"><span>${label(d)}</span><span>${n}/${c}</span></div></div>`}}
+  if(!miss)h+=`<div class="mini">없습니다.</div>`;
+  h+=`</div>`;M.innerHTML=h;
+  M.querySelectorAll(".d").forEach(e=>e.onclick=()=>{cur=e.dataset.d;view="today";setNav();render()});
+}
+function vScore(){
+  const l=scoresList();
+  let h=`<div class="card"><h2>점수 기록</h2><table><tr><th class="l">회차</th><th>청해</th><th>어휘</th><th>문법</th><th>독해</th><th>합계</th><th></th></tr>`;
+  h+=`<tr><td class="l mini">목표</td><td class="mini">130</td><td class="mini">30</td><td class="mini">37</td><td class="mini">130</td><td class="mini">327</td><td></td></tr>`;
+  for(const s of l){const tot=["L","V","G","R"].reduce((a,k)=>a+(Number(s[k])||0),0);
+    h+=`<tr><td class="l">${s.name}<div class="mini">${s.date}</div></td>${["L","V","G","R"].map(k=>`<td>${s[k]}</td>`).join("")}<td class="${tot>=327?"pass":"fail"}">${tot}</td><td><button class="btn gray" data-del="${s.id}" style="margin:0;padding:4px 8px;font-size:12px">삭제</button></td></tr>`}
+  h+=`</table><div class="note" style="margin-top:6px">영역별 목표는 대략적인 기준입니다. 실제 점수는 문항 난이도를 반영해 환산됩니다.</div></div>
+  <div class="card"><h2>새 기록</h2><label>회차 이름</label><input type="text" id="sn" placeholder="예: 기출 1회 진단, 1차 시험">
+  <label>날짜</label><input type="date" id="sd" value="${todayStr()}">
+  <div class="row">${["L","V","G","R"].map(k=>`<div><label>${NAME[k]} /${TARGET[k][1]}</label><input type="number" id="s${k}" inputmode="numeric"></div>`).join("")}</div>
+  <button class="btn" id="sadd">기록 추가</button></div>`;
+  M.innerHTML=h;
+  document.getElementById("sadd").onclick=()=>{const name=document.getElementById("sn").value.trim()||"기록";const o={name,date:document.getElementById("sd").value,t:Date.now()};
+    for(const k of ["L","V","G","R"])o[k]=document.getElementById("s"+k).value;
+    S.scores["s"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)]=o;changed();render()};
+  M.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const s=S.scores[b.dataset.del];s.del=true;s.t=Date.now();changed();render()});
+}
+function vSet(){
+  const tok=localStorage.getItem(LSTOK)||"";
+  M.innerHTML=`<div class="card"><h2>시험일</h2><div class="note">접수한 회차 날짜를 넣으면 그 앞뒤 계획(기출 3~5회, 시험 주간, 성적 확인)이 채워집니다.</div>
+  <label>1차 시험 (1월 하순 회차)</label><input type="date" id="e1" value="${cfg("exam1")}">
+  <label>2차 시험 (2월 하순 회차)</label><input type="date" id="e2" value="${cfg("exam2")}">
+  <label>예비 시험 (3월 첫 주 회차, 필요할 때만)</label><input type="date" id="e3" value="${cfg("exam3")}">
+  <h3>파고다 뉴텝스 보카</h3>
+  <label>책의 Day 수</label><input type="number" id="vd" value="${cfg("vocabDays")}">
+  <label>보카 시작일</label><input type="date" id="vs" value="${cfg("vocabStart")}">
+  <button class="btn" id="cfgSave">저장</button></div>
+  <div class="card"><h2>휴대폰·컴퓨터 동기화</h2>
+  <div class="note">기록은 GitHub 비공개 Gist 한 개(${FILE})에 저장됩니다. 두 기기에 같은 토큰을 한 번씩 넣으면, 체크할 때마다 자동으로 주고받습니다. 토큰은 이 기기 브라우저에만 저장됩니다.</div>
+  <label>GitHub 토큰 (Gist 읽기·쓰기 권한만)</label><input type="password" id="tok" value="${tok}" placeholder="github_pat_...">
+  <button class="btn" id="tokSave">연결</button> <button class="btn gray" id="syncNow">지금 동기화</button> <button class="btn gray" id="tokDel">연결 끊기</button>
+  <div class="note" id="syncMsg" style="margin-top:8px">${tok?"Gist: "+(localStorage.getItem(LSGIST)||"아직 찾지 않음"):"연결 안 됨"}</div></div>
+  <div class="card"><h2>백업</h2><button class="btn gray" id="exp">기록 파일로 받기</button></div>`;
+  document.getElementById("cfgSave").onclick=()=>{for(const [id,k] of [["e1","exam1"],["e2","exam2"],["e3","exam3"],["vd","vocabDays"],["vs","vocabStart"]]){const v=document.getElementById(id).value;if(v!==cfg(k))setCfg(k,v)}alertMsg("저장했습니다.")};
+  document.getElementById("tokSave").onclick=async()=>{localStorage.setItem(LSTOK,document.getElementById("tok").value.trim());localStorage.removeItem(LSGIST);await sync(true);vSet()};
+  document.getElementById("syncNow").onclick=async()=>{await sync(true);vSet()};
+  document.getElementById("tokDel").onclick=()=>{localStorage.removeItem(LSTOK);localStorage.removeItem(LSGIST);setLine("이 기기에만 저장 중");vSet()};
+  document.getElementById("exp").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:"application/json"}));a.download="teps_progress_"+todayStr()+".json";a.click()};
+}
+function alertMsg(m){const e=document.getElementById("syncMsg");if(e)e.textContent=m;setLine(m)}
+function setNav(){document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===view))}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{view=b.dataset.v;if(view==="today")cur=clamp(todayStr());setNav();render()});
+
+/* ---------- sync (GitHub Gist) ---------- */
+function setLine(m){document.getElementById("syncLine").textContent=m}
+function merge(a,b){const o=blank();for(const part of ["items","cfg","scores"]){const A=a[part]||{},B=b[part]||{};for(const k of new Set([...Object.keys(A),...Object.keys(B)])){const x=A[k],y=B[k];o[part][k]=!x?y:!y?x:((y.t||0)>(x.t||0)?y:x)}}return o}
+async function gh(method,path,body){
+  const r=await fetch("https://api.github.com"+path,{method,headers:{Authorization:"Bearer "+localStorage.getItem(LSTOK),Accept:"application/vnd.github+json"},body:body?JSON.stringify(body):undefined,cache:"no-store"});
+  if(!r.ok)throw new Error("GitHub "+r.status);return r.json();
+}
+async function findGist(){
+  let id=localStorage.getItem(LSGIST);if(id)return id;
+  for(let page=1;page<=5;page++){const l=await gh("GET","/gists?per_page=100&page="+page);const g=l.find(g=>g.files&&g.files[FILE]);if(g){id=g.id;break}if(l.length<100)break}
+  if(!id){const g=await gh("POST","/gists",{description:"TEPS 327 공부 기록 (공부계획 HTML 이 씀)",public:false,files:{[FILE]:{content:JSON.stringify(S)}}});id=g.id}
+  localStorage.setItem(LSGIST,id);return id;
+}
+let busy=false,again=false,timer=null;
+async function sync(verbose){
+  if(!localStorage.getItem(LSTOK))return;
+  if(busy){again=true;return}busy=true;setLine("동기화 중…");
+  try{
+    const id=await findGist();const g=await gh("GET","/gists/"+id);
+    let remote=blank();try{remote=JSON.parse(g.files[FILE].content)}catch(e){}
+    const m=merge(S,remote),js=JSON.stringify(m);
+    S=m;saveLocal();
+    if(js!==JSON.stringify(remote))await gh("PATCH","/gists/"+id,{files:{[FILE]:{content:js}}});
+    const t=new Date();setLine("동기화됨 "+p2(t.getHours())+":"+p2(t.getMinutes()));
+    if(view!=="set")render();else if(verbose)alertMsg("동기화됨 "+p2(t.getHours())+":"+p2(t.getMinutes()));
+  }catch(e){setLine("동기화 실패: "+e.message+" (이 기기에는 저장됨)");if(verbose)alertMsg("동기화 실패: "+e.message+". 토큰과 인터넷 연결을 확인하세요.")}
+  busy=false;if(again){again=false;sync()}
+}
+function changed(){saveLocal();clearTimeout(timer);timer=setTimeout(()=>sync(),1200)}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){cur=view==="today"&&cur<todayStr()?clamp(todayStr()):cur;sync()}});
+render();sync();
+</script>
+</body>
+</html>
