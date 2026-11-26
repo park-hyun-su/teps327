@@ -52,7 +52,7 @@ button,input,select{font:inherit;color:inherit}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .app{max-width:720px;margin:0 auto;min-height:100vh;padding:0 0 calc(84px + env(safe-area-inset-bottom))}
 header.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(var(--s3) + env(safe-area-inset-top)) var(--s4) var(--s2);display:flex;align-items:center;gap:var(--s2)}
-header.top h1{font-size:var(--f-xl);margin:0;flex:1;font-weight:700;letter-spacing:-.2px}
+header.top h1{font-size:var(--f-xl);margin:0;flex:1;font-weight:700;letter-spacing:-.2px;min-width:0}
 header.top .meta{font-size:var(--f-xs);color:var(--sub);text-align:right}
 main{padding:0 var(--s4)}
 .card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--line);padding:var(--s4);margin:0 0 var(--s3)}
@@ -181,11 +181,38 @@ summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:
 .alarm-hero{text-align:center;padding:var(--s4) 0 var(--s2)}
 .alarm-hero .clock{font-size:3rem;font-weight:800;line-height:1.1}
 @media (min-width:600px){.cell{min-height:80px}}
+/* 머리글 뒤로·닫기 (내비-17) */
+.hb{border:0;background:none;min-width:44px;min-height:44px;margin-left:-10px;border-radius:50%;display:grid;place-content:center;cursor:pointer;color:var(--text)}
+.hb svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.2}
+/* 집중 화면: 시험·익히기는 탭 막대를 숨기고 손이 닿는 아래쪽에 조작을 모음 (내비-22, 레이아웃-13) */
+body.focus nav.tabs{display:none}
+body.focus .app{padding-bottom:0}
+body.focus .sticky-act{bottom:0;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.focus-wrap{min-height:calc(100dvh - 76px - env(safe-area-inset-top));display:flex;flex-direction:column}
+.focus-wrap .spacer{flex:1;min-height:var(--s3)}
+.qbar{display:flex;align-items:center;gap:var(--s3);margin:0 0 var(--s3)}
+.qbar .bar{height:8px}
+.qbar .v{font-size:var(--f-s);color:var(--sub);white-space:nowrap}
+/* 오늘: 지금 할 것 하나 (원칙-04·05, 대시보드-04) */
+.hero{padding:var(--s5) var(--s4)}
+.hero .lead{font-size:var(--f-s);color:var(--sub);margin:0 0 var(--s1)}
+.hero h2{font-size:var(--f-xl);line-height:1.35;margin:0 0 var(--s2)}
+.hero .btn{margin-top:var(--s4)}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin-top:var(--s4)}
+.mini div{background:var(--surface2);border-radius:var(--r-s);padding:var(--s2) var(--s3)}
+.mini b{display:block;font-size:var(--f-l)}
+.mini span{font-size:var(--f-xs);color:var(--sub)}
+.linkrow{display:flex;align-items:center;gap:var(--s3);width:100%;min-height:56px;border:0;background:none;padding:var(--s2) 0;text-align:left;cursor:pointer;color:var(--text);border-top:1px solid var(--line)}
+.linkrow:first-child{border-top:0}
+.linkrow .grow b{display:block}
+.linkrow .chev{color:var(--sub);font-size:1.25rem}
+.resume{border:2px solid var(--primary)}
+input:disabled,.toggle:disabled{opacity:.5}
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="top"><h1 id="title">오늘</h1><div class="meta" id="meta"></div></header>
+  <header class="top"><span id="hbx"></span><h1 id="title">오늘</h1><div class="meta" id="meta"></div></header>
   <main id="main" tabindex="-1"></main>
 </div>
 <nav class="tabs" aria-label="주 메뉴"><div class="in">
@@ -438,12 +465,18 @@ function makeQ(w){
 let view="today",sel=clamp(todayStr()),month=sel.slice(0,7),quiz=null,learn=null,ocr=null,fromAlarm=false;
 const M=document.getElementById("main");
 function say(m){document.getElementById("live").textContent=m}
-function toast(m,undo){document.querySelectorAll(".toast").forEach(x=>x.remove());const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=m;if(undo){const b=document.createElement("button");b.textContent="되돌리기";b.onclick=()=>{t.remove();undo()};t.appendChild(b)}document.body.appendChild(t);setTimeout(()=>t.remove(),undo?6000:2600)}
+function toast(m,undo){document.querySelectorAll(".toast").forEach(x=>x.remove());const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=m;if(undo){const b=document.createElement("button");b.textContent="되돌리기";b.onclick=()=>{t.remove();undo()};t.appendChild(b)}document.body.appendChild(t);setTimeout(()=>t.remove(),undo?6000:Math.max(4000,m.length*90))}
 const TITLES={today:"오늘",words:"단어",cal:"달력",score:"기록",set:"설정",method:"330점 공부법",quiz:"단어 시험",learn:"새 단어 익히기",ocr:"사진으로 단어 추가",list:"단어 목록"};
-function go(v,opt){document.querySelectorAll('.toast').forEach(t=>t.remove());view=v;if(!opt||!opt.keep){quiz=null;learn=null}render();window.scrollTo(0,0);M.focus({preventScroll:true});if(!(opt&&opt.nohist))history.pushState({v},"","#"+v)}
-window.addEventListener("popstate",e=>{view=(e.state&&e.state.v)||"today";quiz=null;learn=null;render()});
+function go(v,opt){document.querySelectorAll('.toast').forEach(t=>t.remove());if(quiz&&quiz.i>=quiz.qs.length&&v!=="quiz")quiz=null;if(learn&&learn.i>=learn.list.length&&v!=="learn"&&v!=="quiz")learn=null;view=v;render();window.scrollTo(0,0);M.focus({preventScroll:true});if(!(opt&&opt.nohist))history.pushState({v},"","#"+v)}
+window.addEventListener("popstate",e=>{let v=(e.state&&e.state.v)||"today";if((v==="quiz"&&!quiz)||(v==="learn"&&!learn)||(v==="ocr"&&!ocr))v="words";view=v;render()});
+const PARENT={method:"today",list:"words",ocr:"words",quiz:"words",learn:"words"};
+const ICON_BACK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',ICON_X='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function leaveSub(){const back=PARENT[view]||"today";if(history.state&&history.length>1&&history.state.v===view)history.back();else go(back)}
 function nextExamLine(){const td=todayStr();const e=EXAMS.find(e=>examOn(e)&&e.date>=td);return e?e.no+"회 시험 D-"+(diff(td,e.date)||"DAY"):""}
 function render(){
+  const focus=view==="quiz"||view==="learn";document.body.classList.toggle("focus",focus);
+  const hb=document.getElementById("hbx");hb.innerHTML=PARENT[view]?`<button class="hb" id="hback" aria-label="${focus?"닫기 (진행은 남아요)":"뒤로"}">${focus?ICON_X:ICON_BACK}</button>`:"";
+  const hbb=document.getElementById("hback");if(hbb)hbb.onclick=leaveSub;
   document.getElementById("title").textContent=TITLES[view]||"";
   document.getElementById("meta").innerHTML=esc(nextExamLine())+"<br><span id='syncLine'>"+esc(syncText)+"</span>";
   document.querySelectorAll("nav.tabs button").forEach(b=>{const on=b.dataset.v===view||(view==="method"&&b.dataset.v==="today")||(["quiz","learn","ocr","list"].includes(view)&&b.dataset.v==="words");b.toggleAttribute("aria-current",false);if(on)b.setAttribute("aria-current","page")});
@@ -454,44 +487,60 @@ function taskHTML(d,x){const k=key(d,x.id),dn=isDone(k),c=CAT[x.cat];
 function bindTasks(){M.querySelectorAll(".task input").forEach(i=>i.onchange=e=>{const k=e.target.closest(".task").dataset.k,v=e.target.checked,y=window.scrollY;setDone(k,v);say(v?"완료로 표시했어요":"완료 표시를 지웠어요");render();window.scrollTo(0,y);const n=M.querySelector(`.task[data-k="${CSS.escape(k)}"] input`);if(n)n.focus({preventScroll:true});if(v)toast("완료로 표시했어요",()=>{setDone(k,false);render();window.scrollTo(0,y)})})}
 function meter(n,c,lab){const p=c?Math.round(n/c*100):0;return `<div class="meter" role="img" aria-label="${esc(lab||"")} ${n}/${c} 완료, ${p}%"><div class="bar"><b class="${p>=100?"full":""}" style="width:${p}%"></b></div><span class="v num">${n}/${c} · ${p}%</span></div>`}
 
+function resumeCard(){
+  if(quiz&&quiz.i<quiz.qs.length)return `<section class="card resume"><h2>하던 단어 시험이 있어요</h2><p class="sub">${quiz.qs.length}문제 중 ${quiz.i}문제를 풀었어요.</p><button class="btn primary block" data-resume="quiz">이어서 풀기</button></section>`;
+  if(learn&&learn.i<learn.list.length)return `<section class="card resume"><h2>보던 새 단어가 있어요</h2><p class="sub">${learn.list.length}개 중 ${learn.i}개를 봤어요.</p><button class="btn primary block" data-resume="learn">이어서 보기</button></section>`;
+  return "";
+}
+function bindResume(){M.querySelectorAll("[data-resume]").forEach(b=>b.onclick=()=>go(b.dataset.resume))}
+function nextAction(d,t){
+  const nl=newLeftToday(),due=dueList().length;
+  if(nl)return {lead:"지금 할 것",h:`새 단어 ${nl}개 익히기`,sub:due?`복습할 단어 ${due}개는 그다음에 이어서 나와요.`:"뜻과 예문을 보고 바로 시험으로 확인해요.",btn:`새 단어 ${nl}개 보기`,act:"study"};
+  if(due)return {lead:"지금 할 것",h:`복습 ${due}문제`,sub:"맞히면 다음 복습이 뒤로 밀려요.",btn:`복습 ${Math.min(due,20)}문제 풀기`,act:"study"};
+  const x=t.find(y=>!isDone(key(d,y.id))&&y.id!=="quiz");
+  if(x)return {lead:"단어는 다 했어요. 다음 할 일",h:x.t,sub:x.k,btn:"이 일 다 했어요",act:"done",k:key(d,x.id)};
+  return {lead:"오늘 할 일을 다 했어요",h:"추가 연습",sub:"시간이 남으면 익힌 단어를 한 번 더 풀어요.",btn:`단어 ${cfg("quizSize")}문제 더 풀기`,act:"extra"};
+}
 function vToday(){
-  const td=todayStr(),d=clamp(td),t=tasksFor(d),[n,c]=dayProgress(d);
-  const due=dueList().length,nl=newLeftToday();
+  const td=todayStr(),d=clamp(td),t=tasksFor(d),[n,c]=dayProgress(d),qs=Number(cfg("quizSize"))||5;
   let h="";
   if(td<START)h+=`<div class="banner info"><span>ℹ</span><span>계획은 <b>11월 27일 금요일</b>부터 시작해요. 아래는 첫날 할 일이에요.</span></div>`;
-  if(fromAlarm){h+=`<section class="card"><div class="alarm-hero"><div class="clock num">${p2(new Date().getHours())}:${p2(new Date().getMinutes())}</div><div class="sub">알람 시간이에요. 단어 ${cfg("quizSize")}문제부터 풀어요.</div></div><button class="btn primary block" id="qa">단어 ${cfg("quizSize")}문제 풀기</button><div class="sub" style="margin-top:8px;text-align:center">${esc(nextAlarmText())}</div></section>`}
-  const qs=Number(cfg("quizSize"))||5;if(fromAlarm)h=h.replace(`단어 ${cfg("quizSize")}문제 풀기</button>`,(Object.keys(S.srs).length?`단어 ${qs}문제 풀기`:`새 단어 ${qs}개 보고 바로 시험`)+`</button>`);
-  h+=`<section class="card" aria-labelledby="h-w"><h2 id="h-w">단어</h2>
-   <div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>복습할 단어</span></div><div class="stat"><b class="num">${Object.keys(S.srs).length}</b><span>지금까지 익힌 단어</span></div></div>
-   <div class="btns"><button class="btn ${fromAlarm?"":"primary "}grow" id="q1">${nl?"새 단어 "+nl+"개 익히기":due?"복습 "+Math.min(due,20)+"문제 풀기":"추가 연습 "+cfg("quizSize")+"문제"}</button></div></section>`;
-  h+=`<section class="card" aria-labelledby="h-t"><div class="row"><h2 id="h-t" class="grow">${esc(label(d))} 할 일</h2><span class="sub">${esc(phaseOf(d))}</span></div>${meter(n,c,"오늘 할 일")}${t.map(x=>taskHTML(d,x)).join("")}</section>`;
+  if(fromAlarm){
+    h+=`<section class="card hero"><div class="alarm-hero"><div class="clock num">${p2(new Date().getHours())}:${p2(new Date().getMinutes())}</div><p class="sub" style="margin:4px 0 0">알람 시간이에요</p></div><button class="btn primary block" id="qa">${Object.keys(S.srs).length?`단어 ${qs}문제 풀기`:`새 단어 ${qs}개 보고 바로 시험`}</button><p class="sub" style="margin:8px 0 0;text-align:center">${esc(nextAlarmText())}</p></section>`;
+  }else{
+    const rc=resumeCard();
+    if(rc)h+=rc;else{const a=nextAction(d,t);h+=`<section class="card hero" aria-labelledby="h-na"><p class="lead">${esc(a.lead)}</p><h2 id="h-na">${esc(a.h)}</h2><p class="sub" style="margin:0">${esc(a.sub)}</p><button class="btn primary block" id="na" data-act="${a.act}"${a.k?` data-k="${esc(a.k)}"`:""}>${esc(a.btn)}</button>
+      <div class="mini"><div><b class="num">${dueList().length}</b><span>복습할 단어</span></div><div><b class="num">${Object.keys(S.srs).length}</b><span>익힌 단어</span></div><div><b class="num">${n}/${c}</b><span>오늘 할 일</span></div></div></section>`}
+  }
+  h+=`<section class="card" aria-labelledby="h-t"><div class="row"><h2 id="h-t" class="grow">${esc(label(d))}</h2><span class="sub">${esc(phaseOf(d))}</span></div>${meter(n,c,"오늘 할 일")}${t.map(x=>taskHTML(d,x)).join("")}</section>`;
   const miss=[];for(let x=START;x<td&&x<=END;x=add(x,1)){const r=tasksFor(x).filter(y=>!isDone(key(x,y.id))&&y.id!=="quiz");if(r.length)miss.push([x,r])}
-  if(miss.length)h+=`<section class="card"><details><summary>지난 날 체크 안 한 일 ${miss.reduce((a,[,r])=>a+r.length,0)}개</summary>${miss.slice(-7).map(([x,r])=>`<h3>${esc(label(x))}</h3>${r.map(y=>taskHTML(x,y)).join("")}`).join("")}<p class="sub">최근 7일만 보여요. 다 못 했어도 오늘 할 일부터 하면 돼요.</p></details></section>`;
-  h+=`<section class="card"><h2>330점 공부법</h2><p class="sub">참고 영상 6편을 정리한 영역별 목표와 방법이에요.</p><button class="btn block" id="mth">공부법 보기</button></section>`;
-  M.innerHTML=h;bindTasks();
-  const q1=document.getElementById("q1");q1.onclick=()=>startStudy();
-  const qa=document.getElementById("qa");if(qa)qa.onclick=()=>{fromAlarm=false;startQuiz(Number(cfg("quizSize"))||5)};
+  h+=`<section class="card" style="padding-top:4px;padding-bottom:4px">`;
+  if(miss.length)h+=`<details><summary>지난 날 체크 안 한 일 ${miss.reduce((a,[,r])=>a+r.length,0)}개</summary>${miss.slice(-7).map(([x,r])=>`<h3>${esc(label(x))}</h3>${r.map(y=>taskHTML(x,y)).join("")}`).join("")}<p class="sub">최근 7일만 보여요. 다 못 했어도 오늘 할 일부터 하면 돼요.</p></details>`;
+  h+=`<button class="linkrow" id="mth"><span class="grow"><b>330점 공부법</b><span class="sub">참고 영상 6편으로 정리한 영역별 목표와 방법</span></span><span class="chev" aria-hidden="true">›</span></button></section>`;
+  M.innerHTML=h;bindTasks();bindResume();
+  const na=document.getElementById("na");if(na)na.onclick=()=>{const a=na.dataset.act;if(a==="study")startStudy();else if(a==="extra")startQuiz(qs);else if(a==="done"){setDone(na.dataset.k,true);toast("완료로 표시했어요",()=>{setDone(na.dataset.k,false);render()});render()}};
+  const qa=document.getElementById("qa");if(qa)qa.onclick=()=>{fromAlarm=false;startQuiz(qs)};
   document.getElementById("mth").onclick=()=>go("method");
 }
-function startStudy(){const nl=newLeftToday();if(nl){const q=newQueue().slice(0,nl);if(q.length){learn={list:q,i:0};go("learn",{keep:1});return}}startQuiz(dueList().length?Math.min(dueList().length,20):Number(cfg("quizSize"))||5)}
+function startStudy(){if(quiz&&quiz.i<quiz.qs.length){go("quiz");return}if(learn&&learn.i<learn.list.length){go("learn");return}const nl=newLeftToday();if(nl){const q=newQueue().slice(0,nl);if(q.length){quiz=null;learn={list:q,i:0};go("learn",{keep:1});return}}startQuiz(dueList().length?Math.min(dueList().length,20):Number(cfg("quizSize"))||5)}
 function startQuiz(n){
   let ids=dueList();if(ids.length<n){const extra=Object.entries(S.srs).filter(([id])=>!ids.includes(id)&&wordById(id)).sort((a,b)=>a[1].box-b[1].box||(a[1].last<b[1].last?-1:1)).map(([id])=>id);ids=ids.concat(extra)}
   ids=ids.slice(0,n);
   if(!ids.length){const q=newQueue().slice(0,n);if(q.length){learn={list:q,i:0};go("learn",{keep:1});return}toast("시험 볼 단어가 없어요");return}
-  quiz={qs:ids.map(id=>makeQ(wordById(id))),i:0,ok:0,answered:null,wrongIds:[]};go("quiz",{keep:1});
+  learn=null;quiz={qs:ids.map(id=>makeQ(wordById(id))),i:0,ok:0,answered:null,wrongIds:[]};go("quiz",{keep:1});
 }
 function vLearn(){
   const L=learn;if(!L){go("words");return}
-  if(L.i>=L.list.length){M.innerHTML=`<section class="card"><h2>${L.list.length}개를 봤어요</h2><p>바로 시험으로 확인해요. 틀린 단어는 내일 다시 나와요.</p><div class="btns"><button class="btn primary grow" id="lq">방금 본 단어 시험</button></div></section>`;
+  if(L.i>=L.list.length){M.innerHTML=`<div class="focus-wrap"><section class="card hero"><h2>${L.list.length}개를 다 봤어요</h2><p class="sub" style="margin:0">바로 시험으로 확인해요. 틀린 단어는 내일 다시 나와요.</p></section><div class="spacer"></div><div class="sticky-act"><button class="btn primary block" id="lq">방금 본 ${L.list.length}개 시험 보기</button></div></div>`;
     document.getElementById("lq").onclick=()=>{quiz={qs:shuffle(L.list.map(w=>makeQ(w))),i:0,ok:0,answered:null,wrongIds:[],isNew:1};learn=null;go("quiz",{keep:1})};return}
   const w=L.list[L.i];
-  M.innerHTML=`<p class="sub num" aria-live="polite">${L.i+1} / ${L.list.length}</p>${meter(L.i,L.list.length,"새 단어")}
+  M.innerHTML=`<div class="focus-wrap"><div class="qbar"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${L.list.length}" aria-valuenow="${L.i+1}" aria-label="새 단어"><b style="width:${Math.round((L.i+1)/L.list.length*100)}%"></b></div><span class="v num" aria-live="polite">${L.i+1} / ${L.list.length}</span></div>
   <section class="card learn"><div class="row"><div class="grow"><span class="w" lang="en">${esc(w.w)}</span><span class="pos">${esc(posName(w.pos))}</span></div><button class="speak" id="sp" aria-label="${esc(w.w)} 발음 듣기">${SPK}</button></div>
   <div class="ko">${esc(w.ko)}</div>
   ${w.ex?`<p class="ex" lang="en">${esc(w.ex)}</p><p class="exko">${esc(w.exKo||"")}</p>`:""}
   ${w.syn&&w.syn.length?`<details style="margin-top:8px"><summary class="sub">비슷한 말·반대말 (나중에 외워도 돼요)</summary><div class="chips" lang="en">${w.syn.map(s=>`<span class="chip">≈ ${esc(s)}</span>`).join("")}${(w.ant||[]).map(s=>`<span class="chip">↔ ${esc(s)}</span>`).join("")}</div></details>`:""}
   <p class="why" style="margin-top:12px">${srcName(w)}</p></section>
-  <div class="btns sticky-act"><button class="btn" id="lp"${L.i?"":" disabled"}>이전</button><button class="btn primary grow" id="ln">다음 단어</button></div>`;
+  <div class="spacer"></div><div class="btns sticky-act" style="margin-top:0"><button class="btn" id="lp"${L.i?"":" disabled"}>이전</button><button class="btn primary grow" id="ln">${L.i+1<L.list.length?"다음 단어":"다 봤어요, 시험 보기"}</button></div></div>`;
   document.getElementById("sp").onclick=()=>speak(w.ex&&w.cat==="idiom"?w.ex:w.w);
   document.getElementById("ln").onclick=()=>{L.i++;render()};
   document.getElementById("lp").onclick=()=>{if(L.i){L.i--;render()}};
@@ -503,17 +552,17 @@ function vQuiz(){
   const Q=quiz;if(!Q){go("words");return}
   if(Q.i>=Q.qs.length){
     const n=Q.qs.length,p=Math.round(Q.ok/n*100);
-    M.innerHTML=`<section class="card"><h2>${n}문제 중 ${Q.ok}개 맞았어요 (${p}%)</h2>${meter(Q.ok,n,"정답")}
+    M.innerHTML=`<div class="focus-wrap"><section class="card hero"><p class="lead">시험 결과</p><h2>${n}문제 중 ${Q.ok}개 맞았어요</h2>${meter(Q.ok,n,"정답")}
     ${Q.wrongIds.length?`<h3>틀린 단어 (내일 다시 나와요)</h3><ul class="list-plain">${[...new Set(Q.wrongIds)].map(id=>{const w=wordById(id);return `<li><b>${esc(w.w)}</b> ${esc(w.ko)}</li>`}).join("")}</ul>`:"<p>모두 맞았어요. 다음 복습 날짜가 뒤로 밀렸어요.</p>"}
-    <div class="btns"><button class="btn primary grow" id="qn">${newLeftToday()?"다음 새 단어 익히기":dueList().length?"남은 복습 풀기":"오늘로 돌아가기"}</button></div><p class="sub" style="margin-top:8px">${esc(nextAlarmText())}</p></section>`;
-    document.getElementById("qn").onclick=()=>{if(newLeftToday()||dueList().length)startStudy();else go("today")};say(n+"문제 중 "+Q.ok+"개 정답");return}
+    <p class="sub" style="margin:8px 0 0">${esc(nextAlarmText())}</p></section><div class="spacer"></div><div class="sticky-act"><button class="btn primary block" id="qn">${newLeftToday()?"다음 새 단어 익히기":dueList().length?"남은 복습 풀기":"오늘로 돌아가기"}</button></div></div>`;
+    document.getElementById("qn").onclick=()=>{quiz=null;if(newLeftToday()||dueList().length)startStudy();else go("today")};say(n+"문제 중 "+Q.ok+"개 정답");return}
   const q=Q.qs[Q.i],a=Q.answered;
   let body=q.type==="blank"?`<p class="qsent" lang="en">${esc(q.sent).replace("\u0000",'<span class="blank" aria-label="빈칸">&nbsp;</span>')}</p>`:`<div class="row"><div class="qprompt grow" lang="${q.type==="en"?"ko":"en"}">${esc(q.prompt)}</div>${q.type!=="en"?`<button class="speak" id="sp" aria-label="발음 듣기">${SPK}</button>`:""}</div>`;
-  M.innerHTML=`<p class="sub num">${Q.i+1} / ${Q.qs.length} · 맞은 수 ${Q.ok}</p>${meter(Q.i,Q.qs.length,"시험 진행")}
-  <section class="card qcard"><p class="sub">${esc(q.ask)}</p>${body}
-  <div class="opts" role="group" aria-label="보기">${q.opts.map((o,i)=>{let cls="opt",mk="";if(a!=null){if(o===q.ans){cls+=" right";mk="✓ 정답"}else if(i===a){cls+=" wrong";mk="✗ 고른 답"}}return `<button class="${cls}" data-i="${i}"${a!=null?" disabled":""}><span class="n">${i+1}</span><span class="grow" lang="${q.type==="ko"?"ko":"en"}">${esc(o)}</span>${mk?`<span class="mark">${mk}</span>`:""}</button>`}).join("")}</div>
-  ${a!=null?fbHTML(q,q.opts[a]===q.ans):""}</section>
-  <div class="sticky-act">${a!=null?`<button class="btn primary block" id="qnext">${Q.i+1<Q.qs.length?"다음 문제":"결과 보기"}</button>`:`<button class="btn block" id="qskip">모르겠어요</button>`}</div>`;
+  M.innerHTML=`<div class="focus-wrap"><div class="qbar"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${Q.qs.length}" aria-valuenow="${Q.i+1}" aria-label="시험 진행"><b style="width:${Math.round((Q.i+(a!=null?1:0))/Q.qs.length*100)}%"></b></div><span class="v num">${Q.i+1} / ${Q.qs.length} · 맞음 ${Q.ok}</span></div>
+  <section class="card qcard"><p class="sub" style="margin:0">${esc(q.ask)}</p>${body}${a!=null?fbHTML(q,q.opts[a]===q.ans):""}</section>
+  <div class="spacer"></div>
+  <div class="opts" role="group" aria-label="보기" style="margin-top:0">${q.opts.map((o,i)=>{let cls="opt",mk="";if(a!=null){if(o===q.ans){cls+=" right";mk="✓ 정답"}else if(i===a){cls+=" wrong";mk="✗ 고른 답"}}return `<button class="${cls}" data-i="${i}"${a!=null?" disabled":""}><span class="n">${i+1}</span><span class="grow" lang="${q.type==="ko"?"ko":"en"}">${esc(o)}</span>${mk?`<span class="mark">${mk}</span>`:""}</button>`}).join("")}</div>
+  <div class="sticky-act">${a!=null?`<button class="btn primary block" id="qnext">${Q.i+1<Q.qs.length?"다음 문제":"결과 보기"}</button>`:`<button class="btn block" id="qskip">모르겠어요</button>`}</div></div>`;
   const sp=document.getElementById("sp");if(sp)sp.onclick=()=>speak(q.w.w);
   M.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(Number(b.dataset.i)));
   const nx=document.getElementById("qnext");if(nx){nx.onclick=()=>{Q.i++;Q.answered=null;render()};nx.focus()}
@@ -527,7 +576,7 @@ function speak(t){if(IS_APP&&Android.speak){Android.speak(t);return}try{const u=
 function vWords(){
   const due=dueList().length,nl=newLeftToday(),tot=allWords().length,seen=Object.keys(S.srs).length,uw=userWords().length;
   const boxes=[0,0,0,0,0,0];for(const s of Object.values(S.srs))boxes[s.box]++;
-  M.innerHTML=`<section class="card"><h2>오늘 단어</h2><div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>복습할 단어</span></div><div class="stat"><b class="num">${seen}/${tot}</b><span>익힌 / 전체</span></div></div>
+  M.innerHTML=resumeCard()+`<section class="card"><h2>오늘 단어</h2><div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>복습할 단어</span></div><div class="stat"><b class="num">${seen}/${tot}</b><span>익힌 / 전체</span></div></div>
    <div class="btns"><button class="btn primary grow" id="s1">${nl?"새 단어 "+nl+"개 익히기":"복습 시험"}</button><button class="btn" id="s2">${cfg("quizSize")}문제만</button></div></section>
    <section class="card"><h2>파고다 보카 사진으로 추가</h2><p class="sub">쪽을 찍으면 큰 표제어와 뜻만 읽어서 바로 넣어요. 인식은 뒤에서 하니까 카메라가 다시 열리면 다음 쪽을 이어서 찍고, 다 찍었으면 뒤로 가기를 누르세요.</p>
    ${IS_APP?`<div class="btns"><button class="btn grow" id="cam">📷 연속 찍기</button><button class="btn grow" id="gal">사진 여러 장 고르기</button></div>`:`<div class="note">사진 글자 읽기는 휴대폰 앱에서만 돼요. 여기서는 아래 「직접 추가」로 넣을 수 있어요.</div>`}
@@ -537,7 +586,7 @@ function vWords(){
    <section class="card"><h2>외운 정도</h2><p class="sub">맞힐수록 다음 복습이 1일 → 3일 → 7일 → 14일 → 30일 뒤로 밀려요. 틀리면 다음 날 다시 나와요. 처음엔 뜻 문제만, 2단계부터 예문 빈칸, 3단계부터 비슷한 말 문제가 나와요.</p>
    <table><caption class="sr">단계별 단어 수</caption><thead><tr><th class="l" scope="col">단계</th><th scope="col">다음 복습</th><th scope="col">단어 수</th></tr></thead><tbody>${[1,2,3,4,5].map(b=>`<tr><td class="l">${b}단계</td><td>${BOX[b]}일 뒤</td><td>${boxes[b]}</td></tr>`).join("")}</tbody></table>
    <div class="btns"><button class="btn grow" id="wl">단어 목록 보기 (내가 추가한 단어 ${uw}개)</button></div></section>`;
-  document.getElementById("s1").onclick=()=>startStudy();
+  bindResume();document.getElementById("s1").onclick=()=>startStudy();
   document.getElementById("s2").onclick=()=>startQuiz(Number(cfg("quizSize"))||5);
   document.getElementById("wl").onclick=()=>go("list");
   if(IS_APP){document.getElementById("cam").onclick=()=>Android.ocrImage("camera");document.getElementById("gal").onclick=()=>Android.ocrImage("gallery")}
@@ -552,9 +601,10 @@ function vList(){
   const q=(window._wq||"").toLowerCase();
   const ws=allWords().filter(w=>!q||w.w.toLowerCase().includes(q)||(w.ko||"").includes(q));
   M.innerHTML=`<label class="f" for="wq">찾기</label><input type="text" id="wq" value="${esc(window._wq||"")}" placeholder="영어 또는 뜻" autocomplete="off"><p class="sub" style="margin-top:8px" id="wcount">${ws.length}개</p>
-  <section class="card">${ws.slice(0,80).map(w=>{const s=S.srs[w.id];return `<details><summary><span class="grow"><b>${esc(w.w)}</b> <span class="sub">${esc(w.ko)}</span></span><span class="sub">${s?s.box+"단계":"아직"}</span></summary>
+  <section class="card">${ws.slice(0,window._wn||80).map(w=>{const s=S.srs[w.id];return `<details><summary><span class="grow"><b>${esc(w.w)}</b> <span class="sub">${esc(w.ko)}</span></span><span class="sub">${s?s.box+"단계":"아직"}</span></summary>
    ${w.ex?`<p>${esc(w.ex)}</p><p class="sub">${esc(w.exKo||"")}</p>`:""}<p class="why">${esc(srcName(w))}</p>
-   <label class="f" for="ek-${w.id}">뜻 고치기</label><div class="row"><input type="text" id="ek-${w.id}" value="${esc(w.ko)}" class="grow"><button class="btn small" data-fix="${w.id}">뜻 저장</button></div><div class="btns"><button class="btn small" data-del="${w.id}">${w.src==="claude"?"이 단어 숨기기":"이 단어 지우기"}</button></div></details>`}).join("")}${ws.length>80?`<p class="sub">앞의 80개만 보여요. 찾기로 좁혀 보세요.</p>`:""}${!ws.length?`<p>찾는 단어가 없어요. 「단어」 탭에서 직접 추가할 수 있어요.</p>`:""}</section>`;
+   <label class="f" for="ek-${w.id}">뜻 고치기</label><div class="row"><input type="text" id="ek-${w.id}" value="${esc(w.ko)}" class="grow"><button class="btn small" data-fix="${w.id}">뜻 저장</button></div><div class="btns"><button class="btn small" data-del="${w.id}">${w.src==="claude"?"이 단어 숨기기":"이 단어 지우기"}</button></div></details>`}).join("")}${ws.length>(window._wn||80)?`<button class="btn block" id="wmore" style="margin-top:8px">80개 더 보기 (${(window._wn||80)}/${ws.length})</button>`:""}${!ws.length?`<p>찾는 단어가 없어요. 「단어」 탭에서 직접 추가할 수 있어요.</p>`:""}</section>`;
+  const wm=document.getElementById("wmore");if(wm)wm.onclick=()=>{const y=window.scrollY;window._wn=(window._wn||80)+80;vList();window.scrollTo(0,y)};
   const inp=document.getElementById("wq");inp.oninput=()=>{window._wq=inp.value;const pos=inp.selectionStart;vList();const n=document.getElementById("wq");n.focus();n.setSelectionRange(pos,pos)};
   M.querySelectorAll("[data-fix]").forEach(b=>b.onclick=()=>{const id=b.dataset.fix,v=document.getElementById("ek-"+id).value.trim();if(!v){toast("뜻이 비어 있어요");return}const o=S.words[id]||{};o.ko=v;o.t=Date.now();if(id[0]==="c")o.del=false;S.words[id]=o;changed();toast("뜻을 「"+v+"」로 고쳤어요")});
   M.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const id=b.dataset.del,w=wordById(id),o=S.words[id]||{};const prev=JSON.stringify(o);o.del=true;o.t=Date.now();S.words[id]=o;changed();vList();toast("「"+w.w+"」 단어를 "+(id[0]==="c"?"숨겼어요":"지웠어요"),()=>{S.words[id]=Object.assign(JSON.parse(prev),{del:false,t:Date.now()});changed();vList()})});
@@ -678,7 +728,7 @@ function vSet(){
   if(!IS_APP)h+=`<div class="note">알람은 안드로이드 앱에서만 울려요. 이 웹 페이지에서는 시간만 바꿔 둘 수 있고, 앱이 동기화로 받아 가요.</div>`;
   if(st&&!st.ok)h+=`<div class="banner"><span>⚠</span><span><b>알람이 화면에 뜨려면 권한이 필요해요.</b> ${esc(st.msg)}<br><button class="btn small" id="perm" style="margin-top:8px">권한 켜기</button></span></div>`;
   h+=`<p class="sub" id="nextAl" role="status">${esc(nextAlarmText())}</p><div class="sw"><span class="lab"><b>알람 켜기</b><div class="hint">정해진 시각마다 공부 화면을 알람처럼 띄우고 단어 ${cfg("quizSize")}문제를 내요</div></span><input type="checkbox" class="toggle" id="aon" ${cfg("alarmsOn")==="1"?"checked":""} aria-label="알람 켜기"></div>`;
-  h+=`<div id="alist" class="alist${cfg("alarmsOn")==="1"?"":" off"}">${al.map((a,i)=>`<div class="sw"><input type="time" value="${a[0]}" data-ti="${i}" aria-label="${i+1}번째 알람 시각" class="time"><input type="checkbox" class="toggle" data-on="${i}" ${a[1]?"checked":""} aria-label="${a[0]} 알람 켜기"><span class="lab"></span><button class="btn small" data-rm="${i}" aria-label="${a[0]} 알람 지우기">🗑 지우기</button></div>`).join("")}</div>
+  h+=`${cfg("alarmsOn")==="1"?"":`<p class="sub">알람이 모두 꺼져 있어요. 위 스위치를 켜면 아래 시각대로 울려요.</p>`}<div id="alist" class="alist${cfg("alarmsOn")==="1"?"":" off"}">${al.map((a,i)=>`<div class="sw"><input type="time" value="${a[0]}" data-ti="${i}" aria-label="${i+1}번째 알람 시각" class="time"${cfg("alarmsOn")==="1"?"":" disabled"}><input type="checkbox" class="toggle" data-on="${i}" ${a[1]?"checked":""} aria-label="${a[0]} 알람 켜기"${cfg("alarmsOn")==="1"?"":" disabled"}><span class="lab"></span><button class="btn small" data-rm="${i}" aria-label="${a[0]} 알람 지우기">🗑 지우기</button></div>`).join("")}</div>
   <div class="btns"><button class="btn grow" id="aadd">알람 시각 추가</button>${IS_APP?`<button class="btn" id="atest">1분 뒤 시험 알람</button>`:""}</div>
   <label class="f" for="qs">알람마다 낼 문제 수</label><input type="number" id="qs" class="narrow" inputmode="numeric" min="1" max="30" value="${cfg("quizSize")}"></section>`;
   h+=`<section class="card"><h2>단어</h2><label class="f" for="np">하루 새 단어 수</label><input type="number" id="np" class="narrow" inputmode="numeric" min="0" max="100" value="${cfg("newPerDay")}"><p class="hint">Claude 목록 ${BUILTIN.length}개를 1월 하순까지 보려면 하루 15개쯤이면 돼요.</p>
@@ -686,7 +736,7 @@ function vSet(){
   const th=cfg("theme")||"system";h+=`<section class="card"><h2>화면 모드</h2><div role="radiogroup" aria-label="화면 모드" class="btns" style="margin-top:0">${[["system","휴대폰 설정 따르기"],["light","밝게"],["dark","어둡게"]].map(([v,t])=>`<label class="btn small" style="gap:8px"><input type="radio" name="theme" value="${v}" ${th===v?"checked":""} style="width:20px;height:20px;margin:0">${t}</label>`).join("")}</div></section>`;
   h+=`<section class="card"><h2>시험 회차</h2><div class="sw"><span class="lab"><b>418회(3월 6일)도 보기</b><div class="hint">성적이 3월 12일에 나와서 3월 중순 마감에 맞아요. 끄면 달력에서 빠져요</div></span><input type="checkbox" class="toggle" id="x3" ${cfg("exam3")==="1"?"checked":""} aria-label="418회 보기"></div><p class="sub">1차 415회(1/30), 2차 417회(2/27)는 공식 일정으로 고정돼 있어요.</p></section>`;
   h+=`<section class="card"><h2>휴대폰·컴퓨터 동기화</h2><p class="sub">체크·점수·추가한 단어·외운 정도가 GitHub 비공개 Gist 한 개(${FILE})에 저장돼요. 두 기기에 같은 토큰을 한 번씩 넣으면 자동으로 주고받아요. 토큰은 이 기기에만 저장돼요.</p>
-  <label class="f" for="tok">GitHub 토큰 (Gist 권한만)</label><input type="password" id="tok" value="${esc(tok)}" placeholder="github_pat_..." autocomplete="off">
+  <label class="f" for="tok">GitHub 토큰 (Gist 권한만)</label><div class="row"><input type="password" id="tok" value="${esc(tok)}" placeholder="github_pat_..." autocomplete="off" class="grow"><button class="btn small" id="tokShow" aria-pressed="false">보기</button></div>
   <div class="btns"><button class="btn primary" id="tokSave">연결</button><button class="btn" id="syncNow">지금 동기화</button>${tok?`<button class="btn" id="tokDel">연결 끊기</button>`:""}</div><p class="sub" id="syncMsg" style="margin-top:8px" role="status">${esc(tok?syncText:"연결 안 됨 · 이 기기에만 저장 중")}</p></section>
   <section class="card"><h2>백업</h2><button class="btn" id="exp">기록을 파일로 받기</button></section>`;
   M.innerHTML=h;
@@ -704,6 +754,7 @@ function vSet(){
   document.getElementById("vs").onchange=e=>{if(e.target.value){setCfg("vocabStart",e.target.value);toast("저장했어요")}};
   M.querySelectorAll("input[name=theme]").forEach(r=>r.onchange=()=>{setCfg("theme",r.value);applyTheme();toast("화면 모드를 바꿨어요")});
   document.getElementById("x3").onchange=e=>{setCfg("exam3",e.target.checked?"1":"0");toast(e.target.checked?"418회를 달력에 넣었어요":"418회를 달력에서 뺐어요")};
+  document.getElementById("tokShow").onclick=e=>{const i=document.getElementById("tok"),sh=i.type==="password";i.type=sh?"text":"password";e.target.textContent=sh?"숨기기":"보기";e.target.setAttribute("aria-pressed",String(sh))};
   document.getElementById("tokSave").onclick=async()=>{localStorage.setItem(LSTOK,document.getElementById("tok").value.trim());localStorage.removeItem(LSGIST);await sync(true);vSet()};
   document.getElementById("syncNow").onclick=async()=>{await sync(true);vSet()};
   const td=document.getElementById("tokDel");if(td)td.onclick=()=>{localStorage.removeItem(LSTOK);localStorage.removeItem(LSGIST);syncText="이 기기에만 저장 중";vSet()};
@@ -724,7 +775,8 @@ async function findGist(){let id=localStorage.getItem(LSGIST);if(id)return id;
   localStorage.setItem(LSGIST,id);return id}
 let busy=false,again=false,timer=null;
 async function sync(verbose){
-  if(!localStorage.getItem(LSTOK))return;if(busy){again=true;return}busy=true;setLine("동기화 중…");
+  if(!localStorage.getItem(LSTOK)){if(verbose){const sm=document.getElementById("syncMsg");if(sm)sm.innerHTML=`<span class="err" style="display:inline">토큰을 먼저 넣어 주세요.</span>`}return}if(busy){again=true;return}busy=true;setLine("동기화 중…");
+  ["syncNow","tokSave"].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=true});const smm=document.getElementById("syncMsg");if(smm)smm.textContent="동기화 중…";
   try{const id=await findGist();const g=await gh("GET","/gists/"+id);let remote=blank();try{remote=JSON.parse(g.files[FILE].content)}catch(e){}
     const before=JSON.stringify(S.cfg.alarms||null)+JSON.stringify(S.cfg.alarmsOn||null);
     const m=merge(S,remote),js=JSON.stringify(m);S=m;saveLocal();
@@ -732,7 +784,7 @@ async function sync(verbose){
     if(JSON.stringify(S.cfg.alarms||null)+JSON.stringify(S.cfg.alarmsOn||null)!==before)pushAlarms();
     const t=new Date();setLine("동기화됨 "+p2(t.getHours())+":"+p2(t.getMinutes()));applyTheme();const ae=document.activeElement;if(!["quiz","learn","ocr","set","score","words","list"].includes(view)&&!(ae&&/INPUT|SELECT|TEXTAREA/.test(ae.tagName)))render();
   }catch(e){const m=/401|403/.test(e.message)?"토큰이 맞지 않거나 만료됐어요":/404/.test(e.message)?"기록 Gist 를 찾지 못했어요":"인터넷 연결을 확인해 주세요";setLine("동기화 실패: "+m+" · 이 기기에는 저장됨");const sm=document.getElementById("syncMsg");if(sm)sm.innerHTML=`<span class="err" style="display:inline">${esc(m)}</span> <button class="btn small" id="syncRetry">다시 시도</button>`;const rb=document.getElementById("syncRetry");if(rb)rb.onclick=()=>sync(true)}
-  busy=false;if(again){again=false;sync()}
+  busy=false;["syncNow","tokSave"].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=false});const sm2=document.getElementById("syncMsg");if(sm2&&!sm2.querySelector(".err"))sm2.textContent=syncText;if(again){again=false;sync()}
 }
 function changed(){saveLocal();clearTimeout(timer);timer=setTimeout(()=>sync(),1500)}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){sync();if(view==="today")render()}});
