@@ -458,7 +458,7 @@ const BOX=[0,1,3,7,14,30],CHUNK=10; /* 새 단어는 10개씩 보고 바로 시�
 function userWords(){return Object.entries(S.words).filter(([id,w])=>id[0]==="u"&&!w.del).map(([id,w])=>Object.assign({id},w))}
 function ovr(w){const o=S.words[w.id];if(!o)return Object.assign({},w);if(o.del)return null;return Object.assign({},w,o.ko?{ko:o.ko,edited:1}:{},o.syn2?{syn2:o.syn2}:{},o.der?{der:o.der}:{})}
 function builtin(w){return ovr(w)}
-let _bank=null;
+var _bank=null; /* var: 시험지를 은행보다 먼저 불러와도 되게 */
 function bank(){
   if(_bank)return _bank;
   const pri={u:0,p:1,c:2},byKey={},list=[];
