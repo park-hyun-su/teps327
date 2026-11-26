@@ -868,6 +868,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:"&&!IS_APP)navigator
 {const h=location.hash.slice(1);if(h==="alarm")fromAlarm=true;else if(TITLES[h]&&!["quiz","learn","ocr"].includes(h))view=h}
 history.replaceState({v:view},"","#"+view);
 applyTheme();autoQuizDone();render();pushAlarms();sync();
+if(IS_APP&&Android.markGood)Android.markGood();
 </script>
 </body>
 </html>
