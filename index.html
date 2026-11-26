@@ -122,11 +122,11 @@ label.f{display:block;font-size:13px;color:var(--sub);margin:10px 0 4px}
 </div></div>
 <script>
 "use strict";
-const START="2026-11-20", END="2027-03-14", LS="teps327_state_v1", LSTOK="teps327_token", LSGIST="teps327_gist";
+const START="2026-11-27", END="2027-03-14", LS="teps327_state_v1", LSTOK="teps327_token", LSGIST="teps327_gist";
 const FILE="teps_progress.json";
 const TARGET={L:[130,240],V:[30,60],G:[37,60],R:[130,240]};
 const NAME={L:"청해",V:"어휘",G:"문법",R:"독해"};
-const DEF={exam1:"",exam2:"",exam3:"",vocabDays:"30",vocabStart:"2026-11-19"};
+const DEF={exam1:"",exam2:"",exam3:"",vocabDays:"30",vocabStart:"2026-11-27"};
 const HOL={"2026-12-25":"성탄절","2027-01-01":"신정","2027-02-06":"설 연휴","2027-02-07":"설날","2027-02-08":"설 연휴","2027-02-09":"대체공휴일","2027-03-01":"삼일절"};
 const CAT={voc:["보카","var(--c-voc)"],lis:["청해","var(--c-lis)"],gram:["문법","var(--c-gram)"],read:["독해","var(--c-read)"],mock:["기출","var(--c-mock)"],exam:["시험","var(--c-exam)"],etc:["할 일","var(--c-etc)"]};
 
@@ -155,8 +155,8 @@ function scoresList(){return Object.entries(S.scores).filter(([,s])=>!s.del).map
 /* ---------- plan ---------- */
 function phaseOf(d){
   const e1=cfg("exam1"),e2=cfg("exam2");
-  if(d<"2026-11-23")return "0단계 · 진단";
-  if(d<="2026-12-20")return "1단계 · 기본기";
+  if(d<"2026-11-30")return "0단계 · 진단";
+  if(d<="2026-12-27")return "1단계 · 기본기";
   if(d<="2027-01-17")return "2단계 · 다지기";
   if(!e1||d<=e1)return "3단계 · 1차 응시 준비";
   if(!e2||d<=e2)return "4단계 · 약점 보강";
@@ -184,21 +184,20 @@ function tasksFor(d){
   const e1=cfg("exam1"),e2=cfg("exam2"),e3=cfg("exam3");
   const mock=(id,n)=>{push(id,"기출 "+n+"회 실전 풀이: 청해 40분 → 어휘·문법 25분 → 독해 40분, 한 번에","공식 기출 5회분");push(id+"s","기출 "+n+"회 점수를 「진행·점수」 탭에 기록","기록")};
   const review=(id,n)=>push(id,"기출 "+n+"회 오답 정리: 모르는 단어는 보카 빈칸에, 틀린 청해는 받아쓰기","공식 기출 5회분");
-  if(d==="2026-11-20")push("p","진단 준비: 기출 1회 풀 시간(105분)을 정하고 음원·답안지 준비","0단계");
-  else if(d==="2026-11-21")mock("m1",1);
-  else if(d==="2026-11-22")review("r1",1);
-  else if(d<="2026-12-20"){
-    const n=Math.floor(diff("2026-11-23",d)/7)+1;
-    if(d==="2026-11-23")push("reg1","1차 시험 접수 (1월 하순 회차) 후 「설정」에 시험일 입력","할 일");
+  if(d==="2026-11-27")mock("m1",1);
+  else if(d==="2026-11-28")review("r1",1);
+  else if(d==="2026-11-29")push("reg1","1차 시험 접수 (1월 하순 회차) 후 「설정」에 시험일 입력","할 일");
+  else if(d<="2026-12-27"){
+    const n=Math.floor(diff("2026-11-30",d)/7)+1;
     if(wk){push("g","문법책 1회독: 이번 주 목차 "+n+"/4 구간 (하루 1/5씩)","해커스 텝스 중급 문법");push("l","청해책 앞 절반: 이번 주 "+n+"/4 구간 (하루 1/5씩)","뉴텝스 기본편 실전 300+ 청해")}
     else if(w===6){push("r","독해: 기출 1회 지문 다시 읽기, 모르는 단어 적기","독해");push("c","이번 주 문법·청해 밀린 분량 채우기","주말")}
     else push("c","한 주 점검: 이번 주 체크 안 된 항목 확인","주말");
   }
   else if(d<="2027-01-17"){
-    const n=Math.floor(diff("2026-12-21",d)/7)+1;
+    const n=Math.floor(diff("2026-12-28",d)/7)+1;
     if(d==="2027-01-16")mock("m2",2);
     else if(d==="2027-01-17"){review("r2",2);push("cmp","진단과 기출 2회를 영역별로 비교: 오른 영역과 안 오른 영역","기록")}
-    else if(wk){push("g","문법 2회독: 1회독에서 틀린 문제만 (이번 주 "+n+"/4 구간)","해커스 텝스 중급 문법");push("l","청해책 뒤 절반: 이번 주 "+n+"/4 구간 (하루 1/5씩)","뉴텝스 기본편 실전 300+ 청해")}
+    else if(wk){push("g","문법 2회독: 1회독에서 틀린 문제만 (이번 주 "+n+"/3 구간)","해커스 텝스 중급 문법");push("l","청해책 뒤 절반: 이번 주 "+n+"/3 구간 (하루 1/5씩)","뉴텝스 기본편 실전 300+ 청해")}
     else if(w===6){push("r","독해: 지난 회차 지문을 시간 재고 다시 풀기, 모르는 문제는 넘기기 연습","독해");push("c","이번 주 밀린 분량 채우기","주말")}
     else push("c","한 주 점검: 이번 주 체크 안 된 항목 확인","주말");
   }
