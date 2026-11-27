@@ -13,7 +13,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27g">
+<meta name="build" content="2026-11-27h">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
 /* 색: 밝게 = 회색빛 종이 지면과 빨강 한 곳(이코노미스트 방식), 어둡게 = 깊은 물색 지면(파타고니아 방식).
@@ -353,7 +353,7 @@ const START="2026-11-27", END="2027-04-16", LS="teps330_state_v1", LSTOK="teps32
 const NAME={L:"청해",V:"어휘",G:"문법",R:"독해"};
 const MAXS={L:240,V:60,G:60,R:240};
 const TARGET={L:132,V:33,G:33,R:132};            /* 영상 [A] 135/30/30/135 와 [B] 130/35/35/130 의 중간 */
-const DEF={recall:"1",newPerDay:"5",photoFull:"auto",quizSize:"5",vocabDays:"30",vocabStart:"2026-11-27",examsOff:[],
+const DEF={recall:"1",newPerDay:"5",photoFull:"auto",quizSize:"5",vocabDays:"30",vocabStart:"2026-11-30",examsOff:[],
   alarmsOn:"1",alarms:[["08:00",1],["09:00",1],["11:40",1],["13:00",1],["16:00",1],["17:20",1],["18:00",1],["18:30",1],["20:00",1]]};
 const HOL={"2026-12-25":"성탄절","2027-01-01":"신정","2027-02-06":"설 연휴","2027-02-07":"설날","2027-02-08":"설 연휴","2027-02-09":"대체공휴일","2027-03-01":"삼일절"};
 /* 공식 일정 (teps.or.kr 시험일정 안내, 2026-11-26 확인) */
@@ -402,7 +402,8 @@ function examOn(e){return !(cfg("examsOff")||[]).includes(e.no)}
 function firstExam(){return EXAMS.find(examOn)}
 function phaseOf(d){
   const fe=firstExam(),fd=fe?fe.date:"2027-02-27";
-  if(d<"2026-11-30")return "0단계 · 진단";
+  if(d<"2026-11-30")return "0단계 · 책 없이 준비";
+  if(d<="2026-12-01")return "0단계 · 진단";
   if(d<="2026-12-27")return "1단계 · 기본기";
   if(d<="2027-01-24")return "2단계 · 실전 연습";
   if(d<add(fd,-6))return "3단계 · 실전 다지기";
@@ -433,14 +434,17 @@ function tasksFor(d){
   const pd=pagodaDay(d);
   if(d===photoFullFrom())push("photo2","voc","30 Unit 을 두 번 다 봤어요. 오늘부터 사진이 유의어·파생어까지 읽어요. Unit 1부터 다시 찍기","파고다 뉴텝스 보카","");
   if(pd)push("pagoda","voc","파고다 보카 "+pd.round+"회독 Unit "+pd.day+" 외우고, "+(pd.round===1?"시험지에 없는 큰 단어 쪽을":"그 쪽들을")+" 「단어」 탭에서 연속으로 찍기","파고다 뉴텝스 보카","");
-  else if(w===0)push("pagoda","voc","파고다 보카 이번 주 Unit 다시 보기","파고다 뉴텝스 보카","");
+  else if(w===0&&d>=cfg("vocabStart"))push("pagoda","voc","파고다 보카 이번 주 Unit 다시 보기","파고다 뉴텝스 보카","");
   /* 날짜별 행사 */
   const M=(id,n,extra)=>{push(id,"mock","기출 "+n+"회 실전: 쉬는 시간 없이 청해 40분 → 어휘·문법 25분 → 독해 40분","서울대 공식 기출 5회분","실전처럼 끊지 않고, 시험 시각(오후 2시 20분)에 풀기 [A][F]");push(id+"s","mock","기출 "+n+"회 영역별 점수를 「기록」 탭에 적기"+(extra||""),"기록")};
   const R=(id,n)=>push(id,"mock","기출 "+n+"회 리뷰: 틀린 문제와 찍은 문제마다 왜 그 보기를 골랐는지 적고, 해설 없이 원인부터 찾기","서울대 공식 기출 5회분","점수는 리뷰에서 오름, 문제만 많이 풀지 않기 [A][B][D]");
   const ev={
-    "2026-11-27":()=>{push("plan","etc","「오늘」 탭의 330점 공부법을 읽고 해석용 문법 7가지를 문법책 목차에서 표시 (20분)","해커스 텝스 중급 문법","해석에 필요한 문법만 먼저 [A]")},
-    "2026-11-28":()=>M("m1",1," (진단)"),
-    "2026-11-29":()=>R("r1",1),
+    /* 11-27~11-29: 사용자 사정으로 실전·책·사진 찍기 없음. 앱 단어(Claude 목록)만 */
+    "2026-11-27":()=>{push("plan","etc","「오늘」 탭의 330점 공부법 읽기 (10분)","이 앱","해석에 필요한 문법만 먼저 [A]")},
+    "2026-11-28":()=>{push("lis0","lis","청해 숙어: 새 단어 화면에서 발음 단추로 듣고 따라 읽기","이 앱","청해용 숙어는 발음을 들으며 [A][B]")},
+    "2026-11-29":()=>{push("prep","etc","내일 진단 준비: 오후 2시 20분부터 140분을 비워 두고, 기출 1회 책·답안지·시계 챙기기","월요일 진단","실전처럼 끊지 않고, 시험 시각에 [A][F]")},
+    "2026-11-30":()=>M("m1",1," (진단)"),
+    "2026-12-01":()=>{R("r1",1);push("plan2","gram","해석용 문법 7가지를 문법책 목차에서 표시 (20분)","해커스 텝스 중급 문법","해석에 필요한 문법만 먼저 [A]")},
     "2026-12-26":()=>M("m2",2),"2026-12-27":()=>R("r2",2),
     "2027-01-16":()=>M("m3",3),"2027-01-17":()=>R("r3",3),
     "2027-01-30":()=>M("m4",4),"2027-01-31":()=>R("r4",4),
@@ -818,7 +822,7 @@ function vScore(){
   h+=`<div class="tbl" style="margin-top:12px"><table><caption>모든 기록</caption><thead><tr><th class="l" scope="col">회차</th><th scope="col">청해</th><th scope="col">어휘</th><th scope="col">문법</th><th scope="col">독해</th><th scope="col">합계</th><th scope="col"><span class="sr">지우기</span></th></tr></thead><tbody>
   <tr><td class="l sub">목표</td><td class="sub">${TARGET.L}</td><td class="sub">${TARGET.V}</td><td class="sub">${TARGET.G}</td><td class="sub">${TARGET.R}</td><td class="sub">330</td><td></td></tr>
   ${l.map(s=>`<tr><td class="l" style="min-width:6.5em">${esc(s.name)}<div class="sub num">${esc(s.date.slice(5).replace("-","/"))}</div></td>${["L","V","G","R"].map(k=>`<td>${esc(s[k])}</td>`).join("")}<td class="${tot(s)>=330?"pass":"fail"}">${tot(s)} ${tot(s)>=330?"✓":"✗"}</td><td><button class="btn small" data-del="${s.id}" aria-label="${esc(s.name)} 기록 지우기" style="padding:0 8px">지우기</button></td></tr>`).join("")}
-  ${!l.length?`<tr><td class="l" colspan="7">아직 기록이 없어요. 11월 28일 기출 1회 진단을 풀고 아래에 적어 주세요.</td></tr>`:""}</tbody></table></div></section>
+  ${!l.length?`<tr><td class="l" colspan="7">아직 기록이 없어요. 11월 30일 기출 1회 진단을 풀고 아래에 적어 주세요.</td></tr>`:""}</tbody></table></div></section>
   <form class="card" id="sform" novalidate style="display:block"><h2>새 기록</h2><label class="f" for="sn">회차 이름</label><input type="text" id="sn" placeholder="예: 기출 1회 진단"><label class="f" for="sd">날짜</label><input type="date" id="sd" value="${td}">
   <div class="score4">${["L","V","G","R"].map(k=>`<div><label class="f" for="s${k}">${NAME[k]} (0~${MAXS[k]})</label><input type="number" id="s${k}" inputmode="numeric" min="0" max="${MAXS[k]}" aria-describedby="e${k}"><div id="e${k}"></div></div>`).join("")}</div>
   <button class="btn primary" id="sadd" type="submit" style="margin-top:12px">기록 추가</button></form>`;
