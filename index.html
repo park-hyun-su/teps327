@@ -13,7 +13,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27f">
+<meta name="build" content="2026-11-27g">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
 /* 색: 밝게 = 회색빛 종이 지면과 빨강 한 곳(이코노미스트 방식), 어둡게 = 깊은 물색 지면(파타고니아 방식).
@@ -95,12 +95,14 @@ p{margin:0 0 var(--s2)}
 .why{font-size:var(--f-xs);color:var(--faint);margin-top:2px}
 .badge-done{font-size:var(--f-xs);color:var(--ok);font-weight:700}
 /* 하단 탭 (내비-03·04·09, 레이아웃-13) */
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--tab);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+/* 탭 막대: 사용자가 선 아이콘 줄을 싫어함 -> 글자만, 지금 탭은 진하게 + 빨간 점 하나 */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--tab);border-top:0;padding-bottom:env(safe-area-inset-bottom)}
 nav.tabs .in{display:flex;max-width:720px;margin:0 auto}
-nav.tabs button{flex:1;border:0;background:none;min-height:60px;padding:6px 0 8px;font-size:var(--f-xs);color:var(--sub);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
-nav.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8}
+nav.tabs button{flex:1;border:0;background:none;min-height:56px;padding:0;font-size:var(--f-m);font-weight:500;letter-spacing:-.01em;color:var(--sub);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+nav.tabs button::after{content:"";width:5px;height:5px;border-radius:50%;background:transparent}
+nav.tabs svg{display:none}
 nav.tabs button[aria-current="page"]{color:var(--text);font-weight:700}
-nav.tabs button[aria-current="page"] svg{fill:var(--surface2);stroke-width:2.2}
+nav.tabs button[aria-current="page"]::after{background:var(--accent)}
 /* 달력 */
 .cal-head{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2)}
 .cal-head h2{flex:1;margin:0}
@@ -135,7 +137,7 @@ nav.tabs button[aria-current="page"] svg{fill:var(--surface2);stroke-width:2.2}
 .card.learn{padding:var(--s5) var(--s4);will-change:transform}
 .card.learn.inv{background:var(--text);color:var(--bg)}
 .card.learn.inv .pos,.card.learn.inv .exko,.card.learn.inv .why,.card.learn.inv summary{color:inherit;opacity:.78}
-.card.learn.inv .speak{background:transparent;border-color:currentColor;color:inherit}
+.card.learn.inv .speak{background:rgba(127,127,127,.22);color:inherit}
 .push-r{animation:pushR var(--t-push) cubic-bezier(.3,0,.2,1)}.push-l{animation:pushL var(--t-push) cubic-bezier(.3,0,.2,1)}
 @keyframes pushR{from{transform:translateX(60%);opacity:0}to{transform:none;opacity:1}}
 @keyframes pushL{from{transform:translateX(-60%);opacity:0}to{transform:none;opacity:1}}
@@ -149,7 +151,7 @@ nav.tabs button[aria-current="page"] svg{fill:var(--surface2);stroke-width:2.2}
 .learn .exko{color:var(--sub);font-size:var(--f-s)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--s2)}
 .chip{font-size:var(--f-s);padding:0;margin-right:10px;background:none;border:0}
-.speak{border:1px solid var(--line-strong);background:var(--surface);border-radius:50%;width:44px;height:44px;display:inline-grid;place-content:center;cursor:pointer;flex:none}
+.speak{border:0;background:var(--surface2);border-radius:50%;width:44px;height:44px;display:inline-grid;place-content:center;cursor:pointer;flex:none}
 .speak svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
 .stat{background:var(--surface2);border-radius:var(--r-s);padding:var(--s3);text-align:center}
@@ -178,7 +180,11 @@ input.narrow{width:7.5em}
 .sw{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);min-height:56px;border-top:1px solid var(--line);padding:4px 0}
 .btn{white-space:nowrap}
 .alist.off{opacity:.45}
-.sticky-act{position:sticky;bottom:calc(68px + env(safe-area-inset-bottom));z-index:4;background:var(--bg);padding:8px 0}
+.sticky-act{position:sticky;bottom:calc(56px + env(safe-area-inset-bottom));z-index:4;background:var(--bg);padding:8px 0}
+/* 아래 단추 줄: 주 단추 하나만 면, 나머지는 테두리·면 없는 글자 단추 */
+.sticky-act .btn:not(.primary){background:transparent;border:0;color:var(--text);font-weight:600}
+.sticky-act .btn:not(.primary):disabled{opacity:.35}
+.sticky-act .btn.primary{min-height:54px;font-size:var(--f-l);font-weight:700;border:0}
 .toast button{margin-left:12px;background:none;border:0;color:inherit;font-weight:800;text-decoration:underline;min-height:32px;cursor:pointer}
 .sw:first-of-type{border-top:0}
 .sw .lab{flex:1}
