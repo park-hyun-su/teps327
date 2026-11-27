@@ -13,7 +13,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27k">
+<meta name="build" content="2026-11-27l">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
 /* 색: 밝게 = 회색빛 종이 지면과 빨강 한 곳(이코노미스트 방식), 어둡게 = 깊은 물색 지면(파타고니아 방식).
@@ -88,8 +88,12 @@ p{margin:0 0 var(--s2)}
 .task input:checked{background:var(--ok);border-color:var(--ok)}
 .task input:checked::after{content:"✓";color:var(--on-ok);font-weight:800;font-size:15px}
 .task .t{font-weight:600}
-.task .k{font-size:var(--f-s);color:var(--sub);margin-top:2px}
-.task.done .t{text-decoration:line-through;color:var(--sub)}
+.task .k{font-size:var(--f-s);color:var(--sub);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task.done .t{color:var(--sub);font-weight:500}
+.task .t{line-height:1.45}
+.donebox{border-top:1px solid var(--line);margin-top:var(--s1)}
+.donebox summary{color:var(--sub);font-weight:600;font-size:var(--f-s)}
+.alldone{color:var(--sub);margin:var(--s3) 0}
 .tag{display:inline-block;font-size:var(--f-xs);font-weight:700;padding:0;margin-right:8px;background:none;color:var(--text);border:0}
 .tag i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:1px}
 .why{font-size:var(--f-xs);color:var(--faint);margin-top:2px}
@@ -232,7 +236,8 @@ body.focus .sticky-act{bottom:0;padding-bottom:calc(12px + env(safe-area-inset-b
 .cal-head .mon .dotp{color:var(--accent)}
 .cal-head .nav{width:44px;height:44px;border-radius:50%;border:0;background:var(--surface2);color:var(--text);font-size:1.4rem;cursor:pointer;margin-left:6px}
 .wk .sun{color:var(--bad)}
-.cell{background:color-mix(in srgb,var(--primary) var(--h,0%),transparent)}
+.cell{position:relative;isolation:isolate}
+.cell::before{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--primary);opacity:var(--o,0);z-index:-1}
 .cell.full{background:var(--primary);color:var(--on-primary)}
 .cell.full .d,.cell.full .ev,.cell.full .ck{color:var(--on-primary)}
 .cell.out .d{color:var(--sub);font-weight:400}
@@ -243,12 +248,13 @@ body.focus .sticky-act{bottom:0;padding-bottom:calc(12px + env(safe-area-inset-b
 .cell.today.full .d{background:var(--on-primary);color:var(--primary)}
 .cell .ck{font-size:.75rem;font-weight:800}
 .cleg{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--f-xs);color:var(--sub);margin-top:var(--s3)}
-.cleg i{width:14px;height:14px;border-radius:4px;background:color-mix(in srgb,var(--primary) var(--h,0%),transparent)}
-.cleg i.f{background:var(--primary)}.cleg .gap{width:8px}.cleg .exd{color:var(--accent)}.cleg .mkd{color:var(--warn)}
+.cleg i{width:14px;height:14px;border-radius:4px;background:var(--primary)}
+.cleg i.f{background:var(--primary)}.cleg .gap{width:8px}.cleg .exd{color:var(--accent);font-weight:800}.cleg .mkd{color:var(--warn)}
 .jbar{position:relative;display:flex;gap:3px;height:12px;margin:var(--s4) 0 var(--s2)}
-.jbar span{border-radius:6px}
+.jbar span{border-radius:6px;background:var(--surface2);overflow:hidden}
+.jbar span b{display:block;height:100%;background:var(--primary)}
 .jbar .jnow{position:absolute;top:-6px;width:4px;height:24px;margin-left:-2px;border-radius:2px;background:var(--text)}
-.jbar .jex{position:absolute;top:14px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--accent)}
+.jbar .jex{position:absolute;top:16px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--text)}
 .jcur{margin:var(--s3) 0 var(--s2)}
 .jleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:var(--f-xs);color:var(--sub)}
 .jleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
@@ -328,6 +334,22 @@ body.focus header.top .meta{display:none}
 .act14 i{display:block;width:100%;border-radius:5px;background:var(--text);opacity:.82}
 .act14 span.on i{background:var(--primary);opacity:1}
 .act14 small{font-size:.6875rem;color:var(--sub);height:1em}
+.hero2 .tsub{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.prog{padding:var(--s4) var(--s5)}
+.prog .pbar+.pbar{margin-top:14px}
+.prog .pbar .t{color:var(--sub)}.prog .pbar .t b{color:var(--text)}
+.prog .pbar .tr{background:var(--surface2)}.prog .pbar .tr i{background:var(--primary)}
+.nextrow{display:flex;align-items:center;gap:var(--s3);width:100%;border:0;border-top:1px solid var(--line);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;margin-top:var(--s4);padding:var(--s4) 0 0}
+.nextrow b{display:block;font-size:var(--f-l);margin-top:2px}
+.nextrow .dbig{font-size:2rem;font-weight:700;letter-spacing:-.03em}
+.prog .nextrow:first-child{border-top:0;margin-top:0;padding-top:0}
+.nums3.flat{padding:var(--s2) 0}
+.act14.hide{display:none}
+.lnk{border:0;background:none;color:var(--sub);font:inherit;font-size:var(--f-s);font-weight:600;min-height:44px;padding:0 4px;cursor:pointer}
+.addrec summary{display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:999px;background:var(--primary);color:var(--on-primary);font-weight:700;list-style:none;margin:0}
+.addrec summary::-webkit-details-marker{display:none}
+.addrec[open] summary{background:transparent;color:var(--text);justify-content:flex-start;min-height:44px;font-size:var(--f-l)}
+details.addrec{border-top:0}
 /* 큰 카드 하나 (오늘·기록) + 숫자 칸 */
 .hero2{background:var(--hero);color:var(--on-hero);border-radius:24px;padding:var(--s5);margin:0 0 var(--s3)}
 .hero2 .hrow{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s2)}
@@ -715,10 +737,11 @@ function render(){
   const hb=document.getElementById("hbx");hb.innerHTML=PARENT[view]?`<button class="hb" id="hback" aria-label="${focus?"닫기 (진행은 남아요)":"뒤로"}">${focus?ICON_X:ICON_BACK}</button>`:"";
   const hbb=document.getElementById("hback");if(hbb)hbb.onclick=leaveSub;
   document.getElementById("title").innerHTML=esc(TITLES[view]||"")+(["today","words","cal","score","set"].includes(view)?'<span class="dotp" aria-hidden="true">.</span>':"");
-  document.getElementById("meta").innerHTML=esc(nextExamLine())+"<br><span id='syncLine'>"+esc(syncText)+"</span>";
+  document.getElementById("meta").innerHTML="<span id='syncLine' class='"+(/실패/.test(syncText)?"":"sr")+"'>"+esc(syncText)+"</span>";
   document.querySelectorAll("nav.tabs button").forEach(b=>{const on=b.dataset.v===view||(view==="method"&&b.dataset.v==="today")||(["quiz","learn","ocr","list"].includes(view)&&b.dataset.v==="words");b.toggleAttribute("aria-current",false);if(on)b.setAttribute("aria-current","page")});
   ({today:vToday,words:vWords,cal:vCal,score:vScore,set:vSet,method:vMethod,quiz:vQuiz,learn:vLearn,ocr:vOcr,list:vList})[view]();
 }
+function tasksBlock(d,t){const un=t.filter(x=>!isDone(key(d,x.id))),dn=t.filter(x=>isDone(key(d,x.id)));return un.map(x=>taskHTML(d,x)).join("")+(un.length?"":`<p class="alldone">오늘 할 일을 다 했어요.</p>`)+(dn.length?`<details class="donebox"><summary>끝낸 일 ${dn.length}개</summary>${dn.map(x=>taskHTML(d,x)).join("")}</details>`:"")}
 function taskHTML(d,x){const k=key(d,x.id),dn=isDone(k),c=CAT[x.cat];
   return `<label class="task${dn?" done":""}" data-k="${k}"><input type="checkbox"${dn?" checked":""} aria-describedby="k-${esc(k)}"><div class="grow"><div class="t">${esc(x.t)}</div><div class="k" id="k-${esc(k)}"><span class="tag"><i style="background:${c[1]}"></i>${c[0]}</span>${esc(x.k)}</div></div></label>`}
 function bindTasks(){M.querySelectorAll(".task input").forEach(i=>i.onchange=e=>{const k=e.target.closest(".task").dataset.k,v=e.target.checked,y=window.scrollY;setDone(k,v);say(v?"완료로 표시했어요":"완료 표시를 지웠어요");render();window.scrollTo(0,y);const n=M.querySelector(`.task[data-k="${CSS.escape(k)}"] input`);if(n)n.focus({preventScroll:true});if(v)toast("완료로 표시했어요",()=>{setDone(k,false);render();window.scrollTo(0,y)})})}
@@ -751,11 +774,11 @@ function vToday(){
       const pb=(lab,v,tot,cmp)=>{const p=tot?Math.round(v/tot*100):0;return `<div class="pbar"><div class="t"><span>${lab}</span><b class="num">${v} / ${tot}</b></div><div class="tr" role="img" aria-label="${lab} ${v}/${tot}, ${p}%"><i style="width:${p}%"></i></div>${cmp?`<div class="cmp">${cmp}</div>`:""}</div>`};
       h+=`<section class="hero2" aria-labelledby="h-na"><div class="hrow"><p class="lead">${esc(a.lead)}</p>${ne?`<span class="dd num">${ne.no}회 D-${diff(td,ne.date)||"DAY"}</span>`:""}</div>
       <div class="giant"><b class="num">${G[0]}</b><span>${G[1]}</span></div><h2 id="h-na" class="sr">${esc(a.h)}</h2><p class="tsub">${esc(a.sub)}</p>
-      <div class="pbars">${pb("복습",rvd,rvd+due)}${pb("새 단어",lnd,lnd+nl)}${pb("할 일",n,c)}</div>
-      <button class="btn block" id="na" data-act="${a.act}"${a.k?` data-k="${esc(a.k)}"`:""}>${esc(a.btn)}</button></section>
-      ${nx?`<button class="card nextcard" data-go="cal"><span class="grow"><span class="sub">다음 일정 · ${esc(nx[0])}</span><b>${esc(nx[1])}</b></span><span class="dbig num">D-${diff(td,nextEventDate(d))}</span></button>`:""}`}
+      <button class="btn block" id="na" data-act="${a.act}"${a.k?` data-k="${esc(a.k)}"`:""}>${esc(a.btn)}</button></section>`;
+      const rows=[["복습",rvd,rvd+due],["새 단어",lnd,lnd+nl],["할 일",n,c]].filter(r=>r[2]>0);
+      h+=`<section class="card prog" aria-label="오늘 진행">${rows.map(r=>pb(...r)).join("")}${nx?`<button class="nextrow" data-go="cal"><span class="grow"><span class="sub">다음 일정 · ${esc(nx[0])}</span><b>${esc(nx[1])}</b></span><span class="dbig num">D-${diff(td,nextEventDate(d))}</span></button>`:""}</section>`}
   }
-  h+=`<section class="card" aria-labelledby="h-t"><div class="row"><h2 id="h-t" class="grow">${esc(label(d))}</h2><span class="sub">${esc(phaseOf(d))}</span></div>${meter(n,c,"오늘 할 일")}${t.map(x=>taskHTML(d,x)).join("")}</section>`;
+  h+=`<section class="card" aria-labelledby="h-t"><div class="row"><h2 id="h-t" class="grow">${esc(label(d))}</h2><span class="sub">${esc(phaseOf(d))}</span></div>${meter(n,c,"오늘 할 일")}${tasksBlock(d,t)}</section>`;
   const miss=[];for(let x=START;x<td&&x<=END;x=add(x,1)){const r=tasksFor(x).filter(y=>!isDone(key(x,y.id))&&y.id!=="quiz");if(r.length)miss.push([x,r])}
   h+=`<section class="card" style="padding-top:4px;padding-bottom:4px">`;
   if(miss.length)h+=`<details><summary>지난 날 체크 안 한 일 ${miss.reduce((a,[,r])=>a+r.length,0)}개</summary>${miss.slice(-7).map(([x,r])=>`<h3>${esc(label(x))}</h3>${r.map(y=>taskHTML(x,y)).join("")}`).join("")}<p class="sub">최근 7일만 보여요. 다 못 했어도 오늘 할 일부터 하면 돼요.</p></details>`;
@@ -843,9 +866,9 @@ function speak(t){if(IS_APP&&Android.speak){Android.speak(t);return}try{const u=
 function vWords(){
   const due=dueList().length,nl=newLeftToday(),tot=allWords().length,seen=Object.keys(S.srs).length,uw=userWords().length;
   const boxes=[0,0,0,0,0,0];for(const s of Object.values(S.srs))boxes[s.box]++;
-  M.innerHTML=resumeCard()+`<section class="card"><h2>오늘 단어</h2><div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>오늘 복습</span></div><div class="stat"><b class="num">${stageCounts()[8]}</b><span>장기 기억</span></div></div><p class="sub" style="margin:8px 0 0">전체 단어 ${tot.toLocaleString()}개</p>
-   <div class="btns"><button class="btn primary grow" id="s1">${nl?"새 단어 "+Math.min(nl,CHUNK)+"개 익히기":"복습 시험"}</button><button class="btn" id="s2">${cfg("quizSize")}문제만</button></div></section>
-   <section class="card"><h2>파고다 보카 사진으로 추가</h2><p class="sub">${photoFull()?"<b>2단계:</b> 쪽을 찍으면 이미 있는 단어에 책의 유의어·파생어를 붙이고, 없는 단어는 새로 넣어요.":"<b>1단계:</b> 단어 시험지 "+PAGODA.length+"개는 이미 들어 있어요. 시험지에 없는 큰 표제어와 뜻만 읽어서 바로 넣어요."} 인식은 뒤에서 하니까 카메라가 다시 열리면 다음 쪽을 이어서 찍고, 다 찍었으면 뒤로 가기를 누르세요.</p>
+  M.innerHTML=resumeCard()+`<section class="card"><h2>오늘 단어</h2><div class="nums3 flat"><div class="nc"><b class="num">${due}</b><span>오늘 복습</span></div><div class="nc"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="nc"><b class="num">${stageCounts()[8]}</b><span>장기 기억</span></div></div><p class="sub" style="margin:4px 0 0;text-align:center">전체 단어 ${tot.toLocaleString()}개</p>
+   <div class="btns"><button class="btn primary grow" id="s1">${due?"복습 "+Math.min(due,20)+"문제부터":nl?"새 단어 "+Math.min(nl,CHUNK)+"개 가르기":"복습 시험"}</button><button class="btn" id="s2">${cfg("quizSize")}문제만</button></div></section>
+   <section class="card"><h2>파고다 보카 사진으로 추가</h2><p class="sub">${photoFull()?"<b>2단계:</b> 쪽을 찍으면 이미 있는 단어에 책의 유의어·파생어를 붙이고, 없는 단어는 새로 넣어요.":"시험지에 없는 큰 표제어와 뜻만 읽어 바로 넣어요."} 찍으면 카메라가 다시 열려요. 다 찍었으면 뒤로 가기.</p>
    ${IS_APP?`<div class="btns"><button class="btn grow" id="cam">📷 연속 찍기</button><button class="btn grow" id="gal">사진 여러 장 고르기</button></div>`:`<div class="note">사진 글자 읽기는 휴대폰 앱에서만 돼요. 여기서는 아래 「직접 추가」로 넣을 수 있어요.</div>`}
    <p class="sub" id="ocrStat" role="status" style="margin-top:8px">${ocrStatText()}</p>
    ${(()=>{const b=lastBatch();if(!b||!b.ids.length)return "";return `<details><summary>최근 사진에서 넣은 단어 ${b.ids.length}개 보기·고치기</summary>${b.ids.map(id=>{const w=S.words[id];return `<div class="row" style="margin:6px 0"><span lang="en" style="min-width:7.5em;font-weight:700">${esc(w.w)}</span><input type="text" class="grow" data-bk="${id}" value="${esc(w.ko)}" aria-label="${esc(w.w)} 뜻"></div>`}).join("")}<div class="btns"><button class="btn small" id="bundo">이 사진에서 넣은 단어 모두 지우기</button></div></details>`})()}
@@ -953,9 +976,9 @@ function journeyHTML(td){
   const ph=[["0단계 준비·진단",START,"2026-12-01","var(--line-strong)"],["1단계 기본기","2026-12-02","2026-12-27","var(--tile-voc)"],["2단계 실전 연습","2026-12-28","2027-01-24","var(--tile-read)"],["3단계 다지기","2027-01-25",add(fd,-7),"var(--tile-now)"],["첫 시험 주간",add(fd,-6),fd,"var(--tile-mock)"],["시험 기간",add(fd,1),END,"var(--accent)"]].filter(x=>x[1]<=x[2]);
   const pos=diff(START,cd)/(tot-1)*100,curP=ph.find(x=>cd>=x[1]&&cd<=x[2])||ph[0];
   return `<section class="card"><div class="row"><h2 class="grow">전체 여정</h2><span class="sub num">${diff(START,cd)+1}일째 / ${tot}일</span></div>
-  <div class="jbar" role="img" aria-label="지금 ${esc(curP[0])}, 전체 ${tot}일 중 ${diff(START,cd)+1}일째">${ph.map(x=>`<span style="flex:${diff(x[1],x[2])+1};background:${x[3]}"></span>`).join("")}<i class="jnow" style="left:${pos.toFixed(1)}%"></i>${EXAMS.filter(examOn).map(e=>`<i class="jex" style="left:${(diff(START,e.date)/(tot-1)*100).toFixed(1)}%"></i>`).join("")}</div>
+  <div class="jbar" role="img" aria-label="지금 ${esc(curP[0])}, 전체 ${tot}일 중 ${diff(START,cd)+1}일째">${ph.map(x=>{const len=diff(x[1],x[2])+1,f=Math.max(0,Math.min(1,(diff(x[1],cd)+1)/len));return `<span style="flex:${len}"><b style="width:${(f*100).toFixed(1)}%"></b></span>`}).join("")}<i class="jnow" style="left:${pos.toFixed(1)}%"></i>${EXAMS.filter(examOn).map(e=>`<i class="jex" style="left:${(diff(START,e.date)/(tot-1)*100).toFixed(1)}%"></i>`).join("")}</div>
   <p class="jcur"><b>${esc(curP[0])}</b> <span class="sub">${esc(short(curP[1]))} ~ ${esc(short(curP[2]))}</span></p>
-  <div class="jleg">${ph.map(x=>`<span><i style="background:${x[3]}"></i>${esc(x[0])}</span>`).join("")}<span><i class="tk"></i>정기시험</span></div></section>`}
+  ${(()=>{const nx=ph[ph.indexOf(curP)+1];return nx?`<p class="sub" style="margin:0">다음 · ${esc(nx[0])} ${esc(short(nx[1]))}부터 · 점 = 정기시험</p>`:""})()}</section>`}
 function vCal(){
   const first=month+"-01",lead=dow(first);let d=add(first,-lead);const td=todayStr();
   const [yy,mm]=month.split("-"),ne=EXAMS.find(e=>examOn(e)&&e.date>=td);
@@ -968,15 +991,15 @@ function vCal(){
     const inR=d>=START&&d<=END,out=d.slice(0,7)!==month,cls=["cell"];if(d===td)cls.push("today");if(out)cls.push("out");
     let lab=label(d)+(HOL[d]?" "+HOL[d]:""),inner="",sty="";
     if(inR){const t=tasksFor(d),[n,c]=dayProgress(d),ch=t.map(chipOf).filter(Boolean),r=c?n/c:0,ex=ch.find(x=>x[0]==="x");
-      if(ex)cls.push("exam");if(c&&n===c)cls.push("full");else if(r>0)sty=`--h:${(18+r*42).toFixed(0)}%`;
+      if(ex)cls.push("exam");if(c&&n===c)cls.push("full");else if(r>0)sty=`--o:${(.12+r*.36).toFixed(2)}`;
       inner=ch.slice(0,1).map(([k,txt])=>`<span class="ev ${k}">${esc(txt)}</span>`).join("")+(c&&n===c?`<span class="ck" aria-hidden="true">✓</span>`:"");
       lab+=(ch.length?", "+ch.map(x=>x[2]||x[1]).join(", "):"")+", 할 일 "+n+"/"+c+" 완료"}
     if(dow(d)===0||HOL[d])cls.push("hol");
     h+=`<button class="${cls.join(" ")}" data-d="${d}" aria-pressed="${d===sel}" aria-label="${esc(lab)}"${inR?"":" disabled"}${sty?` style="${sty}"`:""}><span class="d num">${Number(d.slice(8))}</span>${inner}</button>`;
   }
-  h+=`</div><div class="cleg"><span>완료</span><i style="--h:18%"></i><i style="--h:39%"></i><i style="--h:60%"></i><i class="f"></i><span class="gap"></span><b class="exd">●</b><span>시험</span><b class="mkd">●</b><span>실전 모의</span></div></section>`;
+  h+=`</div><div class="cleg"><span>완료</span><i style="opacity:.16"></i><i style="opacity:.3"></i><i style="opacity:.45"></i><i class="f"></i><span>다 함</span><span class="gap"></span><b class="exd">12</b><span>시험일</span></div></section>`;
   const t=tasksFor(sel),[n,c]=dayProgress(sel);
-  h+=`<section class="card" aria-labelledby="h-s"><div class="row"><h2 id="h-s" class="grow">${esc(label(sel))}</h2><span class="sub">${esc(phaseOf(sel))}</span></div>${meter(n,c,label(sel))}${t.map(x=>taskHTML(sel,x)).join("")}</section>
+  h+=`<section class="card" aria-labelledby="h-s"><div class="row"><h2 id="h-s" class="grow">${esc(label(sel))}</h2><span class="sub">${esc(phaseOf(sel))}</span></div>${meter(n,c,label(sel))}${tasksBlock(sel,t)}</section>
   <section class="card"><h2>시험 일정 (공식)</h2><div class="tbl"><table><caption class="sr">정기시험 일정</caption><thead><tr><th class="l" scope="col">회차</th><th scope="col">시험일</th><th scope="col">정기 접수</th><th scope="col">성적</th></tr></thead><tbody>${EXAMS.map(e=>`<tr><td class="l">${e.no}회${examOn(e)?"":" (안 봄)"}</td><td>${short(e.date)}</td><td>${short(e.reg[0])}~${short(e.reg[1])}</td><td>${short(e.res)}</td></tr>`).join("")}</tbody></table></div><p class="sub" style="margin-top:8px">teps.or.kr 시험일정 안내에서 2026-11-26 확인. 추가 접수는 정기 접수 뒤에 따로 있어요.</p></section>`;
   M.innerHTML=h;bindTasks();
   M.querySelectorAll(".cell:not([disabled])").forEach(e=>e.onclick=()=>{sel=e.dataset.d;if(sel.slice(0,7)!==month)month=sel.slice(0,7);render();const x=M.querySelector(`.cell[data-d="${sel}"]`);x&&x.focus()});
@@ -986,39 +1009,40 @@ function moveMonth(k){const [y,m]=month.split("-").map(Number);const nm=ymd(new 
 
 /* ---------- 기록 ---------- */
 function streaks(){const ds=Object.keys(S.days).filter(k=>((S.days[k].n||0)+(S.days[k].nw||0))>0).sort(),set=new Set(ds);let cur=0,x=todayStr();if(!set.has(x))x=add(x,-1);while(set.has(x)){cur++;x=add(x,-1)}let best=0,run=0,pv=null;for(const d of ds){run=pv&&add(pv,1)===d?run+1:1;best=Math.max(best,run);pv=d}return [cur,best]}
-function weekStats(off){const td=todayStr(),mon=add(td,-((dow(td)+6)%7)+7*off);let n=0,ok=0,nw=0;for(let i=0;i<7;i++){const d=add(mon,i);if(d>td)break;const x=S.days[d];if(x){n+=x.n||0;ok+=x.ok||0;nw+=x.nw||0}}return {n,ok,nw}}
+function weekStats(off){const td=todayStr(),mon=add(td,-6+7*off);let n=0,ok=0,nw=0;for(let i=0;i<7;i++){const d=add(mon,i);if(d>td)break;const x=S.days[d];if(x){n+=x.n||0;ok+=x.ok||0;nw+=x.nw||0}}return {n,ok,nw}}
 function delta(a,b,unit){const d=a-b;return d>0?`<span class="up">▲ ${d}${unit} 늘었어요</span>`:d<0?`<span class="dn">▼ ${-d}${unit} 줄었어요</span>`:`<span>지난주와 같아요</span>`}
 function scoreChart(l,tot){const W=320,H=130,P=14,vs=l.map(tot),lo=Math.min(250,...vs)-10,hi=Math.max(350,...vs)+10,x=i=>l.length<2?W/2:P+i/(l.length-1)*(W-2*P),y=v=>H-20-(v-lo)/(hi-lo)*(H-34);
-  return `<svg class="schart" viewBox="0 0 ${W} ${H}" role="img" aria-label="점수 추이 ${vs.join(", ")}점, 목표 330점"><line x1="${P}" x2="${W-P}" y1="${y(330)}" y2="${y(330)}" class="goal"/><text x="${W-P}" y="${y(330)-5}" text-anchor="end" class="tl">목표 330</text><path d="${vs.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" class="ln"/>${vs.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" class="pt"/><text x="${x(i)}" y="${y(v)-9}" text-anchor="middle" class="tv">${v}</text>`).join("")}${l.map((s,i)=>`<text x="${x(i)}" y="${H-4}" text-anchor="middle" class="tl">${esc(s.date.slice(5).replace("-","/"))}</text>`).join("")}</svg>`}
+  return `<svg class="schart" viewBox="0 0 ${W} ${H}" role="img" aria-label="점수 추이 ${vs.join(", ")}점, 목표 330점"><line x1="${P}" x2="${W-P}" y1="${y(330)}" y2="${y(330)}" class="goal"/><text x="${P}" y="${y(330)-5}" class="tl">목표 330</text><path d="${vs.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" class="ln"/>${vs.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" class="pt"/><text x="${x(i)}" y="${y(v)-9}" text-anchor="middle" class="tv">${v}</text>`).join("")}${l.map((s,i)=>`<text x="${x(i)}" y="${H-4}" text-anchor="middle" class="tl">${esc(s.date.slice(5).replace("-","/"))}</text>`).join("")}</svg>`}
 function vScore(){
   let tn=0,tc=0,pn=0,pc=0;const td=todayStr();
   for(let d=START;d<=END;d=add(d,1)){const [n,c]=dayProgress(d);tn+=n;tc+=c;if(d<=td){pn+=n;pc+=c}}
   const l=scoresList(),last=l[l.length-1],prev=l[l.length-2],tot=s=>["L","V","G","R"].reduce((a,k)=>a+(Number(s[k])||0),0),best=l.length?Math.max(...l.map(tot)):0;
   const [cur,bst]=streaks(),w0=weekStats(0),w1=weekStats(-1),sc=stageCounts(),lrn=sc.slice(1,8).reduce((a,b)=>a+b,0),fe=firstExam();
   const lv=last?tot(last):null,gap=lv==null?null:330-lv,acc=w=>w.n?Math.round(w.ok/w.n*100):0;
-  const dl=(a,b)=>a>b?`<span class="up">▲ ${a-b}</span>`:a<b?`<span class="dn">▼ ${b-a}</span>`:"· 같음";
+  const dl=(a,b)=>a>b?`<span class="up">▲ ${a-b}</span>`:a<b?`<span class="dn">▼ ${b-a}</span>`:(a?"· 같음":"");
   const days14=[...Array(14)].map((_,k)=>add(td,k-13)),v14=days14.map(x=>(S.days[x]||{}).n||0),m14=Math.max(1,...v14);
-  const msg=w0.n===w1.n?`이번 주 ${w0.n}문제 · 지난주와 같아요`:`이번 주 ${w0.n}문제 · 지난주보다 ${Math.abs(w0.n-w1.n)}문제 ${w0.n>w1.n?"더":"덜"}`;
+  const msg=w0.n===w1.n?`최근 7일 ${w0.n}문제 · 그 전 7일과 같아요`:`최근 7일 ${w0.n}문제 · 그 전 7일보다 ${Math.abs(w0.n-w1.n)}문제 ${w0.n>w1.n?"더":"덜"}`,none=!v14.some(Boolean)&&!Object.keys(S.srs).length;
   let h=`<section class="hero2"><div class="hrow"><p class="lead">지금 내 수준${last?" · "+esc(last.name):""}</p>${fe?`<span class="dd num">${fe.no}회 D-${diff(td,fe.date)||"DAY"}</span>`:""}</div>
   ${last?`<div class="giant"><b class="num">${lv}</b><span>점</span></div><div class="lbar" role="img" aria-label="${lv}점, 목표 330점, 만점 600점"><b style="width:${Math.min(100,lv/600*100)}%"></b><i style="left:${330/600*100}%"></i><em style="left:${330/600*100}%">330</em></div><p class="tsub">${gap>0?`목표까지 <b>${gap}점</b>`:`목표보다 <b>${-gap}점</b> 높아요`}${prev?` · 지난 기록보다 ${lv-tot(prev)>=0?"+":""}${lv-tot(prev)}점`:""} · 최고 ${best}점</p>`:`<div class="giant"><b>진단 전</b></div><p class="tsub">11월 30일 기출 1회를 풀고 아래에 점수를 적으면, 지금 몇 점 수준인지와 330점까지 남은 점수가 여기 나와요.</p>`}</section>
   <section class="dgrid" aria-label="나와의 승부">
-   <div class="dt wide"><div class="k">최근 14일 푼 문제</div><div class="m">${esc(msg)}</div><div class="act14" role="img" aria-label="최근 14일 푼 문제 ${v14.join(", ")}">${v14.map((v,k)=>`<span class="${k===13?"on":""}"><i style="height:${v?Math.max(6,Math.round(v/m14*84)):3}px"></i><small>${k%2===1||k===13?Number(days14[k].slice(8)):""}</small></span>`).join("")}</div></div>
+   <div class="dt wide"><div class="k">최근 14일 푼 문제</div>${none?`<div class="m">아직 푼 문제가 없어요</div><p class="c" style="margin:4px 0 12px">단어를 풀면 날마다 여기에 막대가 하나씩 서요. 오늘 첫 막대를 세워 보세요.</p><button class="btn primary" data-study="1">지금 시작</button>`:`<div class="m">${esc(msg)}</div>`}<div class="act14${none?" hide":""}" role="img" aria-label="최근 14일 푼 문제 ${v14.join(", ")}">${v14.map((v,k)=>`<span class="${k===13?"on":""}"><i style="height:${v?Math.max(6,Math.round(v/m14*84)):3}px"></i><small>${k%2===1||k===13?Number(days14[k].slice(8)):""}</small></span>`).join("")}</div></div>
    <div class="dt"><div class="k">장기 기억 단어</div><div class="v num">${sc[8]}</div><div class="c">복습 중 ${lrn} · 목표 빈출 1,000</div></div>
    <div class="dt"><div class="k">연속 공부</div><div class="v num">${cur}<small>일</small></div><div class="c">가장 긴 연속 ${bst}일</div></div>
-   <div class="dt"><div class="k">이번 주 정답률</div><div class="v num">${acc(w0)}<small>%</small></div><div class="c">지난주 ${acc(w1)}% ${dl(acc(w0),acc(w1))}</div></div>
-   <div class="dt"><div class="k">이번 주 새 단어</div><div class="v num">${w0.nw}</div><div class="c">지난주 ${w1.nw} ${dl(w0.nw,w1.nw)}</div></div></section>`;
+   <div class="dt"><div class="k">최근 7일 정답률</div><div class="v num">${acc(w0)}<small>%</small></div><div class="c">그 전 7일 ${acc(w1)}% ${dl(acc(w0),acc(w1))}</div></div>
+   <div class="dt"><div class="k">최근 7일 새 단어</div><div class="v num">${w0.nw}</div><div class="c">그 전 7일 ${w1.nw} ${dl(w0.nw,w1.nw)}</div></div></section>`;
   if(last)h+=`<section class="card"><h2>점수 흐름</h2>${scoreChart(l,tot)}</section>`;
   h+=`<section class="card"><h2>${last?"영역별 · 목표 대비":"점수 기록"}</h2>`;
-  if(last){h+=["L","V","G","R"].map(k=>{const v=Number(last[k])||0,p=Math.min(100,Math.round(v/MAXS[k]*100)),tp=Math.round(TARGET[k]/MAXS[k]*100);return `<div style="margin:10px 0"><div class="row"><b class="grow">${NAME[k]}</b><span class="num ${v>=TARGET[k]?"pass":"fail"}">${v} / 목표 ${TARGET[k]} ${v>=TARGET[k]?"✓":"✗"}</span></div><div class="bar" style="position:relative;height:14px" role="img" aria-label="${NAME[k]} ${v}점, 목표 ${TARGET[k]}점, 만점 ${MAXS[k]}점"><b style="width:${p}%;background:${v>=TARGET[k]?"var(--ok)":"var(--primary)"}"></b><span style="position:absolute;left:${tp}%;top:-3px;bottom:-3px;width:2px;background:var(--text)"></span></div></div>`}).join("")+`<p class="sub">세로선 = 목표. 목표는 참고 영상 두 편의 영역별 목표 중간값이에요. 실제 점수는 문항 난이도에 따라 환산돼서 영역 합이 같아도 달라질 수 있어요.</p>`}
+  if(last){h+=["L","V","G","R"].map(k=>{const v=Number(last[k])||0,p=Math.min(100,Math.round(v/MAXS[k]*100)),tp=Math.round(TARGET[k]/MAXS[k]*100);return `<div style="margin:10px 0"><div class="row"><b class="grow">${NAME[k]}</b><span class="num"><b>${v}</b> <span class="sub">/ ${TARGET[k]}</span> ${v>=TARGET[k]?`<span class="pass">✓ 목표 넘김</span>`:`<span class="sub">· ${TARGET[k]-v}점 남음</span>`}</span></div><div class="bar" style="position:relative;height:14px" role="img" aria-label="${NAME[k]} ${v}점, 목표 ${TARGET[k]}점, 만점 ${MAXS[k]}점"><b style="width:${p}%;background:${v>=TARGET[k]?"var(--ok)":"var(--primary)"}"></b><span style="position:absolute;left:${tp}%;top:-3px;bottom:-3px;width:2px;background:var(--text)"></span></div></div>`}).join("")+`<p class="sub">세로선 = 목표. 목표는 참고 영상 두 편의 영역별 목표 중간값이에요. 실제 점수는 문항 난이도에 따라 환산돼서 영역 합이 같아도 달라질 수 있어요.</p>`}
   h+=`<div class="tbl" style="margin-top:12px"><table><caption>모든 기록</caption><thead><tr><th class="l" scope="col">회차</th><th scope="col">청해</th><th scope="col">어휘</th><th scope="col">문법</th><th scope="col">독해</th><th scope="col">합계</th><th scope="col"><span class="sr">지우기</span></th></tr></thead><tbody>
   <tr><td class="l sub">목표</td><td class="sub">${TARGET.L}</td><td class="sub">${TARGET.V}</td><td class="sub">${TARGET.G}</td><td class="sub">${TARGET.R}</td><td class="sub">330</td><td></td></tr>
-  ${l.map(s=>`<tr><td class="l" style="min-width:6.5em">${esc(s.name)}<div class="sub num">${esc(s.date.slice(5).replace("-","/"))}</div></td>${["L","V","G","R"].map(k=>`<td>${esc(s[k])}</td>`).join("")}<td class="${tot(s)>=330?"pass":"fail"}">${tot(s)} ${tot(s)>=330?"✓":"✗"}</td><td><button class="btn small" data-del="${s.id}" aria-label="${esc(s.name)} 기록 지우기" style="padding:0 8px">지우기</button></td></tr>`).join("")}
+  ${l.map(s=>`<tr><td class="l" style="min-width:6.5em">${esc(s.name)}<div class="sub num">${esc(s.date.slice(5).replace("-","/"))}</div></td>${["L","V","G","R"].map(k=>`<td>${esc(s[k])}</td>`).join("")}<td class="${tot(s)>=330?"pass":""}"><b>${tot(s)}</b>${tot(s)>=330?" ✓":""}</td><td><button class="lnk" data-del="${s.id}" aria-label="${esc(s.name)} 기록 지우기">지우기</button></td></tr>`).join("")}
   ${!l.length?`<tr><td class="l" colspan="7">아직 기록이 없어요. 11월 30일 기출 1회 진단을 풀고 아래에 적어 주세요.</td></tr>`:""}</tbody></table></div></section>
   <section class="card"><h2>진행</h2><h3 style="margin-top:0">오늘까지 할 일</h3>${pc?meter(pn,pc,"오늘까지 할 일"):"<p class=sub>11월 27일부터 세어요.</p>"}<h3>전체 계획</h3>${meter(tn,tc,"전체 계획")}</section>
-  <form class="card" id="sform" novalidate style="display:block"><h2>새 기록</h2><label class="f" for="sn">회차 이름</label><input type="text" id="sn" placeholder="예: 기출 1회 진단"><label class="f" for="sd">날짜</label><input type="date" id="sd" value="${td}">
+  <details class="card addrec"${l.length?"":" open"}><summary>새 점수 기록하기</summary><form id="sform" novalidate><label class="f" for="sn">회차 이름</label><input type="text" id="sn" placeholder="예: 기출 1회 진단"><label class="f" for="sd">날짜</label><input type="date" id="sd" value="${td}">
   <div class="score4">${["L","V","G","R"].map(k=>`<div><label class="f" for="s${k}">${NAME[k]} (0~${MAXS[k]})</label><input type="number" id="s${k}" inputmode="numeric" min="0" max="${MAXS[k]}" aria-describedby="e${k}"><div id="e${k}"></div></div>`).join("")}</div>
-  <button class="btn primary" id="sadd" type="submit" style="margin-top:12px">기록 추가</button></form>`;
+  <button class="btn primary" id="sadd" type="submit" style="margin-top:12px">기록 추가</button></form></details>`;
   M.innerHTML=h;
+  M.querySelectorAll("[data-study]").forEach(b=>b.onclick=()=>startStudy());
   document.getElementById("sform").onsubmit=ev=>{ev.preventDefault();const o={name:document.getElementById("sn").value.trim()||"기록",date:document.getElementById("sd").value||todayStr(),t:Date.now()};let first=null;
     for(const k of ["L","V","G","R"]){const el=document.getElementById("s"+k),v=el.value,e=document.getElementById("e"+k);let m="";if(v==="")m=NAME[k]+" 점수가 비어 있어요.";else if(Number(v)<0||Number(v)>MAXS[k])m=NAME[k]+" 점수는 0~"+MAXS[k]+" 사이로 넣어 주세요.";e.innerHTML=m?`<div class="err">${m}</div>`:"";el.setAttribute("aria-invalid",m?"true":"false");if(m&&!first)first=el;o[k]=v}
     if(first){first.focus();say("고칠 칸이 있어요");return}
@@ -1092,7 +1116,7 @@ function pushAlarms(){if(IS_APP&&Android.setAlarms)Android.setAlarms(JSON.string
 
 /* ====================== 동기화 (GitHub 비공개 저장소) ====================== */
 let syncText="이 기기에만 저장 중";
-function setLine(m){syncText=m;const e=document.getElementById("syncLine");if(e)e.textContent=m}
+function setLine(m){syncText=m;const e=document.getElementById("syncLine");if(e){e.textContent=m;e.className=/실패/.test(m)?"":"sr"}}
 function merge(a,b){const o=blank();for(const p of PARTS){const A=a[p]||{},B=b[p]||{};for(const k of new Set([...Object.keys(A),...Object.keys(B)])){const x=A[k],y=B[k];o[p][k]=!x?y:!y?x:((y.t||0)>(x.t||0)?y:x)}}return o}
 async function gh(method,path,body){const r=await fetch("https://api.github.com"+path,{method,headers:{Authorization:"Bearer "+localStorage.getItem(LSTOK),Accept:"application/vnd.github+json"},body:body?JSON.stringify(body):undefined,cache:"no-store"});if(!r.ok)throw new Error("GitHub "+r.status);return r.json()}
 const b64dec=b=>new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,"")),c=>c.charCodeAt(0)));
