@@ -13,7 +13,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27b">
+<meta name="build" content="2026-11-27c">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
 :root{
@@ -74,7 +74,7 @@ p{margin:0 0 var(--s2)}
 .bar{flex:1;height:10px;border-radius:5px;background:var(--surface2);overflow:hidden;border:1px solid var(--line)}
 .bar>b{display:block;height:100%;background:var(--primary)}
 .bar>b.full{background:var(--ok)}
-.meter .v{font-weight:700;min-width:4.5em;text-align:right}
+.meter .v{font-weight:700;min-width:8.5em;text-align:right}
 /* 할 일 */
 .task{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3) 0;border-top:1px solid var(--line);cursor:pointer}
 .task:first-of-type{border-top:0}
@@ -143,7 +143,7 @@ table{width:100%;border-collapse:collapse;font-size:var(--f-s)}
 caption{text-align:left;font-weight:700;margin-bottom:var(--s2);font-size:var(--f-m)}
 th,td{padding:8px 3px;border-bottom:1px solid var(--line);white-space:nowrap}
 th.l,td.l{white-space:normal}
-input.time{width:9.5em;flex:none}
+.sw input.time,input.time{width:9.5em;flex:none}
 th{color:var(--sub);font-weight:600;text-align:right}
 td{text-align:right}
 th.l,td.l{text-align:left}
@@ -155,6 +155,8 @@ input[type=text],input[type=number],input[type=date],input[type=time],input[type
 input.narrow{width:7.5em}
 .err{color:var(--bad);font-size:var(--f-s);margin-top:4px;font-weight:600}
 .err::before{content:"⚠ "}
+.score4{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--s3)}
+.score4 input{width:100%}
 .sw{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);min-height:56px;border-top:1px solid var(--line);padding:4px 0}
 .btn{white-space:nowrap}
 .alist.off{opacity:.45}
@@ -451,8 +453,8 @@ function tasksFor(d){
 const key=(d,id)=>d+"|"+id;
 function dayProgress(d){const t=tasksFor(d);return [t.filter(x=>isDone(key(d,x.id))).length,t.length]}
 function chipOf(x){if(x.cat==="exam"&&/^x\d$/.test(x.id))return ["x",x.t.split("(")[0].replace(" 정기시험","")];
-  if(/^m\d$/.test(x.id))return ["m","기출 "+x.id.slice(1)+"회"];if(/^f\d$/.test(x.id))return ["m","무료 "+x.id.slice(1)+"회"];
-  if(/^reg\d/.test(x.id))return ["","접수 시작"];if(/^res/.test(x.id))return ["","성적"];return null}
+  if(/^m\d$/.test(x.id))return ["m","기출"+x.id.slice(1),"기출 "+x.id.slice(1)+"회"];if(/^f\d$/.test(x.id))return ["m","무료"+x.id.slice(1),"무료 모의 "+x.id.slice(1)+"회"];
+  if(/^reg\d/.test(x.id))return ["","접수","정기 접수 시작"];if(/^res/.test(x.id))return ["","성적","성적 발표"];return null}
 
 /* ====================== 단어 은행·복습 간격 ====================== */
 const BOX=[0,1,3,7,14,30],CHUNK=10; /* 새 단어는 10개씩 보고 바로 시험 */
@@ -502,17 +504,18 @@ function autoQuizDone(){const d=todayStr();if(d<START||d>END)return;const k=key(
 /* 문제 만들기: 뜻 고르기 · 예문 빈칸 · 동의어 · 한→영 (영상 [F]: 빈칸과 동의어가 실제 시험 보기에 가까움) */
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function pickOthers(w,n,f){const pool=allWords().filter(x=>x.id!==w.id&&f(x));const same=pool.filter(x=>x.pos===w.pos&&x.cat===w.cat);const src=same.length>=n?same:pool;return shuffle(src.slice()).slice(0,n)}
+const sk=s=>String(s||"").split(/\s*(?:,|\/|;)\s*/).filter(Boolean).slice(0,2).join(", ");
 function makeQ(w){
   const box=(S.srs[w.id]||{}).box||0,types=["ko","ko","en"];
   if(box>=2&&w.ex&&w.ans&&w.ex.includes(w.ans))types.push("blank","blank");
   if(box>=3&&w.syn&&w.syn.length)types.push("syn");
   if(box>=3&&w.der&&w.der.length)types.push("der");
   const t=types[Math.floor(Math.random()*types.length)];
-  if(t==="ko"){const o=pickOthers(w,3,x=>x.ko&&x.ko!==w.ko).map(x=>x.ko.split(" / ")[0]);return {w,type:t,ask:"뜻을 고르세요",prompt:w.w,opts:shuffle([w.ko,...o]),ans:w.ko}}
-  if(t==="en"){const o=pickOthers(w,3,x=>x.w!==w.w).map(x=>x.w);return {w,type:t,ask:"이 뜻의 영어를 고르세요",prompt:w.ko,opts:shuffle([w.w,...o]),ans:w.w}}
+  if(t==="ko"){const a=sk(w.ko),o=[...new Set(pickOthers(w,6,x=>x.ko&&sk(x.ko)!==a).map(x=>sk(x.ko)))].slice(0,3);return {w,type:t,ask:"뜻을 고르세요",prompt:w.w,opts:shuffle([a,...o]),ans:a}}
+  if(t==="en"){const o=pickOthers(w,3,x=>x.w!==w.w).map(x=>x.w);return {w,type:t,ask:"이 뜻의 영어를 고르세요",prompt:sk(w.ko),opts:shuffle([w.w,...o]),ans:w.w}}
   if(t==="blank"){const o=pickOthers(w,3,x=>x.ans&&x.ans!==w.ans).map(x=>x.ans);return {w,type:t,ask:"빈칸에 맞는 말을 고르세요",sent:w.ex.replace(w.ans,"\u0000"),opts:shuffle([w.ans,...o]),ans:w.ans}}
-  if(t==="der"){const dv=w.der[Math.floor(Math.random()*w.der.length)];const o=pickOthers(w,3,x=>x.ko&&x.ko!==dv.ko).map(x=>x.ko.split(" / ")[0]);return {w,type:"der",ask:"「"+w.w+"」에서 온 말이에요. 뜻을 고르세요",prompt:dv.w,opts:shuffle([dv.ko,...o]),ans:dv.ko}}
-  const right=w.syn[0];const o=pickOthers(w,3,x=>x.syn&&x.syn.length&&!w.syn.includes(x.syn[0])&&x.syn[0]!==w.w).map(x=>x.syn[0]);
+  if(t==="der"){const dv=w.der[Math.floor(Math.random()*w.der.length)];const a=sk(dv.ko),o=[...new Set(pickOthers(w,6,x=>x.ko&&sk(x.ko)!==a).map(x=>sk(x.ko)))].slice(0,3);return {w,type:"der",ask:"「"+w.w+"」에서 온 말이에요. 뜻을 고르세요",prompt:dv.w,opts:shuffle([a,...o]),ans:a}}
+  const right=w.syn[0];const o=[...new Set(pickOthers(w,8,x=>x.syn&&x.syn.length&&!w.syn.includes(x.syn[0])&&x.syn[0]!==w.w).map(x=>x.syn[0]))].slice(0,3);
   return {w,type:"syn",ask:"뜻이 가장 가까운 말을 고르세요 (바꿔 말하기)",prompt:w.w,opts:shuffle([right,...o]),ans:right};
 }
 
@@ -540,7 +543,7 @@ function render(){
 function taskHTML(d,x){const k=key(d,x.id),dn=isDone(k),c=CAT[x.cat];
   return `<label class="task${dn?" done":""}" data-k="${k}"><input type="checkbox"${dn?" checked":""} aria-describedby="k-${esc(k)}"><div class="grow"><div class="t">${esc(x.t)}</div><div class="k" id="k-${esc(k)}"><span class="tag"><i style="background:${c[1]}"></i>${c[0]}</span>${esc(x.k)}</div>${x.why?`<div class="why">근거: ${esc(x.why)}</div>`:""}</div></label>`}
 function bindTasks(){M.querySelectorAll(".task input").forEach(i=>i.onchange=e=>{const k=e.target.closest(".task").dataset.k,v=e.target.checked,y=window.scrollY;setDone(k,v);say(v?"완료로 표시했어요":"완료 표시를 지웠어요");render();window.scrollTo(0,y);const n=M.querySelector(`.task[data-k="${CSS.escape(k)}"] input`);if(n)n.focus({preventScroll:true});if(v)toast("완료로 표시했어요",()=>{setDone(k,false);render();window.scrollTo(0,y)})})}
-function meter(n,c,lab){const p=c?Math.round(n/c*100):0;return `<div class="meter" role="img" aria-label="${esc(lab||"")} ${n}/${c} 완료, ${p}%"><div class="bar"><b class="${p>=100?"full":""}" style="width:${p}%"></b></div><span class="v num">${n}/${c} · ${p}%</span></div>`}
+function meter(n,c,lab){const p=c?Math.round(n/c*100):0;return `<div class="meter" role="img" aria-label="${esc(lab||"")} ${n}/${c} 완료, ${p}%"><div class="bar"><b class="${p>=100?"full":""}" style="width:${p}%"></b></div><span class="v num">${n.toLocaleString()}/${c.toLocaleString()} · ${p}%</span></div>`}
 
 function resumeCard(){
   if(quiz&&quiz.i<quiz.qs.length)return `<section class="card resume"><h2>하던 단어 시험이 있어요</h2><p class="sub">${quiz.qs.length}문제 중 ${quiz.i}문제를 풀었어요.</p><button class="btn primary block" data-resume="quiz">이어서 풀기</button></section>`;
@@ -632,7 +635,7 @@ function speak(t){if(IS_APP&&Android.speak){Android.speak(t);return}try{const u=
 function vWords(){
   const due=dueList().length,nl=newLeftToday(),tot=allWords().length,seen=Object.keys(S.srs).length,uw=userWords().length;
   const boxes=[0,0,0,0,0,0];for(const s of Object.values(S.srs))boxes[s.box]++;
-  M.innerHTML=resumeCard()+`<section class="card"><h2>오늘 단어</h2><div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>복습할 단어</span></div><div class="stat"><b class="num">${seen}</b><span>익힌 단어 · 전체 ${tot.toLocaleString()}</span></div></div>
+  M.innerHTML=resumeCard()+`<section class="card"><h2>오늘 단어</h2><div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>복습할 단어</span></div><div class="stat"><b class="num">${seen}</b><span>익힌 단어</span></div></div><p class="sub" style="margin:8px 0 0">전체 단어 ${tot.toLocaleString()}개</p>
    <div class="btns"><button class="btn primary grow" id="s1">${nl?"새 단어 "+Math.min(nl,CHUNK)+"개 익히기":"복습 시험"}</button><button class="btn" id="s2">${cfg("quizSize")}문제만</button></div></section>
    <section class="card"><h2>파고다 보카 사진으로 추가</h2><p class="sub">${photoFull()?"<b>2단계:</b> 쪽을 찍으면 이미 있는 단어에 책의 유의어·파생어를 붙이고, 없는 단어는 새로 넣어요.":"<b>1단계:</b> 단어 시험지 "+PAGODA.length+"개는 이미 들어 있어요. 시험지에 없는 큰 표제어와 뜻만 읽어서 바로 넣어요."} 인식은 뒤에서 하니까 카메라가 다시 열리면 다음 쪽을 이어서 찍고, 다 찍었으면 뒤로 가기를 누르세요.</p>
    ${IS_APP?`<div class="btns"><button class="btn grow" id="cam">📷 연속 찍기</button><button class="btn grow" id="gal">사진 여러 장 고르기</button></div>`:`<div class="note">사진 글자 읽기는 휴대폰 앱에서만 돼요. 여기서는 아래 「직접 추가」로 넣을 수 있어요.</div>`}
@@ -732,7 +735,7 @@ function vCal(){
     let inner=`<span class="d num" style="${dow(d)===0||HOL[d]?"color:var(--bad)":""}${d.slice(0,7)!==month?";color:var(--sub);font-weight:400":""}">${Number(d.slice(8))}</span>`,lab=label(d)+(HOL[d]?" "+HOL[d]:"");
     if(inR){const t=tasksFor(d),[n,c]=dayProgress(d);const ch=t.map(chipOf).filter(Boolean);
       for(const [k,txt] of ch.slice(0,2))inner+=`<span class="ev ${k}">${esc(txt)}</span>`;
-      inner+=`<span class="pg num${c&&n===c?" full":""}">${c&&n===c?"✓ 완료":n+"/"+c}</span>`;lab+=(ch.length?", "+ch.map(x=>x[1]).join(", "):"")+", 할 일 "+n+"/"+c+" 완료"}
+      inner+=`<span class="pg num${c&&n===c?" full":""}">${c&&n===c?"✓ 완료":n+"/"+c}</span>`;lab+=(ch.length?", "+ch.map(x=>x[2]||x[1]).join(", "):"")+", 할 일 "+n+"/"+c+" 완료"}
     h+=`<button class="${cls.join(" ")}" data-d="${d}" aria-pressed="${d===sel}" aria-label="${esc(lab)}"${inR?"":" disabled"}>${inner}</button>`;
   }
   h+=`</div>`;
@@ -756,9 +759,9 @@ function vScore(){
   h+=`<div class="tbl" style="margin-top:12px"><table><caption>모든 기록</caption><thead><tr><th class="l" scope="col">회차</th><th scope="col">청해</th><th scope="col">어휘</th><th scope="col">문법</th><th scope="col">독해</th><th scope="col">합계</th><th scope="col"><span class="sr">지우기</span></th></tr></thead><tbody>
   <tr><td class="l sub">목표</td><td class="sub">${TARGET.L}</td><td class="sub">${TARGET.V}</td><td class="sub">${TARGET.G}</td><td class="sub">${TARGET.R}</td><td class="sub">330</td><td></td></tr>
   ${l.map(s=>`<tr><td class="l" style="min-width:6.5em">${esc(s.name)}<div class="sub num">${esc(s.date.slice(5).replace("-","/"))}</div></td>${["L","V","G","R"].map(k=>`<td>${esc(s[k])}</td>`).join("")}<td class="${tot(s)>=330?"pass":"fail"}">${tot(s)} ${tot(s)>=330?"✓":"✗"}</td><td><button class="btn small" data-del="${s.id}" aria-label="${esc(s.name)} 기록 지우기" style="padding:0 8px">지우기</button></td></tr>`).join("")}
-  ${!l.length?`<tr><td class="l" colspan="7">아직 기록이 없어요. 11월 27일 진단 시험 뒤에 아래에 적어 주세요.</td></tr>`:""}</tbody></table></div></section>
+  ${!l.length?`<tr><td class="l" colspan="7">아직 기록이 없어요. 11월 28일 기출 1회 진단을 풀고 아래에 적어 주세요.</td></tr>`:""}</tbody></table></div></section>
   <form class="card" id="sform" novalidate style="display:block"><h2>새 기록</h2><label class="f" for="sn">회차 이름</label><input type="text" id="sn" placeholder="예: 기출 1회 진단"><label class="f" for="sd">날짜</label><input type="date" id="sd" value="${td}">
-  ${["L","V","G","R"].map(k=>`<label class="f" for="s${k}">${NAME[k]} (0~${MAXS[k]}점)</label><input type="number" id="s${k}" inputmode="numeric" min="0" max="${MAXS[k]}" class="narrow" aria-describedby="e${k}"><div id="e${k}"></div>`).join("")}
+  <div class="score4">${["L","V","G","R"].map(k=>`<div><label class="f" for="s${k}">${NAME[k]} (0~${MAXS[k]})</label><input type="number" id="s${k}" inputmode="numeric" min="0" max="${MAXS[k]}" aria-describedby="e${k}"><div id="e${k}"></div></div>`).join("")}</div>
   <button class="btn primary" id="sadd" type="submit" style="margin-top:12px">기록 추가</button></form>`;
   M.innerHTML=h;
   document.getElementById("sform").onsubmit=ev=>{ev.preventDefault();const o={name:document.getElementById("sn").value.trim()||"기록",date:document.getElementById("sd").value||todayStr(),t:Date.now()};let first=null;
