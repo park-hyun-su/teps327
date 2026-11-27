@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#031c24" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="TEPS 330">
@@ -13,34 +13,37 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27d">
+<meta name="build" content="2026-11-27e">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
+/* 색: 밝게 = 회색빛 종이 지면과 빨강 한 곳(이코노미스트 방식), 어둡게 = 깊은 물색 지면(파타고니아 방식).
+   타일 넷은 같은 밝기 단계에서 갈래만 바꿔 무게를 맞춤(남색·청록·주황·자주). 구조는 키노트 방식 */
 :root{
-  --bg:#f5f5f7;--surface:#ffffff;--surface2:#e8e8ed;--line:#d2d2d7;--line-strong:#86868b;--on-ok:#ffffff;--knob:#ffffff;
-  --text:#1d1d1f;--sub:#636366;--faint:#6e6e73;
-  --primary:#0071e3;--on-primary:#ffffff;--primary-soft:#e8f1fc;
-  --ok:#1a7f37;--ok-soft:#e6f4ea;--bad:#d70015;--bad-soft:#fde8ea;--warn:#8a5a00;--warn-soft:#fdf3dc;
-  --sh:none;--tab:rgba(245,245,247,.96);
+  --bg:#f5f4ef;--surface:#fbfaf6;--surface2:#ebe9e0;--line:#d9d6c8;--line-strong:#858275;--on-ok:#ffffff;--knob:#ffffff;
+  --text:#121212;--sub:#55534c;--faint:#55534c;
+  --primary:#1b3a6b;--on-primary:#ffffff;--primary-soft:#e3e8f1;--accent:#c8102e;
+  --ok:#17663a;--ok-soft:#e4efe4;--bad:#b3150d;--bad-soft:#f8e4e1;--warn:#7a5000;--warn-soft:#f6ecd2;
+  --sh:none;--tab:rgba(245,244,239,.97);
+  --tile-now:#1b3a6b;--tile-voc:#0f5c56;--tile-mock:#8a4512;--tile-read:#5b2b6e;
   --r:20px;--r-s:14px;
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
   --f-xs:.8125rem;--f-s:.875rem;--f-m:1rem;--f-l:1.125rem;--f-xl:1.375rem;--f-xxl:1.75rem;
   --t-fast:90ms;--t-med:200ms;--t-push:340ms;
-  /* 타일 색: 회사 색이 아니라 영역에서 가져옴 (키노트 문서 7-2절). 흰 글자 대비 4.5 이상 */
-  --tile-now:#0a57c2;--tile-voc:#1f7a4a;--tile-mock:#8a4d00;--tile-read:#0b6b7d;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme=light]){
-  --bg:#000000;--surface:#1d1d1f;--surface2:#2c2c2e;--line:#38383a;--line-strong:#86868b;
-  --text:#f5f5f7;--sub:#a1a1a6;--faint:#8e8e93;
-  --primary:#2997ff;--on-primary:#000000;--primary-soft:#0d2a4a;
-  --ok:#30d158;--ok-soft:#10301b;--bad:#ff6961;--bad-soft:#3a1d1d;--warn:#ffd60a;--warn-soft:#3a3112;
-  --sh:none;--on-ok:#04210f;--knob:#000000;--tab:rgba(22,22,23,.96);
+  --bg:#031c24;--surface:#0a2a35;--surface2:#123846;--line:#1e4a5a;--line-strong:#7f9aa4;
+  --text:#eeeeee;--sub:#a9bcc3;--faint:#a9bcc3;
+  --primary:#8cc4e6;--on-primary:#031c24;--primary-soft:#123846;--accent:#ff6b5e;
+  --ok:#63d39a;--ok-soft:#0f3a2c;--bad:#ff8a80;--bad-soft:#3d2127;--warn:#f0c060;--warn-soft:#3a3420;
+  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);
+  --tile-now:#2d5b98;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;
 }}
-:root[data-theme=dark]{--bg:#000000;--surface:#1d1d1f;--surface2:#2c2c2e;--line:#38383a;--line-strong:#86868b;
-  --text:#f5f5f7;--sub:#a1a1a6;--faint:#8e8e93;
-  --primary:#2997ff;--on-primary:#000000;--primary-soft:#0d2a4a;
-  --ok:#30d158;--ok-soft:#10301b;--bad:#ff6961;--bad-soft:#3a1d1d;--warn:#ffd60a;--warn-soft:#3a3112;
-  --sh:none;--on-ok:#04210f;--knob:#000000;--tab:rgba(22,22,23,.96);color-scheme:dark}
+:root[data-theme=dark]{--bg:#031c24;--surface:#0a2a35;--surface2:#123846;--line:#1e4a5a;--line-strong:#7f9aa4;
+  --text:#eeeeee;--sub:#a9bcc3;--faint:#a9bcc3;
+  --primary:#8cc4e6;--on-primary:#031c24;--primary-soft:#123846;--accent:#ff6b5e;
+  --ok:#63d39a;--ok-soft:#0f3a2c;--bad:#ff8a80;--bad-soft:#3d2127;--warn:#f0c060;--warn-soft:#3a3420;
+  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);
+  --tile-now:#2d5b98;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;color-scheme:dark}
 :root[data-theme=light]{color-scheme:light}
 @media (prefers-contrast: more){:root{--sub:var(--text);--faint:var(--text);--line:var(--line-strong)}}
 @media (forced-colors: active){.toggle,.task input{border:2px solid ButtonText}.toggle:checked,.task input:checked{background:Highlight}}
@@ -56,7 +59,7 @@ button,input,select{font:inherit;color:inherit}
 .app{max-width:720px;margin:0 auto;min-height:100vh;padding:0 0 calc(84px + env(safe-area-inset-bottom))}
 header.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(var(--s3) + env(safe-area-inset-top)) var(--s4) var(--s2);display:flex;align-items:center;gap:var(--s2)}
 header.top h1{font-size:1.75rem;margin:0;flex:1;font-weight:700;letter-spacing:-.02em;min-width:0}
-header.top h1 .dotp{color:var(--primary)}
+header.top h1 .dotp{color:var(--accent)}
 header.top .meta{font-size:var(--f-xs);color:var(--sub);text-align:right}
 main{padding:0 var(--s4)}
 .card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);border:0;padding:var(--s4);margin:0 0 var(--s3)}
@@ -87,7 +90,7 @@ p{margin:0 0 var(--s2)}
 .task .t{font-weight:600}
 .task .k{font-size:var(--f-s);color:var(--sub);margin-top:2px}
 .task.done .t{text-decoration:line-through;color:var(--sub)}
-.tag{display:inline-block;font-size:var(--f-xs);font-weight:700;border-radius:6px;padding:0 6px;margin-right:6px;background:var(--surface2);color:var(--text);border:1px solid var(--line)}
+.tag{display:inline-block;font-size:var(--f-xs);font-weight:700;padding:0;margin-right:8px;background:none;color:var(--text);border:0}
 .tag i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:1px}
 .why{font-size:var(--f-xs);color:var(--faint);margin-top:2px}
 .badge-done{font-size:var(--f-xs);color:var(--ok);font-weight:700}
@@ -108,16 +111,16 @@ nav.tabs button[aria-current="page"] svg{fill:var(--surface2);stroke-width:2.2}
 .cell .d{min-width:1.9em;height:1.9em;line-height:1.9em;white-space:nowrap;text-align:center;border-radius:50%;font-weight:600;font-size:var(--f-s)}
 .cell.today .d{background:var(--primary);color:var(--on-primary)}
 .cell[aria-pressed="true"]{background:var(--primary-soft);border-radius:var(--r-s);box-shadow:inset 0 0 0 2px var(--primary)}
-.cell .ev{font-size:.75rem;text-overflow:ellipsis;line-height:1.35;font-weight:700;max-width:100%;overflow:hidden;white-space:nowrap;padding:0 3px;border-radius:4px;background:var(--surface2);border:1px solid var(--line)}
-.cell .ev.x{background:var(--bad-soft);color:var(--bad);border-color:transparent}
-.cell .ev.m{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.cell .ev{font-size:.75rem;text-overflow:ellipsis;line-height:1.35;font-weight:700;max-width:100%;overflow:hidden;white-space:nowrap;padding:0 1px;background:none;border:0}
+.cell .ev.x{color:var(--bad)}
+.cell .ev.m{color:var(--warn)}
 .cell .pg{font-size:.75rem;color:var(--sub);white-space:nowrap}
 .cell .pg.full{color:var(--ok);font-weight:700}
 /* 단어 */
 .qcard{text-align:left;background:none;padding:var(--s2) 0 0}
 .qprompt{font-size:clamp(2.25rem,11vw,3.25rem);font-weight:700;letter-spacing:-.03em;margin:var(--s2) 0;line-height:1.08;overflow-wrap:anywhere}
 .qprompt:lang(ko){font-size:clamp(1.75rem,8vw,2.5rem);letter-spacing:-.02em}
-.qsent{font-size:var(--f-l);line-height:1.6;margin:var(--s2) 0}
+.qsent{font-size:1.25rem;line-height:1.6;margin:var(--s2) 0}
 .qsent .blank{display:inline-block;min-width:5em;border-bottom:2px solid var(--text)}
 .opts{display:grid;gap:var(--s2);margin-top:var(--s3)}
 .opt{text-align:left;min-height:52px;padding:var(--s3) var(--s4);border-radius:var(--r-s);border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:var(--f-m);display:flex;gap:var(--s3);align-items:center}
@@ -133,17 +136,19 @@ nav.tabs button[aria-current="page"] svg{fill:var(--surface2);stroke-width:2.2}
 .card.learn.inv{background:var(--text);color:var(--bg)}
 .card.learn.inv .pos,.card.learn.inv .exko,.card.learn.inv .why,.card.learn.inv summary{color:inherit;opacity:.78}
 .card.learn.inv .speak{background:transparent;border-color:currentColor;color:inherit}
-.card.learn.inv .chip{background:transparent;border-color:currentColor}
 .push-r{animation:pushR var(--t-push) cubic-bezier(.3,0,.2,1)}.push-l{animation:pushL var(--t-push) cubic-bezier(.3,0,.2,1)}
 @keyframes pushR{from{transform:translateX(60%);opacity:0}to{transform:none;opacity:1}}
 @keyframes pushL{from{transform:translateX(-60%);opacity:0}to{transform:none;opacity:1}}
+.ko.hide{min-height:2.2em;display:flex;align-items:center}
+.reveal{border:0;border-radius:var(--r-s);background:var(--surface2);color:inherit;font:inherit;font-weight:600;min-height:52px;width:100%;margin:var(--s3) 0 var(--s2);cursor:pointer}
+.card.learn.inv .reveal{background:rgba(127,127,127,.18)}
 .swipehint{font-size:var(--f-xs);color:var(--sub);text-align:center;margin:var(--s2) 0 0}
 .learn .pos{color:var(--sub);font-size:var(--f-s);margin-left:6px;font-weight:600}
 .learn .ko{font-size:var(--f-xl);font-weight:600;margin:var(--s3) 0 var(--s2)}
-.learn .ex{margin:var(--s2) 0 0}
+.learn .ex{margin:var(--s2) 0 0;font-size:1.0625rem;line-height:1.6}
 .learn .exko{color:var(--sub);font-size:var(--f-s)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--s2)}
-.chip{font-size:var(--f-s);padding:2px 8px;border-radius:999px;background:var(--surface2);border:1px solid var(--line)}
+.chip{font-size:var(--f-s);padding:0;margin-right:10px;background:none;border:0}
 .speak{border:1px solid var(--line-strong);background:var(--surface);border-radius:50%;width:44px;height:44px;display:inline-grid;place-content:center;cursor:pointer;flex:none}
 .speak svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
@@ -182,7 +187,7 @@ input.narrow{width:7.5em}
 .toggle:checked{background:var(--primary)}
 .toggle:checked::after{transform:translateX(20px)}
 .note{background:var(--surface2);border-radius:var(--r-s);padding:var(--s3);font-size:var(--f-s);color:var(--sub);margin-top:var(--s2)}
-.banner{border-radius:var(--r-s);padding:var(--s3);margin:0 0 var(--s3);font-size:var(--f-s);display:flex;gap:var(--s2);align-items:flex-start;background:var(--warn-soft);color:var(--text);border:1px solid var(--line)}
+.banner{border-radius:var(--r-s);padding:var(--s3);margin:0 0 var(--s3);font-size:var(--f-s);display:flex;gap:var(--s2);align-items:flex-start;background:var(--warn-soft);color:var(--text);border:0}
 .banner b{color:var(--warn)}
 .banner.info{background:var(--primary-soft)}
 .banner.info b{color:var(--text)}
@@ -194,7 +199,7 @@ summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:
 .ocr-row{display:grid;grid-template-columns:32px 1fr 1fr;gap:6px;align-items:center;margin:6px 0}
 .ocr-row input[type=checkbox]{width:28px;height:28px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:var(--f-s);z-index:9;max-width:90%}
-.cover{background:#000;color:#f5f5f7;border-radius:24px;min-height:62vh;display:flex;flex-direction:column;padding:var(--s6) var(--s5) var(--s5);margin:0 0 var(--s3)}
+.cover{background:#0d0d0d;color:#f5f5f7;border-radius:24px;min-height:62vh;display:flex;flex-direction:column;padding:var(--s6) var(--s5) var(--s5);margin:0 0 var(--s3)}
 .cover .k{font-size:var(--f-m);color:#a1a1a6}
 .cover .clock{font-size:5.5rem;font-weight:700;letter-spacing:-.05em;line-height:1;margin-top:var(--s2)}
 .cover .ctag{font-size:var(--f-xl);font-weight:600;margin-top:var(--s4)}
@@ -342,7 +347,7 @@ const START="2026-11-27", END="2027-04-16", LS="teps330_state_v1", LSTOK="teps32
 const NAME={L:"청해",V:"어휘",G:"문법",R:"독해"};
 const MAXS={L:240,V:60,G:60,R:240};
 const TARGET={L:132,V:33,G:33,R:132};            /* 영상 [A] 135/30/30/135 와 [B] 130/35/35/130 의 중간 */
-const DEF={newPerDay:"5",photoFull:"auto",quizSize:"5",vocabDays:"30",vocabStart:"2026-11-27",examsOff:[],
+const DEF={recall:"1",newPerDay:"5",photoFull:"auto",quizSize:"5",vocabDays:"30",vocabStart:"2026-11-27",examsOff:[],
   alarmsOn:"1",alarms:[["08:00",1],["09:00",1],["11:40",1],["13:00",1],["16:00",1],["17:20",1],["18:00",1],["18:30",1],["20:00",1]]};
 const HOL={"2026-12-25":"성탄절","2027-01-01":"신정","2027-02-06":"설 연휴","2027-02-07":"설날","2027-02-08":"설 연휴","2027-02-09":"대체공휴일","2027-03-01":"삼일절"};
 /* 공식 일정 (teps.or.kr 시험일정 안내, 2026-11-26 확인) */
@@ -634,18 +639,19 @@ function vLearn(){
   const L=learn;if(!L){go("words");return}
   if(L.i>=L.list.length){M.innerHTML=`<div class="focus-wrap"><section class="card hero"><h2>${L.list.length}개를 다 봤어요</h2><p class="sub" style="margin:0">바로 시험으로 확인해요. 틀린 단어는 내일 다시 나와요.</p></section><div class="spacer"></div><div class="sticky-act"><button class="btn primary block" id="lq">방금 본 ${L.list.length}개 시험 보기</button></div></div>`;
     document.getElementById("lq").onclick=()=>{quiz={qs:shuffle(L.list.map(w=>makeQ(w))),i:0,ok:0,answered:null,wrongIds:[],isNew:1};learn=null;go("quiz",{keep:1})};return}
-  const w=L.list[L.i];
+  const w=L.list[L.i];L.shown=L.shown||{};const hid=cfg("recall")==="1"&&!L.shown[L.i];
   M.innerHTML=`<div class="focus-wrap"><div class="qbar"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${L.list.length}" aria-valuenow="${L.i+1}" aria-label="새 단어"><b style="width:${Math.round((L.i+1)/L.list.length*100)}%"></b></div><span class="v num" aria-live="polite">${L.i+1} / ${L.list.length}</span></div>
   <section class="card learn${L.i%2?" inv":""}${L.dir>0?" push-r":L.dir<0?" push-l":""}"><div class="row"><div class="grow"><span class="w" lang="en">${esc(w.w)}</span><span class="pos">${esc(posName(w.pos))}</span></div><button class="speak" id="sp" aria-label="${esc(w.w)} 발음 듣기">${SPK}</button></div>
-  <div class="ko">${esc(w.ko)}</div>
-  ${w.ex?`<p class="ex" lang="en">${esc(w.ex)}</p><p class="exko">${esc(w.exKo||"")}</p>`:""}
-  ${w.syn&&w.syn.length?`<details style="margin-top:8px"><summary class="sub">비슷한 말·반대말 (나중에 외워도 돼요)</summary><div class="chips" lang="en">${w.syn.map(s=>`<span class="chip">≈ ${esc(s)}</span>`).join("")}${(w.ant||[]).map(s=>`<span class="chip">↔ ${esc(s)}</span>`).join("")}</div></details>`:""}
+  ${hid?`<button class="reveal" id="rv">먼저 뜻을 떠올려 보고, 누르면 보여요</button>`:`<div class="ko">${esc(w.ko)}</div>`}
+  ${w.ex?`<p class="ex" lang="en">${esc(w.ex)}</p>${hid?"":`<p class="exko">${esc(w.exKo||"")}</p>`}`:""}
+  ${!hid&&w.syn&&w.syn.length?`<details style="margin-top:8px"><summary class="sub">비슷한 말·반대말 (나중에 외워도 돼요)</summary><div class="chips" lang="en">${w.syn.map(s=>`<span class="chip">≈ ${esc(s)}</span>`).join("")}${(w.ant||[]).map(s=>`<span class="chip">↔ ${esc(s)}</span>`).join("")}</div></details>`:""}
   ${(w.der&&w.der.length)||(w.syn2&&w.syn2.length)?`<details style="margin-top:8px"><summary class="sub">책의 파생어·유의어 (사진에서 읽음)</summary><ul class="list-plain" lang="en">${(w.der||[]).map(r=>`<li><b>${esc(r.w)}</b> <span lang="ko">${esc(r.ko)}</span></li>`).join("")}${(w.syn2||[]).map(r=>`<li>≈ <b>${esc(r.w)}</b> <span lang="ko">${esc(r.ko)}</span></li>`).join("")}</ul></details>`:""}
   <p class="why" style="margin-top:12px">${srcName(w)}</p></section>
-  <p class="swipehint">옆으로 밀어서 넘길 수도 있어요</p><div class="spacer"></div><div class="btns sticky-act" style="margin-top:0"><button class="btn" id="lp"${L.i?"":" disabled"}>이전</button><button class="btn primary grow" id="ln">${L.i+1<L.list.length?"다음 단어":"다 봤어요, 시험 보기"}</button></div></div>`;
+  <p class="swipehint">옆으로 밀어서 넘길 수도 있어요</p><div class="spacer"></div><div class="btns sticky-act" style="margin-top:0"><button class="btn" id="lp"${L.i?"":" disabled"}>이전</button><button class="btn primary grow" id="ln">${hid?"뜻 보기":L.i+1<L.list.length?"다음 단어":"다 봤어요, 시험 보기"}</button></div></div>`;
   document.getElementById("sp").onclick=()=>speak(w.ex&&w.cat==="idiom"?w.ex:w.w);
   L.dir=0;
-  document.getElementById("ln").onclick=()=>{L.i++;L.dir=1;render()};
+  const show=()=>{L.shown[L.i]=1;render();say(w.w+", "+w.ko)};const rv=document.getElementById("rv");if(rv)rv.onclick=show;
+  document.getElementById("ln").onclick=()=>{if(hid){show();return}L.i++;L.dir=1;render()};
   document.getElementById("lp").onclick=()=>{if(L.i){L.i--;L.dir=-1;render()}};
   const lc=M.querySelector(".card.learn");let x0=null,y0=0;lc.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
   lc.addEventListener("touchend",e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<60||Math.abs(dy)>Math.abs(dx))return;if(dx<0)document.getElementById("ln").click();else if(L.i)document.getElementById("lp").click()});
@@ -657,9 +663,10 @@ function vQuiz(){
   const Q=quiz;if(!Q){go("words");return}
   if(Q.i>=Q.qs.length){
     const n=Q.qs.length,p=Math.round(Q.ok/n*100);
-    M.innerHTML=`<div class="focus-wrap"><section class="card hero"><p class="lead">시험 결과</p><h2>${n}문제 중 ${Q.ok}개 맞았어요</h2>${meter(Q.ok,n,"정답")}
+    M.innerHTML=`<div class="focus-wrap"><section class="card hero"><p class="lead">${Q.practice?"다시 풀기 결과 · 복습 일정에는 넣지 않았어요":"시험 결과"}</p><h2>${n}문제 중 ${Q.ok}개 맞았어요</h2>${meter(Q.ok,n,"정답")}
     ${Q.wrongIds.length?`<h3>틀린 단어 (내일 다시 나와요)</h3><ul class="list-plain">${[...new Set(Q.wrongIds)].map(id=>{const w=wordById(id);return `<li><b>${esc(w.w)}</b> ${esc(w.ko)}</li>`}).join("")}</ul>`:"<p>모두 맞았어요. 다음 복습 날짜가 뒤로 밀렸어요.</p>"}
-    <p class="sub" style="margin:8px 0 0">${esc(nextAlarmText())}</p></section><div class="spacer"></div><div class="sticky-act"><button class="btn primary block" id="qn">${newLeftToday()?"다음 새 단어 익히기":dueList().length?"남은 복습 풀기":"오늘로 돌아가기"}</button></div></div>`;
+    <p class="sub" style="margin:8px 0 0">${esc(nextAlarmText())}</p></section><div class="spacer"></div><div class="sticky-act">${Q.wrongIds.length?`<button class="btn block" id="qr" style="margin-bottom:8px">틀린 ${new Set(Q.wrongIds).size}개만 바로 다시 풀기</button>`:""}<button class="btn primary block" id="qn">${newLeftToday()?"다음 새 단어 익히기":dueList().length?"남은 복습 풀기":"오늘로 돌아가기"}</button></div></div>`;
+    const qr=document.getElementById("qr");if(qr)qr.onclick=()=>{const ids=[...new Set(Q.wrongIds)];quiz={qs:shuffle(ids.map(id=>makeQ(wordById(id)))),i:0,ok:0,answered:null,wrongIds:[],practice:1};render()};
     document.getElementById("qn").onclick=()=>{quiz=null;if(newLeftToday()||dueList().length)startStudy();else go("today")};say(n+"문제 중 "+Q.ok+"개 정답");return}
   const q=Q.qs[Q.i],a=Q.answered;
   let body=q.type==="blank"?`<p class="qsent" lang="en">${esc(q.sent).replace("\u0000",'<span class="blank" aria-label="빈칸">&nbsp;</span>')}</p>`:`<div class="row"><div class="qprompt grow" lang="${q.type==="en"?"ko":"en"}">${esc(q.prompt)}</div>${q.type!=="en"?`<button class="speak" id="sp" aria-label="발음 듣기">${SPK}</button>`:""}</div>`;
@@ -673,8 +680,8 @@ function vQuiz(){
   const nx=document.getElementById("qnext");if(nx){nx.onclick=()=>{Q.i++;Q.answered=null;render()};nx.focus()}
   const sk=document.getElementById("qskip");if(sk)sk.onclick=()=>answer(-1);
 }
-function answer(i){const Q=quiz,q=Q.qs[Q.i];if(Q.answered!=null)return;Q.answered=i;const ok=i>=0&&q.opts[i]===q.ans;if(ok)Q.ok++;else Q.wrongIds.push(q.w.id);grade(q.w.id,ok);vibrate(ok);say(ok?"정답이에요":"틀렸어요. 정답은 "+q.ans);render()}
-function fbHTML(q,ok){const w=q.w;return `<div class="fb ${ok?"ok":"no"}" role="status"><div class="h">${ok?"✓ 정답":"✗ 정답은 「"+esc(q.ans)+"」"}</div><div><b>${esc(w.w)}</b> ${esc(posName(w.pos))} · ${esc(w.ko)}</div>${w.ex?`<div class="sub" style="margin-top:4px">${esc(w.ex)}<br>${esc(w.exKo||"")}</div>`:""}</div>`}
+function answer(i){const Q=quiz,q=Q.qs[Q.i];if(Q.answered!=null)return;Q.answered=i;const ok=i>=0&&q.opts[i]===q.ans;if(ok)Q.ok++;else Q.wrongIds.push(q.w.id);if(!Q.practice)grade(q.w.id,ok);vibrate(ok);say(ok?"정답이에요":"틀렸어요. 정답은 "+q.ans);render()}
+function fbHTML(q,ok){const w=q.w;return `<div class="fb ${ok?"ok":"no"}" role="status"><div class="h">${ok?"✓ 정답":"✗ 정답은 「"+esc(q.ans)+"」"}</div><div><b>${esc(w.w)}</b> ${esc(posName(w.pos))} · ${esc(w.ko)}</div>${w.ex?`<div class="sub" style="margin-top:4px"><span class="exen" lang="en">${esc(w.ex)}</span><br>${esc(w.exKo||"")}</div>`:""}</div>`}
 function vibrate(ok){try{if(navigator.vibrate)navigator.vibrate(ok?20:[40,60,40])}catch(e){}}
 function speak(t){if(IS_APP&&Android.speak){Android.speak(t);return}try{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast("이 기기에서는 발음 듣기를 쓸 수 없어요")}}
 
@@ -843,7 +850,7 @@ function vSet(){
   h+=`${cfg("alarmsOn")==="1"?"":`<p class="sub">알람이 모두 꺼져 있어요. 위 스위치를 켜면 아래 시각대로 울려요.</p>`}<div id="alist" class="alist${cfg("alarmsOn")==="1"?"":" off"}">${al.map((a,i)=>`<div class="sw"><input type="time" value="${a[0]}" data-ti="${i}" aria-label="${i+1}번째 알람 시각" class="time"${cfg("alarmsOn")==="1"?"":" disabled"}><input type="checkbox" class="toggle" data-on="${i}" ${a[1]?"checked":""} aria-label="${a[0]} 알람 켜기"${cfg("alarmsOn")==="1"?"":" disabled"}><span class="lab"></span><button class="btn small" data-rm="${i}" aria-label="${a[0]} 알람 지우기">🗑 지우기</button></div>`).join("")}</div>
   <div class="btns"><button class="btn grow" id="aadd">알람 시각 추가</button>${IS_APP?`<button class="btn" id="atest">1분 뒤 시험 알람</button>`:""}</div>
   <label class="f" for="qs">알람마다 낼 문제 수</label><input type="number" id="qs" class="narrow" inputmode="numeric" min="1" max="30" value="${cfg("quizSize")}"></section>`;
-  h+=`<section class="card"><h2>단어</h2><label class="f" for="np">Claude 목록에서 하루 새 단어 수</label><input type="number" id="np" class="narrow" inputmode="numeric" min="0" max="100" value="${cfg("newPerDay")}"><p class="hint">파고다 시험지(하루 1 Unit, ${PAGODA.length?"30개":"이 판에는 없음"})와 사진으로 찍은 단어는 이 수와 따로 나와요. 지하철에서 볼 여분으로 쓰세요.</p>
+  h+=`<section class="card"><h2>단어</h2><div class="sw"><span class="lab"><b>새 단어는 뜻을 가리고 먼저 떠올리기</b><div class="hint">떠올려 본 뒤에 뜻을 보면 더 오래 기억해요(인출 연습)</div></span><input type="checkbox" class="toggle" id="rcl" ${cfg("recall")==="1"?"checked":""} aria-label="뜻을 가리고 먼저 떠올리기"></div><label class="f" for="np">Claude 목록에서 하루 새 단어 수</label><input type="number" id="np" class="narrow" inputmode="numeric" min="0" max="100" value="${cfg("newPerDay")}"><p class="hint">파고다 시험지(하루 1 Unit, ${PAGODA.length?"30개":"이 판에는 없음"})와 사진으로 찍은 단어는 이 수와 따로 나와요. 지하철에서 볼 여분으로 쓰세요.</p>
   <label class="f" for="vd">파고다 보카 책의 Unit 수</label><input type="number" id="vd" class="narrow" inputmode="numeric" value="${cfg("vocabDays")}"><label class="f" for="vs">파고다 보카 시작일</label><input type="date" id="vs" value="${cfg("vocabStart")}" class="narrow" style="width:12em"></section>`;
   const th=cfg("theme")||"system";h+=`<section class="card"><h2>화면 모드</h2><div role="radiogroup" aria-label="화면 모드" class="btns" style="margin-top:0">${[["system","휴대폰 설정 따르기"],["light","밝게"],["dark","어둡게"]].map(([v,t])=>`<label class="btn small" style="gap:8px"><input type="radio" name="theme" value="${v}" ${th===v?"checked":""} style="width:20px;height:20px;margin:0">${t}</label>`).join("")}</div></section>`;
   const pff=photoFullFrom(),pfv=cfg("photoFull");h+=`<section class="card"><h2>사진 읽기 단계</h2><div class="sw"><span class="lab"><b>유의어·파생어까지 읽기</b><div class="hint">${pfv==="auto"?`30 Unit 을 두 번 보는 ${esc(label(pff))}부터 저절로 켜져요.`:`직접 ${pfv==="1"?"켰어요":"껐어요"}.`}</div></span><input type="checkbox" class="toggle" id="pfull" ${photoFull()?"checked":""} aria-label="유의어·파생어까지 읽기"></div>${pfv!=="auto"?`<button class="btn small" id="pauto">날짜에 맞춰 저절로 켜기로 되돌리기</button>`:""}</section>`;
@@ -864,6 +871,7 @@ function vSet(){
   const at=document.getElementById("atest");if(at)at.onclick=()=>{Android.testAlarm();toast("1분 뒤 알람이 울려요. 화면을 꺼 두고 확인해 보세요")};
   const pm=document.getElementById("perm");if(pm)pm.onclick=()=>Android.fixPermissions();
   const num=(id,k,min,max,nm)=>{const el=document.getElementById(id);const er=document.createElement("div");er.id="er-"+id;el.after(er);el.setAttribute("aria-describedby",er.id);el.onchange=e=>{const v=Math.round(Number(e.target.value));if(e.target.value===""||!(v>=min&&v<=max)){er.innerHTML=`<div class="err">${nm}는 ${min}~${max} 사이로 넣어 주세요. 지금 저장된 값은 ${cfg(k)}이에요.</div>`;el.setAttribute("aria-invalid","true");return}er.innerHTML="";el.setAttribute("aria-invalid","false");setCfg(k,String(v));toast(nm+"를 "+v+"(으)로 저장했어요")}};
+  document.getElementById("rcl").onchange=e=>{setCfg("recall",e.target.checked?"1":"0");toast(e.target.checked?"새 단어 뜻을 가려요":"새 단어 뜻을 바로 보여요")};
   num("qs","quizSize",1,30,"알람마다 낼 문제 수");num("np","newPerDay",0,100,"Claude 목록 하루 새 단어 수");num("vd","vocabDays",1,100,"Unit 수");
   document.getElementById("vs").onchange=e=>{if(e.target.value){setCfg("vocabStart",e.target.value);toast("저장했어요")}};
   M.querySelectorAll("input[name=theme]").forEach(r=>r.onchange=()=>{setCfg("theme",r.value);applyTheme();toast("화면 모드를 바꿨어요")});
