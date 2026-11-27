@@ -13,7 +13,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27i">
+<meta name="build" content="2026-11-27j">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
 /* 색: 밝게 = 회색빛 종이 지면과 빨강 한 곳(이코노미스트 방식), 어둡게 = 깊은 물색 지면(파타고니아 방식).
@@ -23,7 +23,7 @@
   --text:#121212;--sub:#55534c;--faint:#55534c;
   --primary:#1b3a6b;--on-primary:#ffffff;--primary-soft:#e3e8f1;--accent:#c8102e;
   --ok:#17663a;--ok-soft:#e4efe4;--bad:#b3150d;--bad-soft:#f8e4e1;--warn:#7a5000;--warn-soft:#f6ecd2;
-  --sh:none;--tab:rgba(245,244,239,.97);
+  --sh:none;--tab:rgba(245,244,239,.97);--hero:#161616;--on-hero:#f5f4ef;
   --tile-now:#1b3a6b;--tile-voc:#0f5c56;--tile-mock:#8a4512;--tile-read:#5b2b6e;
   --r:20px;--r-s:14px;
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
@@ -35,14 +35,14 @@
   --text:#eeeeee;--sub:#a9bcc3;--faint:#a9bcc3;
   --primary:#8cc4e6;--on-primary:#031c24;--primary-soft:#123846;--accent:#ff6b5e;
   --ok:#63d39a;--ok-soft:#0f3a2c;--bad:#ff8a80;--bad-soft:#3d2127;--warn:#f0c060;--warn-soft:#3a3420;
-  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);
+  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);--hero:#0f3d4c;--on-hero:#ffffff;
   --tile-now:#2d5b98;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;
 }}
 :root[data-theme=dark]{--bg:#031c24;--surface:#0a2a35;--surface2:#123846;--line:#1e4a5a;--line-strong:#7f9aa4;
   --text:#eeeeee;--sub:#a9bcc3;--faint:#a9bcc3;
   --primary:#8cc4e6;--on-primary:#031c24;--primary-soft:#123846;--accent:#ff6b5e;
   --ok:#63d39a;--ok-soft:#0f3a2c;--bad:#ff8a80;--bad-soft:#3d2127;--warn:#f0c060;--warn-soft:#3a3420;
-  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);
+  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);--hero:#0f3d4c;--on-hero:#ffffff;
   --tile-now:#2d5b98;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;color-scheme:dark}
 :root[data-theme=light]{color-scheme:light}
 @media (prefers-contrast: more){:root{--sub:var(--text);--faint:var(--text);--line:var(--line-strong)}}
@@ -84,7 +84,7 @@ p{margin:0 0 var(--s2)}
 /* 할 일 */
 .task{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3) 0;border-top:1px solid var(--line);cursor:pointer}
 .task:first-of-type{border-top:0}
-.task input{appearance:none;-webkit-appearance:none;width:28px;height:28px;border:2px solid var(--line-strong);border-radius:50%;flex:none;margin:0;display:grid;place-content:center;cursor:pointer;background:var(--surface)}
+.task input{appearance:none;-webkit-appearance:none;width:24px;height:24px;border:2px solid var(--line-strong);border-radius:50%;flex:none;margin:0;display:grid;place-content:center;cursor:pointer;background:var(--surface)}
 .task input:checked{background:var(--ok);border-color:var(--ok)}
 .task input:checked::after{content:"✓";color:var(--on-ok);font-weight:800;font-size:15px}
 .task .t{font-weight:600}
@@ -279,12 +279,12 @@ body.focus .sticky-act{bottom:0;padding-bottom:calc(12px + env(safe-area-inset-b
 .learn .ex b{font-weight:800}
 body.focus header.top .meta{display:none}
 /* 기록: 지금 내 수준 */
-.tile .lvl{font-size:3.25rem;font-weight:700;letter-spacing:-.04em;line-height:1;margin:var(--s2) 0}
-.tile .lvl small{font-size:1.25rem;margin-left:4px;letter-spacing:0}
+.lvl{font-size:3.25rem;font-weight:700;letter-spacing:-.04em;line-height:1;margin:var(--s2) 0}
+.lvl small{font-size:1.25rem;margin-left:4px;letter-spacing:0}
 .lbar{position:relative;height:8px;border-radius:4px;background:rgba(255,255,255,.22);margin:var(--s3) 0 var(--s2)}
 .lbar b{display:block;height:100%;border-radius:4px;background:#fff}
 .lbar i{position:absolute;top:-4px;width:2px;height:16px;background:#fff}
-.tile .up{color:#c9f2da}.tile .dn{color:#ffd4cf}
+.vs .up{color:var(--ok);font-weight:700}.vs .dn{color:var(--bad);font-weight:700}
 .vs{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin-top:var(--s2)}
 .vs div{display:flex;flex-direction:column}
 .vs span{font-size:var(--f-xs);color:var(--sub)}
@@ -293,6 +293,27 @@ body.focus header.top .meta{display:none}
 .schart .goal{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 4}
 .schart .ln{fill:none;stroke:var(--primary);stroke-width:2.5}
 .schart .pt{fill:var(--primary)}.schart .tv{font-size:11px;font-weight:700;fill:var(--text)}
+/* 큰 카드 하나 (오늘·기록) + 숫자 칸 */
+.hero2{background:var(--hero);color:var(--on-hero);border-radius:24px;padding:var(--s5);margin:0 0 var(--s3)}
+.hero2 .hrow{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s2)}
+.hero2 .lead,.hero2 .dd{font-size:var(--f-s);margin:0;opacity:.72;font-weight:500}
+.hero2 h2{font-size:1.875rem;line-height:1.2;letter-spacing:-.025em;margin:var(--s3) 0 var(--s2);font-weight:700}
+.hero2 .tsub{font-size:var(--f-s);opacity:.78;margin:0;line-height:1.55}
+.hero2 .btn{background:var(--on-hero);color:var(--hero);border:0;margin-top:var(--s5);min-height:52px;font-weight:700;font-size:var(--f-m)}
+.hero2 .lvl{margin:var(--s3) 0 var(--s2)}
+.nums3{display:grid;grid-template-columns:repeat(3,1fr);padding:var(--s3) var(--s2)}
+.nc{border:0;background:none;font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:68px;cursor:pointer}
+.nc+.nc{border-left:1px solid var(--line)}
+.nc b{font-size:1.75rem;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.nc span{font-size:var(--f-xs);color:var(--sub)}
+.nextev{grid-column:1/-1;display:flex;align-items:center;gap:var(--s2);border:0;border-top:1px solid var(--line);background:none;font:inherit;color:inherit;margin:var(--s3) var(--s2) 0;padding:var(--s3) 0 var(--s1);min-height:48px;text-align:left;cursor:pointer}
+.nextev b{flex:1;font-weight:600}
+.nextev .chev{color:var(--sub);font-size:1.25rem}
+.nums2{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.nums2 b{display:block;font-size:2.5rem;letter-spacing:-.03em;line-height:1.05;font-weight:700}
+.nums2 b small{font-size:1rem;margin-left:2px;font-weight:600}
+.nums2 span{display:block;font-size:var(--f-s);font-weight:600;margin-top:4px}
+.nums2 em,.vs em{display:block;font-style:normal;font-size:var(--f-xs);color:var(--sub);margin-top:2px}
 /* 오늘: 크기가 다른 타일 (키노트 7-2절). 가장 큰 타일 = 지금 할 것 하나 (원칙-04·05, 대시보드-04) */
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto;grid-auto-rows:76px;gap:10px;margin:0 0 var(--s3)}
 .tile{border:0;border-radius:var(--r);padding:var(--s3) var(--s4);display:flex;flex-direction:column;justify-content:space-between;text-align:left;font:inherit;color:#fff;min-width:0;overflow:hidden}
@@ -664,7 +685,7 @@ function render(){
   ({today:vToday,words:vWords,cal:vCal,score:vScore,set:vSet,method:vMethod,quiz:vQuiz,learn:vLearn,ocr:vOcr,list:vList})[view]();
 }
 function taskHTML(d,x){const k=key(d,x.id),dn=isDone(k),c=CAT[x.cat];
-  return `<label class="task${dn?" done":""}" data-k="${k}"><input type="checkbox"${dn?" checked":""} aria-describedby="k-${esc(k)}"><div class="grow"><div class="t">${esc(x.t)}</div><div class="k" id="k-${esc(k)}"><span class="tag"><i style="background:${c[1]}"></i>${c[0]}</span>${esc(x.k)}</div>${x.why?`<div class="why">근거: ${esc(x.why)}</div>`:""}</div></label>`}
+  return `<label class="task${dn?" done":""}" data-k="${k}"><input type="checkbox"${dn?" checked":""} aria-describedby="k-${esc(k)}"><div class="grow"><div class="t">${esc(x.t)}</div><div class="k" id="k-${esc(k)}"><span class="tag"><i style="background:${c[1]}"></i>${c[0]}</span>${esc(x.k)}</div></div></label>`}
 function bindTasks(){M.querySelectorAll(".task input").forEach(i=>i.onchange=e=>{const k=e.target.closest(".task").dataset.k,v=e.target.checked,y=window.scrollY;setDone(k,v);say(v?"완료로 표시했어요":"완료 표시를 지웠어요");render();window.scrollTo(0,y);const n=M.querySelector(`.task[data-k="${CSS.escape(k)}"] input`);if(n)n.focus({preventScroll:true});if(v)toast("완료로 표시했어요",()=>{setDone(k,false);render();window.scrollTo(0,y)})})}
 function meter(n,c,lab){const p=c?Math.round(n/c*100):0;return `<div class="meter" role="img" aria-label="${esc(lab||"")} ${n}/${c} 완료, ${p}%"><div class="bar"><b class="${p>=100?"full":""}" style="width:${p}%"></b></div><span class="v num">${n.toLocaleString()}/${c.toLocaleString()} · ${p}%</span></div>`}
 
@@ -691,12 +712,8 @@ function vToday(){
   }else{
     const rc=resumeCard();
     if(rc)h+=rc;else{const a=nextAction(d,t),due=dueList().length,nl=newLeftToday(),ne=EXAMS.find(e=>examOn(e)&&e.date>=td),nx=nextEvent(d);
-      h+=`<section class="tiles" aria-label="오늘 요약"><div class="tile now"><p class="lead">${esc(a.lead)}</p><h2 id="h-na">${esc(a.h)}</h2><p class="tsub">${esc(a.sub)}</p><button class="btn block" id="na" data-act="${a.act}"${a.k?` data-k="${esc(a.k)}"`:""}>${esc(a.btn)}</button></div>
-      <button class="tile t2 voc" data-go="words"><small>${nl?"남은 새 단어":"복습할 단어"}</small><b class="big num">${nl||due}</b></button>
-      <button class="tile t1 gray" data-go="cal"><small>${ne?ne.no+"회 시험까지":"시험"}</small><b class="num">${ne?"D-"+(diff(td,ne.date)||"DAY"):"없음"}</b></button>
-      <div class="tile t1 gray"><small>${nl?"복습할 단어":"익힌 단어"}</small><b class="num">${nl?due:Object.keys(S.srs).length}개</b></div>
-      <button class="tile t2 mock" data-go="cal"><small>${nx?esc(nx[0]):"다음 일정"}</small><b>${nx?esc(nx[1]):"달력 보기"}</b></button>
-      <button class="tile t2 read" data-jump="h-t"><small>오늘 할 일</small><b class="big num">${n}/${c}</b></button></section>`}
+      h+=`<section class="hero2" aria-labelledby="h-na"><div class="hrow"><p class="lead">${esc(a.lead)}</p>${ne?`<span class="dd num">${ne.no}회 D-${diff(td,ne.date)||"DAY"}</span>`:""}</div><h2 id="h-na">${esc(a.h)}</h2><p class="tsub">${esc(a.sub)}</p><button class="btn block" id="na" data-act="${a.act}"${a.k?` data-k="${esc(a.k)}"`:""}>${esc(a.btn)}</button></section>
+      <section class="card nums3"><button class="nc" data-go="words"><b class="num">${due}</b><span>오늘 복습</span></button><button class="nc" data-go="words"><b class="num">${nl}</b><span>남은 새 단어</span></button><button class="nc" data-jump="h-t"><b class="num">${n}/${c}</b><span>오늘 할 일</span></button>${nx?`<button class="nextev" data-go="cal"><span class="sub">${esc(nx[0])}</span><b>${esc(nx[1])}</b><span class="chev" aria-hidden="true">›</span></button>`:""}</section>`}
   }
   h+=`<section class="card" aria-labelledby="h-t"><div class="row"><h2 id="h-t" class="grow">${esc(label(d))}</h2><span class="sub">${esc(phaseOf(d))}</span></div>${meter(n,c,"오늘 할 일")}${t.map(x=>taskHTML(d,x)).join("")}</section>`;
   const miss=[];for(let x=START;x<td&&x<=END;x=add(x,1)){const r=tasksFor(x).filter(y=>!isDone(key(x,y.id))&&y.id!=="quiz");if(r.length)miss.push([x,r])}
@@ -901,7 +918,7 @@ function journeyHTML(td){
 function vCal(){
   const first=month+"-01",lead=dow(first);let d=add(first,-lead);const td=todayStr();
   const [yy,mm]=month.split("-"),ne=EXAMS.find(e=>examOn(e)&&e.date>=td);
-  let h=ne?`<section class="tiles"><div class="tile now"><p class="lead">다음 시험 · ${ne.no}회</p><div class="lvl num">D-${diff(td,ne.date)||"DAY"}</div><p class="tsub">${esc(label(ne.date))} 오후 2시 20분 · 정기 접수 ${esc(short(ne.reg[0]))}~${esc(short(ne.reg[1]))} · 성적 ${esc(short(ne.res))}</p></div></section>`:"";
+  let h=ne?`<section class="hero2"><p class="lead">다음 시험 · ${ne.no}회</p><div class="lvl num">D-${diff(td,ne.date)||"DAY"}</div><p class="tsub">${esc(label(ne.date))} 오후 2시 20분 · 정기 접수 ${esc(short(ne.reg[0]))}~${esc(short(ne.reg[1]))} · 성적 ${esc(short(ne.res))}</p></section>`:"";
   h+=journeyHTML(td);
   h+=`<section class="card calcard"><div class="cal-head"><div class="grow"><h2 class="mon">${Number(mm)}월<span class="dotp" aria-hidden="true">.</span></h2><span class="sub num">${yy}</span></div><button class="nav" id="pv" aria-label="이전 달">‹</button><button class="nav" id="nx" aria-label="다음 달">›</button></div>
   <div class="wk" aria-hidden="true">${WD.map((w,i)=>`<div${i===0?' class="sun"':""}>${w}</div>`).join("")}</div><div class="grid" aria-label="${yy}년 ${Number(mm)}월 계획">`;
@@ -938,14 +955,10 @@ function vScore(){
   const l=scoresList(),last=l[l.length-1],prev=l[l.length-2],tot=s=>["L","V","G","R"].reduce((a,k)=>a+(Number(s[k])||0),0),best=l.length?Math.max(...l.map(tot)):0;
   const [cur,bst]=streaks(),w0=weekStats(0),w1=weekStats(-1),sc=stageCounts(),lrn=sc.slice(1,8).reduce((a,b)=>a+b,0),fe=firstExam();
   const lv=last?tot(last):null,gap=lv==null?null:330-lv,acc=w=>w.n?Math.round(w.ok/w.n*100):0;
-  let h=`<section class="tiles" aria-label="내 상태">
-   <div class="tile now"><p class="lead">지금 내 수준${last?" · "+esc(last.name):""}</p>${last?`<div class="lvl num">${lv}<small>점</small></div><div class="lbar" role="img" aria-label="${lv}점, 목표 330점, 만점 600점"><b style="width:${Math.min(100,lv/600*100)}%"></b><i style="left:${330/600*100}%"></i></div><p class="tsub">${gap>0?`목표 330점까지 <b>${gap}점</b> 남았어요`:`목표보다 <b>${-gap}점</b> 높아요`}${prev?` · 지난 기록보다 ${lv-tot(prev)>=0?"+":""}${lv-tot(prev)}점`:""} · 최고 ${best}점</p>`:`<div class="lvl">진단 전</div><p class="tsub">11월 30일 기출 1회를 풀고 아래에 점수를 적으면, 지금 몇 점 수준인지와 330점까지 남은 점수가 여기 나와요.</p>`}</div>
-   <div class="tile t2 voc"><small>장기 기억 단어</small><span><b class="big num">${sc[8]}</b><small style="display:block;margin-top:4px">복습 중 ${lrn} · 330점 기준 빈출 1,000개</small></span></div>
-   <div class="tile t1 gray"><small>연속 공부</small><b class="num">${cur}일</b></div>
-   <div class="tile t1 gray"><small>가장 긴 연속</small><b class="num">${bst}일</b></div>
-   <div class="tile t2 read"><small>이번 주 푼 문제</small><span><b class="big num">${w0.n}</b><small style="display:block;margin-top:4px">${delta(w0.n,w1.n,"문제")}</small></span></div>
-   <div class="tile t2 mock"><small>이번 주 정답률</small><span><b class="big num">${acc(w0)}%</b><small style="display:block;margin-top:4px">지난주 ${acc(w1)}% · 새 단어 ${w0.nw}개</small></span></div></section>`;
-  h+=`<section class="card"><h2>지난주의 나와 겨루기</h2><div class="vs"><div><span>푼 문제</span><b class="num">${w0.n}</b><em class="num">${w1.n}</em></div><div><span>정답률</span><b class="num">${acc(w0)}%</b><em class="num">${acc(w1)}%</em></div><div><span>새 단어</span><b class="num">${w0.nw}</b><em class="num">${w1.nw}</em></div></div><p class="sub" style="margin:6px 0 0">진한 숫자 = 이번 주, 옅은 숫자 = 지난주. 월요일부터 셉니다.</p></section>`;
+  const dl=(a,b)=>a>b?`<span class="up">▲ ${a-b}</span>`:a<b?`<span class="dn">▼ ${b-a}</span>`:"같음";
+  let h=`<section class="hero2"><p class="lead">지금 내 수준${last?" · "+esc(last.name):""}</p>${last?`<div class="lvl num">${lv}<small>점</small></div><div class="lbar" role="img" aria-label="${lv}점, 목표 330점, 만점 600점"><b style="width:${Math.min(100,lv/600*100)}%"></b><i style="left:${330/600*100}%"></i></div><p class="tsub">${gap>0?`목표 330점까지 <b>${gap}점</b>`:`목표보다 <b>${-gap}점</b> 높아요`}${prev?` · 지난 기록 ${lv-tot(prev)>=0?"+":""}${lv-tot(prev)}점`:""} · 최고 ${best}점</p>`:`<div class="lvl">진단 전</div><p class="tsub">11월 30일 기출 1회를 풀고 아래에 점수를 적으면, 지금 몇 점 수준인지와 330점까지 남은 점수가 여기 나와요.</p>`}</section>
+  <section class="card"><div class="nums2"><div><b class="num">${sc[8]}</b><span>장기 기억 단어</span><em>복습 중 ${lrn}개 · 330점엔 빈출 1,000개</em></div><div><b class="num">${cur}<small>일</small></b><span>연속 공부</span><em>가장 긴 연속 ${bst}일</em></div></div></section>
+  <section class="card"><h2>이번 주 vs 지난주</h2><div class="vs"><div><span>푼 문제</span><b class="num">${w0.n}</b><em class="num">지난주 ${w1.n} · ${dl(w0.n,w1.n)}</em></div><div><span>정답률</span><b class="num">${acc(w0)}%</b><em class="num">지난주 ${acc(w1)}% · ${dl(acc(w0),acc(w1))}</em></div><div><span>새 단어</span><b class="num">${w0.nw}</b><em class="num">지난주 ${w1.nw} · ${dl(w0.nw,w1.nw)}</em></div></div></section>`;
   if(last)h+=`<section class="card"><h2>점수 흐름</h2>${scoreChart(l,tot)}</section>`;
   h+=`<section class="card"><h2>${last?"영역별 · 목표 대비":"점수 기록"}</h2>`;
   if(last){h+=["L","V","G","R"].map(k=>{const v=Number(last[k])||0,p=Math.min(100,Math.round(v/MAXS[k]*100)),tp=Math.round(TARGET[k]/MAXS[k]*100);return `<div style="margin:10px 0"><div class="row"><b class="grow">${NAME[k]}</b><span class="num ${v>=TARGET[k]?"pass":"fail"}">${v} / 목표 ${TARGET[k]} ${v>=TARGET[k]?"✓":"✗"}</span></div><div class="bar" style="position:relative;height:14px" role="img" aria-label="${NAME[k]} ${v}점, 목표 ${TARGET[k]}점, 만점 ${MAXS[k]}점"><b style="width:${p}%;background:${v>=TARGET[k]?"var(--ok)":"var(--primary)"}"></b><span style="position:absolute;left:${tp}%;top:-3px;bottom:-3px;width:2px;background:var(--text)"></span></div></div>`}).join("")+`<p class="sub">세로선 = 목표. 목표는 참고 영상 두 편의 영역별 목표 중간값이에요. 실제 점수는 문항 난이도에 따라 환산돼서 영역 합이 같아도 달라질 수 있어요.</p>`}
