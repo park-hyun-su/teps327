@@ -13,7 +13,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27h">
+<meta name="build" content="2026-11-27i">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
 /* 색: 밝게 = 회색빛 종이 지면과 빨강 한 곳(이코노미스트 방식), 어둡게 = 깊은 물색 지면(파타고니아 방식).
@@ -108,10 +108,10 @@ nav.tabs button[aria-current="page"]::after{background:var(--accent)}
 .cal-head h2{flex:1;margin:0}
 .wk,.grid{display:grid;grid-template-columns:repeat(7,1fr)}
 .wk div{font-size:var(--f-xs);color:var(--sub);text-align:center;padding:4px 0}
-.cell{min-width:0;min-height:4rem;border-top:1px solid var(--line);padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;color:inherit}
+.cell{min-width:0;min-height:3.6rem;border-top:0;border-radius:12px;margin:2px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;color:inherit}
 .cell[disabled]{opacity:.35;cursor:default}
 .cell .d{min-width:1.9em;height:1.9em;line-height:1.9em;white-space:nowrap;text-align:center;border-radius:50%;font-weight:600;font-size:var(--f-s)}
-.cell.today .d{background:var(--primary);color:var(--on-primary)}
+.cell.today .d{background:var(--text);color:var(--bg)}
 .cell[aria-pressed="true"]{background:var(--primary-soft);border-radius:var(--r-s);box-shadow:inset 0 0 0 2px var(--primary)}
 .cell .ev{font-size:.75rem;text-overflow:ellipsis;line-height:1.35;font-weight:700;max-width:100%;overflow:hidden;white-space:nowrap;padding:0 1px;background:none;border:0}
 .cell .ev.x{color:var(--bad)}
@@ -226,6 +226,73 @@ body.focus .sticky-act{bottom:0;padding-bottom:calc(12px + env(safe-area-inset-b
 .qbar{display:flex;align-items:center;gap:var(--s3);margin:0 0 var(--s3)}
 .qbar .bar{height:8px}
 .qbar .v{font-size:var(--f-s);color:var(--sub);white-space:nowrap}
+/* 달력: 완료 정도 = 칸 색 농도, 시험일 = 빨강 숫자, 오늘 = 진한 원 */
+.calcard{padding:var(--s4) var(--s3)}
+.cal-head .mon{font-size:2rem;letter-spacing:-.03em;margin:0;line-height:1}
+.cal-head .mon .dotp{color:var(--accent)}
+.cal-head .nav{width:44px;height:44px;border-radius:50%;border:0;background:var(--surface2);color:var(--text);font-size:1.4rem;cursor:pointer;margin-left:6px}
+.wk .sun{color:var(--bad)}
+.cell{background:color-mix(in srgb,var(--primary) var(--h,0%),transparent)}
+.cell.full{background:var(--primary);color:var(--on-primary)}
+.cell.full .d,.cell.full .ev,.cell.full .ck{color:var(--on-primary)}
+.cell.out .d{color:var(--sub);font-weight:400}
+.cell.hol .d{color:var(--bad)}
+.cell.exam .d{color:var(--accent);font-weight:800}
+.cell.exam .ev{color:var(--accent)}
+.cell.full.out .d,.cell.full.hol .d,.cell.full.exam .d,.cell.full .ev{color:var(--on-primary)}
+.cell.today.full .d{background:var(--on-primary);color:var(--primary)}
+.cell .ck{font-size:.75rem;font-weight:800}
+.cleg{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--f-xs);color:var(--sub);margin-top:var(--s3)}
+.cleg i{width:14px;height:14px;border-radius:4px;background:color-mix(in srgb,var(--primary) var(--h,0%),transparent)}
+.cleg i.f{background:var(--primary)}.cleg .gap{width:8px}.cleg .exd{color:var(--accent)}.cleg .mkd{color:var(--warn)}
+.jbar{position:relative;display:flex;gap:3px;height:12px;margin:var(--s4) 0 var(--s2)}
+.jbar span{border-radius:6px}
+.jbar .jnow{position:absolute;top:-6px;width:4px;height:24px;margin-left:-2px;border-radius:2px;background:var(--text)}
+.jbar .jex{position:absolute;top:14px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--accent)}
+.jcur{margin:var(--s3) 0 var(--s2)}
+.jleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:var(--f-xs);color:var(--sub)}
+.jleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.jleg i.tk{border-radius:50%;background:var(--accent);width:7px;height:7px}
+/* 단어: 복리 단계 기둥과 예상 곡선 */
+.pipe{display:flex;align-items:flex-end;gap:6px;margin:var(--s4) 0 var(--s2);min-height:120px}
+.pcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.pcol b{font-size:var(--f-s)}
+.pcol .pb{display:block;width:100%;border-radius:6px 6px 3px 3px;background:var(--tile-voc)}
+.pcol small{font-size:.6875rem;color:var(--sub);white-space:nowrap;letter-spacing:-.02em}
+.cnums{display:flex;gap:var(--s5);margin:var(--s3) 0}
+.cnums b{display:block;font-size:2rem;letter-spacing:-.03em;line-height:1.1}
+.cnums span{font-size:var(--f-xs);color:var(--sub)}
+.cchart,.schart{width:100%;height:auto;display:block;margin-top:var(--s2)}
+.cchart .a1{fill:var(--primary);opacity:.16}.cchart .a2{fill:var(--tile-voc)}
+.cchart .ex{stroke:var(--accent);stroke-width:1.5}.cchart .nw{fill:var(--accent)}
+.cchart .tl,.schart .tl{font-size:10px;fill:var(--sub)}
+.lg{display:inline-block;width:10px;height:10px;border-radius:3px;margin:0 4px 0 8px;vertical-align:-1px}
+.lg.a1{background:var(--primary);opacity:.3}.lg.a2{background:var(--tile-voc)}.lg.nw{background:var(--accent);border-radius:50%}
+.steps{display:flex;justify-content:space-between;margin-top:var(--s4)}
+.steps span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.6875rem;color:var(--sub);white-space:nowrap}
+.steps i{width:10px;height:10px;border-radius:50%;background:var(--tile-voc);opacity:.35}
+.steps span:last-child i{opacity:1}
+/* 단어 외우기 */
+.wbtn{border:0;background:none;padding:0;text-align:left;color:inherit;cursor:pointer;font:inherit}
+.pos2{font-size:var(--f-s);color:var(--sub);margin-top:2px}
+.card.learn.inv .pos2{color:inherit;opacity:.78}
+.learn .ex b{font-weight:800}
+body.focus header.top .meta{display:none}
+/* 기록: 지금 내 수준 */
+.tile .lvl{font-size:3.25rem;font-weight:700;letter-spacing:-.04em;line-height:1;margin:var(--s2) 0}
+.tile .lvl small{font-size:1.25rem;margin-left:4px;letter-spacing:0}
+.lbar{position:relative;height:8px;border-radius:4px;background:rgba(255,255,255,.22);margin:var(--s3) 0 var(--s2)}
+.lbar b{display:block;height:100%;border-radius:4px;background:#fff}
+.lbar i{position:absolute;top:-4px;width:2px;height:16px;background:#fff}
+.tile .up{color:#c9f2da}.tile .dn{color:#ffd4cf}
+.vs{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin-top:var(--s2)}
+.vs div{display:flex;flex-direction:column}
+.vs span{font-size:var(--f-xs);color:var(--sub)}
+.vs b{font-size:1.75rem;letter-spacing:-.02em;line-height:1.15}
+.vs em{font-style:normal;color:var(--sub);font-size:var(--f-m)}
+.schart .goal{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 4}
+.schart .ln{fill:none;stroke:var(--primary);stroke-width:2.5}
+.schart .pt{fill:var(--primary)}.schart .tv{font-size:11px;font-weight:700;fill:var(--text)}
 /* 오늘: 크기가 다른 타일 (키노트 7-2절). 가장 큰 타일 = 지금 할 것 하나 (원칙-04·05, 대시보드-04) */
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto;grid-auto-rows:76px;gap:10px;margin:0 0 var(--s3)}
 .tile{border:0;border-radius:var(--r);padding:var(--s3) var(--s4);display:flex;flex-direction:column;justify-content:space-between;text-align:left;font:inherit;color:#fff;min-width:0;overflow:hidden}
@@ -385,7 +452,7 @@ const clamp=d=>d<START?START:d>END?END:d;
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ====================== 상태 ====================== */
-const PARTS=["items","cfg","scores","words","srs"];
+const PARTS=["items","cfg","scores","words","srs","days"];
 function blank(){const o={};for(const p of PARTS)o[p]={};return o}
 let S=load();
 function load(){try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.items){for(const p of PARTS)s[p]=s[p]||{};return s}}catch(e){}return blank()}
@@ -507,7 +574,9 @@ function chipOf(x){if(x.cat==="exam"&&/^x\d$/.test(x.id))return ["x",x.t.split("
   if(/^reg\d/.test(x.id))return ["","접수","정기 접수 시작"];if(/^res/.test(x.id))return ["","성적","성적 발표"];return null}
 
 /* ====================== 단어 은행·복습 간격 ====================== */
-const BOX=[0,1,3,7,14,30],CHUNK=10; /* 새 단어는 10개씩 보고 바로 시험 */
+/* 복습 단계 (영상 [G] STUDIAN 「단어를 효율적으로 오랫동안 기억하는 방법」): 처음 본 날은 적어 두기만 하고,
+   다음 날부터 1일·2일·3일 연속, 그다음 3일 후·7일 후·15일 후·30일 후에 시험. 30일 후까지 맞히면 장기 기억 */
+const BOX=[0,1,1,1,3,7,15,30,60],STG=["","1일","2일","3일","3일 후","7일 후","15일 후","30일 후","장기 기억"],CHUNK=10,TO_LONG=58;
 function userWords(){return Object.entries(S.words).filter(([id,w])=>id[0]==="u"&&!w.del).map(([id,w])=>Object.assign({id},w))}
 function ovr(w){const o=S.words[w.id];if(!o)return Object.assign({},w);if(o.del)return null;return Object.assign({},w,o.ko?{ko:o.ko,edited:1}:{},o.syn2?{syn2:o.syn2}:{},o.der?{der:o.der}:{})}
 function builtin(w){return ovr(w)}
@@ -527,7 +596,7 @@ function bank(){
 function allWords(){return bank().list}
 function wordById(id){return bank().byId[id]||null}
 function srs(id){return S.srs[id]}
-function dueList(d){d=d||todayStr();return Object.entries(S.srs).filter(([id,s])=>s.due<=d&&wordById(id)).sort((a,b)=>a[1].due<b[1].due?-1:a[1].box-b[1].box).map(([id])=>id)}
+function dueList(d){d=d||todayStr();return Object.entries(S.srs).filter(([id,s])=>s.due<=d&&wordById(id)).sort((a,b)=>b[1].box-a[1].box||(a[1].due<b[1].due?-1:1)).map(([id])=>id)}
 function learnedToday(d,pre){d=d||todayStr();return Object.entries(S.srs).filter(([id,s])=>s.first===d&&(!pre||id[0]===pre)).length}
 /* 새 단어 순서: 사진으로 찍은 단어 → 오늘까지 열린 Unit 시험지 → Claude 목록(하루 정해진 개수) */
 function newParts(){
@@ -543,11 +612,15 @@ function newParts(){
 function newQueue(){const p=newParts();return p.photo.concat(p.test,p.claude)}
 function newLeftToday(){const p=newParts();return p.photo.length+p.test.length+p.claude.length}
 function grade(id,ok){
-  const d=todayStr(),s=S.srs[id]||{box:0,first:d,right:0,wrong:0};
+  const d=todayStr(),s=S.srs[id]||{box:1,first:d,right:0,wrong:0};
   if(ok){s.box=Math.min(BOX.length-1,s.box+1);s.right++}else{s.box=1;s.wrong++}
-  s.due=add(d,ok?BOX[s.box]:1);s.last=d;s.t=Date.now();S.srs[id]=s;
-  autoQuizDone();changed();
+  s.due=add(d,BOX[s.box]);s.last=d;s.t=Date.now();S.srs[id]=s;
+  logDay(ok);autoQuizDone();changed();
 }
+/* 날마다 푼 문제·정답·새로 본 단어 수 (연속 공부·지난주 비교에 씀) */
+function logDay(ok,isNew){const d=todayStr(),x=S.days[d]||{n:0,ok:0,nw:0};if(isNew)x.nw=(x.nw||0)+1;else{x.n++;if(ok)x.ok++}x.t=Date.now();S.days[d]=x}
+/* 새 단어: 모르면 내일 1일 단계부터, 이미 알면 15일 뒤에 한 번 확인 (영상: 긴가민가하면 모르는 것) */
+function learnMark(w,known){const d=todayStr();S.srs[w.id]=known?{box:6,first:d,due:add(d,15),last:d,right:0,wrong:0,known:1,t:Date.now()}:{box:1,first:d,due:add(d,1),last:d,right:0,wrong:0,t:Date.now()};logDay(false,true);autoQuizDone();changed()}
 function autoQuizDone(){const d=todayStr();if(d<START||d>END)return;const k=key(d,"quiz");
   if(!isDone(k)&&newLeftToday()===0&&dueList(d).length===0)S.items[k]={v:true,t:Date.now(),auto:1}}
 
@@ -557,9 +630,9 @@ function pickOthers(w,n,f){const pool=allWords().filter(x=>x.id!==w.id&&f(x));co
 const sk=s=>String(s||"").split(/\s*(?:,|\/|;)\s*/).filter(Boolean).slice(0,2).join(", ");
 function makeQ(w){
   const box=(S.srs[w.id]||{}).box||0,types=["ko","ko","en"];
-  if(box>=2&&w.ex&&w.ans&&w.ex.includes(w.ans))types.push("blank","blank");
-  if(box>=3&&w.syn&&w.syn.length)types.push("syn");
-  if(box>=3&&w.der&&w.der.length)types.push("der");
+  if(box>=3&&w.ex&&w.ans&&w.ex.includes(w.ans))types.push("blank","blank");
+  if(box>=4&&w.syn&&w.syn.length)types.push("syn");
+  if(box>=4&&w.der&&w.der.length)types.push("der");
   const t=types[Math.floor(Math.random()*types.length)];
   if(t==="ko"){const a=sk(w.ko),o=[...new Set(pickOthers(w,6,x=>x.ko&&sk(x.ko)!==a).map(x=>sk(x.ko)))].slice(0,3);return {w,type:t,ask:"뜻을 고르세요",prompt:w.w,opts:shuffle([a,...o]),ans:a}}
   if(t==="en"){const o=pickOthers(w,3,x=>x.w!==w.w).map(x=>x.w);return {w,type:t,ask:"이 뜻의 영어를 고르세요",prompt:sk(w.ko),opts:shuffle([w.w,...o]),ans:w.w}}
@@ -603,8 +676,8 @@ function resumeCard(){
 function bindResume(){M.querySelectorAll("[data-resume]").forEach(b=>b.onclick=()=>go(b.dataset.resume))}
 function nextAction(d,t){
   const nl=newLeftToday(),due=dueList().length;
-  if(nl)return {lead:"지금 할 것",h:`새 단어 ${Math.min(nl,CHUNK)}개 익히기`,sub:`오늘 남은 새 단어 ${nl}개를 ${CHUNK}개씩 보고 바로 시험해요.`+(due?` 복습할 단어 ${due}개도 있어요.`:""),btn:`새 단어 ${Math.min(nl,CHUNK)}개 보기`,act:"study"};
-  if(due)return {lead:"지금 할 것",h:`복습 ${due}문제`,sub:"맞히면 다음 복습이 뒤로 밀려요.",btn:`복습 ${Math.min(due,20)}문제 풀기`,act:"study"};
+  if(due)return {lead:"지금 할 것 · 복습부터",h:`복습 ${due}문제`,sub:"가장 오래된 단계부터 나와요. 맞히면 다음 단계로 올라가요."+(nl?` 그다음 새 단어 ${nl}개.`:""),btn:`복습 ${Math.min(due,20)}문제 풀기`,act:"study"};
+  if(nl)return {lead:"지금 할 것",h:`새 단어 ${Math.min(nl,CHUNK)}개 가르기`,sub:`뜻을 가리고 아는지 모르는지만 가려요. 모르는 단어는 내일부터 복습에 들어가요. 오늘 남은 새 단어 ${nl}개.`,btn:`새 단어 ${Math.min(nl,CHUNK)}개 보기`,act:"study"};
   const x=t.find(y=>!isDone(key(d,y.id))&&y.id!=="quiz");
   if(x)return {lead:"단어는 다 했어요. 다음 할 일",h:x.t,sub:x.k,btn:"이 일 다 했어요",act:"done",k:key(d,x.id)};
   return {lead:"오늘 할 일을 다 했어요",h:"추가 연습",sub:"시간이 남으면 익힌 단어를 한 번 더 풀어요.",btn:`단어 ${cfg("quizSize")}문제 더 풀기`,act:"extra"};
@@ -638,33 +711,47 @@ function vToday(){
 }
 /* 다음 날부터 30일 안의 첫 일정: [「내일 · 11/28(토)」, 이름] */
 function nextEvent(d){for(let i=1;i<=30;i++){const x=add(d,i);if(x>END)break;const ch=tasksFor(x).map(chipOf).filter(Boolean);if(ch.length)return [(i===1?"내일 · ":"")+short(x),ch[0][2]||ch[0][1]]}return null}
-function startStudy(){if(quiz&&quiz.i<quiz.qs.length){go("quiz");return}if(learn&&learn.i<learn.list.length){go("learn");return}const nl=newLeftToday();if(nl){const q=newQueue().slice(0,CHUNK);if(q.length){quiz=null;learn={list:q,i:0};go("learn",{keep:1});return}}startQuiz(dueList().length?Math.min(dueList().length,20):Number(cfg("quizSize"))||5)}
+function startStudy(){if(quiz&&quiz.i<quiz.qs.length){go("quiz");return}if(learn&&learn.i<learn.list.length){go("learn");return}const due=dueList().length;if(due){startQuiz(Math.min(due,20));return}const nl=newLeftToday();if(nl){const q=newQueue().slice(0,CHUNK);if(q.length){quiz=null;learn={list:q,i:0};go("learn",{keep:1});return}}startQuiz(Number(cfg("quizSize"))||5)}
 function startQuiz(n){
-  let ids=dueList();if(ids.length<n){const extra=Object.entries(S.srs).filter(([id])=>!ids.includes(id)&&wordById(id)).sort((a,b)=>a[1].box-b[1].box||(a[1].last<b[1].last?-1:1)).map(([id])=>id);ids=ids.concat(extra)}
+  let ids=dueList();const nd=ids.length;if(ids.length<n){const extra=Object.entries(S.srs).filter(([id])=>!ids.includes(id)&&wordById(id)).sort((a,b)=>a[1].box-b[1].box||(a[1].last<b[1].last?-1:1)).map(([id])=>id);ids=ids.concat(extra)}
   ids=ids.slice(0,n);
   if(!ids.length){const q=newQueue().slice(0,n);if(q.length){learn={list:q,i:0};go("learn",{keep:1});return}toast("시험 볼 단어가 없어요");return}
-  learn=null;quiz={qs:ids.map(id=>makeQ(wordById(id))),i:0,ok:0,answered:null,wrongIds:[]};go("quiz",{keep:1});
+  learn=null;quiz={qs:ids.map(id=>makeQ(wordById(id))),i:0,ok:0,answered:null,wrongIds:[],extra:new Set(ids.slice(nd))};go("quiz",{keep:1});
 }
+function hl(ex,t){const e=esc(ex);if(!t)return e;const k=esc(t),i=e.toLowerCase().indexOf(k.toLowerCase());return i<0?e:e.slice(0,i)+"<b>"+e.slice(i,i+k.length)+"</b>"+e.slice(i+k.length)}
+function stepsHTML(on){return `<div class="steps" aria-hidden="true">${STG.slice(1).map((x,i)=>`<span class="${i+1<=on?"on":""}"><i></i>${x}</span>`).join("")}</div>`}
 function vLearn(){
   const L=learn;if(!L){go("words");return}
-  if(L.i>=L.list.length){M.innerHTML=`<div class="focus-wrap"><section class="card hero"><h2>${L.list.length}개를 다 봤어요</h2><p class="sub" style="margin:0">바로 시험으로 확인해요. 틀린 단어는 내일 다시 나와요.</p></section><div class="spacer"></div><div class="sticky-act"><button class="btn primary block" id="lq">방금 본 ${L.list.length}개 시험 보기</button></div></div>`;
-    document.getElementById("lq").onclick=()=>{quiz={qs:shuffle(L.list.map(w=>makeQ(w))),i:0,ok:0,answered:null,wrongIds:[],isNew:1};learn=null;go("quiz",{keep:1})};return}
-  const w=L.list[L.i];L.shown=L.shown||{};const hid=cfg("recall")==="1"&&!L.shown[L.i];
-  M.innerHTML=`<div class="focus-wrap"><div class="qbar"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${L.list.length}" aria-valuenow="${L.i+1}" aria-label="새 단어"><b style="width:${Math.round((L.i+1)/L.list.length*100)}%"></b></div><span class="v num" aria-live="polite">${L.i+1} / ${L.list.length}</span></div>
-  <section class="card learn${L.i%2?" inv":""}${L.dir>0?" push-r":L.dir<0?" push-l":""}"><div class="row"><div class="grow"><span class="w" lang="en">${esc(w.w)}</span><span class="pos">${esc(posName(w.pos))}</span></div><button class="speak" id="sp" aria-label="${esc(w.w)} 발음 듣기">${SPK}</button></div>
-  ${hid?`<button class="reveal" id="rv">먼저 뜻을 떠올려 보고, 누르면 보여요</button>`:`<div class="ko">${esc(w.ko)}</div>`}
-  ${w.ex?`<p class="ex" lang="en">${esc(w.ex)}</p>${hid?"":`<p class="exko">${esc(w.exKo||"")}</p>`}`:""}
-  ${!hid&&w.syn&&w.syn.length?`<details style="margin-top:8px"><summary class="sub">비슷한 말·반대말 (나중에 외워도 돼요)</summary><div class="chips" lang="en">${w.syn.map(s=>`<span class="chip">≈ ${esc(s)}</span>`).join("")}${(w.ant||[]).map(s=>`<span class="chip">↔ ${esc(s)}</span>`).join("")}</div></details>`:""}
-  ${(w.der&&w.der.length)||(w.syn2&&w.syn2.length)?`<details style="margin-top:8px"><summary class="sub">책의 파생어·유의어 (사진에서 읽음)</summary><ul class="list-plain" lang="en">${(w.der||[]).map(r=>`<li><b>${esc(r.w)}</b> <span lang="ko">${esc(r.ko)}</span></li>`).join("")}${(w.syn2||[]).map(r=>`<li>≈ <b>${esc(r.w)}</b> <span lang="ko">${esc(r.ko)}</span></li>`).join("")}</ul></details>`:""}
-  <p class="why" style="margin-top:12px">${srcName(w)}</p></section>
-  <p class="swipehint">옆으로 밀어서 넘길 수도 있어요</p><div class="spacer"></div><div class="btns sticky-act" style="margin-top:0"><button class="btn" id="lp"${L.i?"":" disabled"}>이전</button><button class="btn primary grow" id="ln">${hid?"뜻 보기":L.i+1<L.list.length?"다음 단어":"다 봤어요, 시험 보기"}</button></div></div>`;
-  document.getElementById("sp").onclick=()=>speak(w.ex&&w.cat==="idiom"?w.ex:w.w);
+  L.res=L.res||{};L.shown=L.shown||{};
+  if(L.i>=L.list.length){
+    const ids=[...new Set(L.list.map(w=>w.id))],nw=ids.filter(id=>L.res[id]==="new"),kn=ids.filter(id=>L.res[id]==="known"),nl=newLeftToday(),td=todayStr();
+    M.innerHTML=`<div class="focus-wrap"><section class="card hero"><p class="lead">새 단어 ${ids.length}개를 갈랐어요</p><h2>모르는 ${nw.length}개는 내일 첫 시험이에요</h2><p class="sub" style="margin:0">오늘은 외우려 애쓰지 않아도 돼요. 내일·모레·글피에 한 번씩, 그다음 3일·7일·15일·30일 뒤에 다시 나와요. 끝까지 맞히면 ${esc(label(add(td,TO_LONG)))}에 장기 기억이 돼요.${kn.length?` 이미 아는 ${kn.length}개는 15일 뒤에 한 번만 확인해요.`:""}</p>${stepsHTML(0)}</section><div class="spacer"></div><div class="sticky-act">${nw.length?`<button class="btn block" id="lpr">방금 모른 ${nw.length}개 한 번 확인하기 (연습)</button>`:""}<button class="btn primary block" id="lnx">${dueList().length?"복습 풀기":nl?"다음 새 단어 "+Math.min(nl,CHUNK)+"개":"오늘로 돌아가기"}</button></div></div>`;
+    const pr=document.getElementById("lpr");if(pr)pr.onclick=()=>{quiz={qs:shuffle(nw.map(id=>makeQ(wordById(id)))),i:0,ok:0,answered:null,wrongIds:[],practice:1};learn=null;go("quiz",{keep:1})};
+    document.getElementById("lnx").onclick=()=>{learn=null;if(dueList().length||nl)startStudy();else go("today")};return}
+  const w=L.list[L.i],rc=cfg("recall")==="1",hid=rc&&!L.shown[L.i];
+  const nNew=Object.values(L.res).filter(v=>v==="new").length,nKn=Object.values(L.res).filter(v=>v==="known").length;
+  M.innerHTML=`<div class="focus-wrap"><div class="qbar"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${L.list.length}" aria-valuenow="${L.i+1}" aria-label="새 단어"><b style="width:${Math.round((L.i+1)/L.list.length*100)}%"></b></div><span class="v num" aria-live="polite">${L.i+1} / ${L.list.length}${nNew+nKn?` · 모름 ${nNew} · 앎 ${nKn}`:""}</span></div>
+  <section class="card learn${L.i%2?" inv":""}${L.dir>0?" push-r":L.dir<0?" push-l":""}">
+  <div class="row"><button class="wbtn grow" id="sw" aria-label="${esc(w.w)} 발음 듣기"><span class="w" lang="en">${esc(w.w)}</span></button><button class="speak" id="sp" aria-label="${esc(w.w)} 발음 듣기">${SPK}</button></div>
+  <div class="pos2">${esc(posName(w.pos))}</div>
+  ${hid?`<button class="reveal" id="rv">뜻 가림 · 떠올려 보고 누르세요</button>`:`<div class="ko">${esc(w.ko)}</div>`}
+  ${w.ex?`<p class="ex" lang="en">${hl(w.ex,w.ans||w.w)}</p>${hid?"":`<p class="exko">${esc(w.exKo||"")}</p>`}`:""}
+  ${!hid&&w.syn&&w.syn.length?`<details style="margin-top:8px"><summary class="sub">비슷한 말·반대말 (나중에 외워도 돼요)</summary><div class="chips" lang="en">${w.syn.map(x=>`<span class="chip">≈ ${esc(x)}</span>`).join("")}${(w.ant||[]).map(x=>`<span class="chip">↔ ${esc(x)}</span>`).join("")}</div></details>`:""}
+  ${!hid&&((w.der&&w.der.length)||(w.syn2&&w.syn2.length))?`<details style="margin-top:8px"><summary class="sub">책의 파생어·유의어 (사진에서 읽음)</summary><ul class="list-plain" lang="en">${(w.der||[]).map(r=>`<li><b>${esc(r.w)}</b> <span lang="ko">${esc(r.ko)}</span></li>`).join("")}${(w.syn2||[]).map(r=>`<li>≈ <b>${esc(r.w)}</b> <span lang="ko">${esc(r.ko)}</span></li>`).join("")}</ul></details>`:""}
+  <p class="why" style="margin-top:14px">${srcName(w)}</p></section>
+  <p class="swipehint">${hid?"영어만 보고 뜻이 바로 떠오르는지 확인해요. 긴가민가하면 모르는 거예요.":rc?"처음 보는 날은 외우려 애쓰지 않아도 돼요. 모르면 내일부터 시험으로 외워요.":"옆으로 밀어서 넘길 수도 있어요"}</p>
+  <div class="spacer"></div><div class="btns sticky-act" style="margin-top:0">${hid||!rc?`<button class="btn" id="lp"${L.i?"":" disabled"}>이전</button>`:`<button class="btn" id="lk">이미 알았어요</button>`}<button class="btn primary grow" id="ln">${hid?"뜻 보기":rc?"몰랐어요 · 내일 시험":L.i+1<L.list.length?"다음 단어":"다 봤어요"}</button></div></div>`;
+  const spk=()=>speak(w.ex&&w.cat==="idiom"?w.ex:w.w);document.getElementById("sp").onclick=spk;document.getElementById("sw").onclick=spk;
   L.dir=0;
   const show=()=>{L.shown[L.i]=1;render();say(w.w+", "+w.ko)};const rv=document.getElementById("rv");if(rv)rv.onclick=show;
-  document.getElementById("ln").onclick=()=>{if(hid){show();return}L.i++;L.dir=1;render()};
-  document.getElementById("lp").onclick=()=>{if(L.i){L.i--;L.dir=-1;render()}};
+  const pick=known=>{learnMark(w,known);L.res[w.id]=known?"known":"new";L.i++;L.dir=1;render()};
+  const primary=()=>{if(hid){show();return}pick(false)};
+  document.getElementById("ln").onclick=primary;
+  const lk=document.getElementById("lk");if(lk)lk.onclick=()=>pick(true);
+  const lp=document.getElementById("lp");if(lp)lp.onclick=()=>{if(L.i){L.i--;L.dir=-1;render()}};
+  L.key=e=>{if(e.key==="Enter"||e.key===" "||e.key==="ArrowRight"){e.preventDefault();primary()}else if(e.key==="ArrowLeft"&&L.i&&lp){L.i--;L.dir=-1;render()}else if((e.key==="k"||e.key==="K")&&lk)pick(true)};
   const lc=M.querySelector(".card.learn");let x0=null,y0=0;lc.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
-  lc.addEventListener("touchend",e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<60||Math.abs(dy)>Math.abs(dx))return;if(dx<0)document.getElementById("ln").click();else if(L.i)document.getElementById("lp").click()});
+  lc.addEventListener("touchend",e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<60||Math.abs(dy)>Math.abs(dx))return;if(dx<0)primary();else if(L.i&&!(rc&&!hid)){L.i--;L.dir=-1;render()}});
 }
 const SPK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg>';
 const posName=p=>({v:"동사",n:"명사",adj:"형용사",adv:"부사",phr:"구"}[p]||"");
@@ -674,14 +761,14 @@ function vQuiz(){
   if(Q.i>=Q.qs.length){
     const n=Q.qs.length,p=Math.round(Q.ok/n*100);
     M.innerHTML=`<div class="focus-wrap"><section class="card hero"><p class="lead">${Q.practice?"다시 풀기 결과 · 복습 일정에는 넣지 않았어요":"시험 결과"}</p><h2>${n}문제 중 ${Q.ok}개 맞았어요</h2>${meter(Q.ok,n,"정답")}
-    ${Q.wrongIds.length?`<h3>틀린 단어 (내일 다시 나와요)</h3><ul class="list-plain">${[...new Set(Q.wrongIds)].map(id=>{const w=wordById(id);return `<li><b>${esc(w.w)}</b> ${esc(w.ko)}</li>`}).join("")}</ul>`:"<p>모두 맞았어요. 다음 복습 날짜가 뒤로 밀렸어요.</p>"}
+    ${Q.wrongIds.length?`<h3>틀린 단어${Q.practice?"":" (1일 단계로 돌아가 내일 다시)"}</h3><ul class="list-plain">${[...new Set(Q.wrongIds)].map(id=>{const w=wordById(id);return `<li><b>${esc(w.w)}</b> ${esc(w.ko)}</li>`}).join("")}</ul>`:"<p>모두 맞았어요. 다음 복습 날짜가 뒤로 밀렸어요.</p>"}
     <p class="sub" style="margin:8px 0 0">${esc(nextAlarmText())}</p></section><div class="spacer"></div><div class="sticky-act">${Q.wrongIds.length?`<button class="btn block" id="qr" style="margin-bottom:8px">틀린 ${new Set(Q.wrongIds).size}개만 바로 다시 풀기</button>`:""}<button class="btn primary block" id="qn">${newLeftToday()?"다음 새 단어 익히기":dueList().length?"남은 복습 풀기":"오늘로 돌아가기"}</button></div></div>`;
     const qr=document.getElementById("qr");if(qr)qr.onclick=()=>{const ids=[...new Set(Q.wrongIds)];quiz={qs:shuffle(ids.map(id=>makeQ(wordById(id)))),i:0,ok:0,answered:null,wrongIds:[],practice:1};render()};
     document.getElementById("qn").onclick=()=>{quiz=null;if(newLeftToday()||dueList().length)startStudy();else go("today")};say(n+"문제 중 "+Q.ok+"개 정답");return}
   const q=Q.qs[Q.i],a=Q.answered;
   let body=q.type==="blank"?`<p class="qsent" lang="en">${esc(q.sent).replace("\u0000",'<span class="blank" aria-label="빈칸">&nbsp;</span>')}</p>`:`<div class="row"><div class="qprompt grow" lang="${q.type==="en"?"ko":"en"}">${esc(q.prompt)}</div>${q.type!=="en"?`<button class="speak" id="sp" aria-label="발음 듣기">${SPK}</button>`:""}</div>`;
   M.innerHTML=`<div class="focus-wrap"><div class="qbar"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${Q.qs.length}" aria-valuenow="${Q.i+1}" aria-label="시험 진행"><b style="width:${Math.round((Q.i+(a!=null?1:0))/Q.qs.length*100)}%"></b></div><span class="v num">${Q.i+1} / ${Q.qs.length} · 맞음 ${Q.ok}</span></div>
-  <section class="card qcard"><p class="sub" style="margin:0">${esc(q.ask)}</p>${body}${a!=null?fbHTML(q,q.opts[a]===q.ans):""}</section>
+  <section class="card qcard"><p class="sub" style="margin:0">${esc(q.ask)}${!Q.practice&&S.srs[q.w.id]&&a==null?` · ${esc(STG[S.srs[q.w.id].box])} 단계`:""}</p>${body}${a!=null?fbHTML(q,q.opts[a]===q.ans):""}</section>
   <div class="spacer"></div>
   <div class="opts" role="group" aria-label="보기" style="margin-top:0">${q.opts.map((o,i)=>{let cls="opt",mk="";if(a!=null){if(o===q.ans){cls+=" right";mk="✓ 정답"}else if(i===a){cls+=" wrong";mk="✗ 고른 답"}}return `<button class="${cls}" data-i="${i}"${a!=null?" disabled":""}><span class="n">${i+1}</span><span class="grow" lang="${q.type==="ko"?"ko":"en"}">${esc(o)}</span>${mk?`<span class="mark">${mk}</span>`:""}</button>`}).join("")}</div>
   <div class="sticky-act">${a!=null?`<button class="btn primary block" id="qnext">${Q.i+1<Q.qs.length?"다음 문제":"결과 보기"}</button>`:`<button class="btn block" id="qskip">모르겠어요</button>`}</div></div>`;
@@ -690,23 +777,22 @@ function vQuiz(){
   const nx=document.getElementById("qnext");if(nx){nx.onclick=()=>{Q.i++;Q.answered=null;render()};nx.focus()}
   const sk=document.getElementById("qskip");if(sk)sk.onclick=()=>answer(-1);
 }
-function answer(i){const Q=quiz,q=Q.qs[Q.i];if(Q.answered!=null)return;Q.answered=i;const ok=i>=0&&q.opts[i]===q.ans;if(ok)Q.ok++;else Q.wrongIds.push(q.w.id);if(!Q.practice)grade(q.w.id,ok);vibrate(ok);say(ok?"정답이에요":"틀렸어요. 정답은 "+q.ans);render()}
-function fbHTML(q,ok){const w=q.w;return `<div class="fb ${ok?"ok":"no"}" role="status"><div class="h">${ok?"✓ 정답":"✗ 정답은 「"+esc(q.ans)+"」"}</div><div><b>${esc(w.w)}</b> ${esc(posName(w.pos))} · ${esc(w.ko)}</div>${w.ex?`<div class="sub" style="margin-top:4px"><span class="exen" lang="en">${esc(w.ex)}</span><br>${esc(w.exKo||"")}</div>`:""}</div>`}
+function answer(i){const Q=quiz,q=Q.qs[Q.i];if(Q.answered!=null)return;Q.answered=i;const ok=i>=0&&q.opts[i]===q.ans;if(ok)Q.ok++;else Q.wrongIds.push(q.w.id);if(!Q.practice&&!(Q.extra&&Q.extra.has(q.w.id)))grade(q.w.id,ok);else logDay(ok);vibrate(ok);say(ok?"정답이에요":"틀렸어요. 정답은 "+q.ans);render()}
+function fbHTML(q,ok){const w=q.w,st=S.srs[w.id],pr=quiz&&(quiz.practice||(quiz.extra&&quiz.extra.has(w.id)));return `<div class="fb ${ok?"ok":"no"}" role="status"><div class="h">${ok?"✓ 정답":"✗ 정답은 「"+esc(q.ans)+"」"}</div><div class="sub" style="margin:2px 0 4px">${pr?"연습 문제라 복습 일정은 그대로예요":st?(ok?(st.box>=8?"장기 기억 · "+esc(short(st.due))+"에 한 번 더 확인해요":"다음 단계 "+esc(STG[st.box])+" · "+esc(short(st.due))+"에 다시 나와요"):"1일 단계로 돌아가 내일 다시 나와요"):""}</div><div><b>${esc(w.w)}</b> ${esc(posName(w.pos))} · ${esc(w.ko)}</div>${w.ex?`<div class="sub" style="margin-top:4px"><span class="exen" lang="en">${esc(w.ex)}</span><br>${esc(w.exKo||"")}</div>`:""}</div>`}
 function vibrate(ok){try{if(navigator.vibrate)navigator.vibrate(ok?20:[40,60,40])}catch(e){}}
 function speak(t){if(IS_APP&&Android.speak){Android.speak(t);return}try{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast("이 기기에서는 발음 듣기를 쓸 수 없어요")}}
 
 function vWords(){
   const due=dueList().length,nl=newLeftToday(),tot=allWords().length,seen=Object.keys(S.srs).length,uw=userWords().length;
   const boxes=[0,0,0,0,0,0];for(const s of Object.values(S.srs))boxes[s.box]++;
-  M.innerHTML=resumeCard()+`<section class="card"><h2>오늘 단어</h2><div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>복습할 단어</span></div><div class="stat"><b class="num">${seen}</b><span>익힌 단어</span></div></div><p class="sub" style="margin:8px 0 0">전체 단어 ${tot.toLocaleString()}개</p>
+  M.innerHTML=resumeCard()+`<section class="card"><h2>오늘 단어</h2><div class="stats"><div class="stat"><b class="num">${nl}</b><span>남은 새 단어</span></div><div class="stat"><b class="num">${due}</b><span>오늘 복습</span></div><div class="stat"><b class="num">${stageCounts()[8]}</b><span>장기 기억</span></div></div><p class="sub" style="margin:8px 0 0">전체 단어 ${tot.toLocaleString()}개</p>
    <div class="btns"><button class="btn primary grow" id="s1">${nl?"새 단어 "+Math.min(nl,CHUNK)+"개 익히기":"복습 시험"}</button><button class="btn" id="s2">${cfg("quizSize")}문제만</button></div></section>
    <section class="card"><h2>파고다 보카 사진으로 추가</h2><p class="sub">${photoFull()?"<b>2단계:</b> 쪽을 찍으면 이미 있는 단어에 책의 유의어·파생어를 붙이고, 없는 단어는 새로 넣어요.":"<b>1단계:</b> 단어 시험지 "+PAGODA.length+"개는 이미 들어 있어요. 시험지에 없는 큰 표제어와 뜻만 읽어서 바로 넣어요."} 인식은 뒤에서 하니까 카메라가 다시 열리면 다음 쪽을 이어서 찍고, 다 찍었으면 뒤로 가기를 누르세요.</p>
    ${IS_APP?`<div class="btns"><button class="btn grow" id="cam">📷 연속 찍기</button><button class="btn grow" id="gal">사진 여러 장 고르기</button></div>`:`<div class="note">사진 글자 읽기는 휴대폰 앱에서만 돼요. 여기서는 아래 「직접 추가」로 넣을 수 있어요.</div>`}
    <p class="sub" id="ocrStat" role="status" style="margin-top:8px">${ocrStatText()}</p>
    ${(()=>{const b=lastBatch();if(!b||!b.ids.length)return "";return `<details><summary>최근 사진에서 넣은 단어 ${b.ids.length}개 보기·고치기</summary>${b.ids.map(id=>{const w=S.words[id];return `<div class="row" style="margin:6px 0"><span lang="en" style="min-width:7.5em;font-weight:700">${esc(w.w)}</span><input type="text" class="grow" data-bk="${id}" value="${esc(w.ko)}" aria-label="${esc(w.w)} 뜻"></div>`}).join("")}<div class="btns"><button class="btn small" id="bundo">이 사진에서 넣은 단어 모두 지우기</button></div></details>`})()}
    <details style="margin-top:8px"><summary>직접 추가</summary><label class="f" for="nw">단어</label><input type="text" id="nw" autocapitalize="off" autocomplete="off" spellcheck="false" lang="en"><label class="f" for="nk">뜻</label><input type="text" id="nk"><label class="f" for="nd">파고다 Unit (없으면 비워 두기)</label><input type="number" id="nd" inputmode="numeric" class="narrow"><div id="nerr"></div><button class="btn" id="nadd" style="margin-top:12px">단어 추가</button></details></section>
-   <section class="card"><h2>외운 정도</h2><p class="sub">맞힐수록 다음 복습이 1일 → 3일 → 7일 → 14일 → 30일 뒤로 밀려요. 틀리면 다음 날 다시 나와요. 처음엔 뜻 문제만, 2단계부터 예문 빈칸, 3단계부터 비슷한 말 문제가 나와요.</p>
-   <table><caption class="sr">단계별 단어 수</caption><thead><tr><th class="l" scope="col">단계</th><th scope="col">다음 복습</th><th scope="col">단어 수</th></tr></thead><tbody>${[1,2,3,4,5].map(b=>`<tr><td class="l">${b}단계</td><td>${BOX[b]}일 뒤</td><td>${boxes[b]}</td></tr>`).join("")}</tbody></table>
+   ${compoundHTML()}<section class="card" style="padding-top:4px">
    <div class="btns"><button class="btn grow" id="wl">단어 목록 보기 (내가 추가한 단어 ${uw}개)</button></div></section>`;
   bindResume();document.getElementById("s1").onclick=()=>startStudy();
   document.getElementById("s2").onclick=()=>startQuiz(Number(cfg("quizSize"))||5);
@@ -718,6 +804,23 @@ function vWords(){
     const e=document.getElementById("nerr");if(!w||!k){e.innerHTML=`<div class="err">${!w?"단어를":"뜻을"} 넣어 주세요.</div>`;(!w?document.getElementById("nw"):document.getElementById("nk")).focus();return}
     addUserWord(w,k,dd?"pagoda":"user",dd);toast("「"+w+"」을 추가했어요");vWords()};
 }
+function stageCounts(){const c=Array(BOX.length).fill(0);for(const [id,x] of Object.entries(S.srs))if(wordById(id)&&c[x.box]!=null)c[x.box]++;return c}
+/* 계획대로 매일 할 때 예상: 날마다 새로 들어오는 단어(시험지 Unit + Claude 목록) → 58일 뒤 장기 기억 */
+function project(){const n0=Math.max(1,Number(cfg("vocabDays"))||30),per=Number(cfg("newPerDay"))||0,uc={};for(const w of PAGODA)uc[w.unit]=(uc[w.unit]||0)+1;
+  let cl=BUILTIN.length,cum=0,k0=0;const out=[];
+  for(let d=START;d<=END;d=add(d,1)){let n=0;const k=studyDays(d);if(k!==k0&&k>=1&&k<=n0)n+=uc[k]||0;k0=k;const x=Math.min(per,cl);cl-=x;n+=x;cum+=n;out.push({d,s:cum})}
+  for(let i=0;i<out.length;i++)out[i].g=i>=TO_LONG?out[i-TO_LONG].s:0;return out}
+function compoundHTML(){
+  const c=stageCounts(),mx=Math.max(1,...c.slice(1)),learning=c.slice(1,8).reduce((a,b)=>a+b,0),pj=project(),fe=firstExam(),td=todayStr();
+  const bars=STG.slice(1).map((nm,i)=>{const k=i+1,v=c[k],h=v?10+Math.round(v/mx*70):3;return `<div class="pcol"><b class="num">${v}</b><span class="pb" style="height:${h}px;opacity:${(.3+.7*k/8).toFixed(2)}"></span><small>${nm}</small></div>`}).join("");
+  const W=320,H=150,P=8,last=pj[pj.length-1],ymax=Math.max(10,last.s),x=i=>P+i/(pj.length-1)*(W-2*P),y=v=>H-22-v/ymax*(H-40);
+  const path=k=>pj.map((o,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(o[k]).toFixed(1)).join(" ")+` L${x(pj.length-1).toFixed(1)} ${y(0)} L${x(0)} ${y(0)} Z`;
+  const ie=fe?pj.findIndex(o=>o.d===fe.date):-1,it=pj.findIndex(o=>o.d===clamp(td)),pe=ie>=0?pj[ie]:last,now=Object.keys(S.srs).length;
+  const svg=`<svg class="cchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="예상: ${fe?fe.no+"회까지":"끝까지"} 공부 시작 ${pe.s}개, 장기 기억 ${pe.g}개"><path d="${path("s")}" class="a1"/><path d="${path("g")}" class="a2"/>${ie>=0?`<line x1="${x(ie)}" x2="${x(ie)}" y1="10" y2="${y(0)}" class="ex"/><text x="${x(ie)-4}" y="16" text-anchor="end" class="tl">${fe.no}회</text>`:""}${it>=0?`<circle cx="${x(it)}" cy="${y(Math.min(now,ymax))}" r="4.5" class="nw"/>`:""}<text x="${P}" y="${H-6}" class="tl">${short(START)}</text><text x="${W-P}" y="${H-6}" text-anchor="end" class="tl">${short(END)}</text></svg>`;
+  return `<section class="card"><h2>복리로 쌓이는 단어</h2><p class="sub">모르는 단어는 1일·2일·3일·3일 후·7일 후·15일 후·30일 후에 다시 시험 봐요. 30일 후까지 맞히면 장기 기억이에요. 처음 두 달은 느리지만, 그 뒤로는 날마다 장기 기억이 한꺼번에 늘어나요.</p>
+   <div class="pipe" role="img" aria-label="단계별 단어 수 ${STG.slice(1).map((n,i)=>n+" "+c[i+1]).join(", ")}">${bars}</div>
+   <div class="cnums"><div><b class="num">${c[8]}</b><span>장기 기억</span></div><div><b class="num">${learning}</b><span>복습 단계에 있는 단어</span></div></div>
+   <h3>계획대로 하면 (예상)</h3>${svg}<p class="sub" style="margin:4px 0 0"><span class="lg a1"></span>공부를 시작한 단어 <span class="lg a2"></span>장기 기억 <span class="lg nw"></span>지금 나. ${fe?`${fe.no}회(${esc(short(fe.date))})까지 장기 기억 약 ${pe.g.toLocaleString()}개, 공부 중 ${(pe.s-pe.g).toLocaleString()}개.`:""} 하루도 빠지지 않고 모르는 단어로 칠 때의 값이에요.</p></section>`}
 function addUserWord(w,k,src,day){const id="u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);S.words[id]={w,ko:k,pos:"",src,day:day?Number(day):null,cat:"voc",lv:1,t:Date.now()};changed();return id}
 function vList(){
   const q=(window._wq||"").toLowerCase();
@@ -787,42 +890,70 @@ function vOcr(){
 }
 
 /* ---------- 달력 ---------- */
+function journeyHTML(td){
+  const fe=firstExam(),fd=fe?fe.date:"2027-02-27",tot=diff(START,END)+1,cd=clamp(td);
+  const ph=[["0단계 준비·진단",START,"2026-12-01","var(--line-strong)"],["1단계 기본기","2026-12-02","2026-12-27","var(--tile-voc)"],["2단계 실전 연습","2026-12-28","2027-01-24","var(--tile-read)"],["3단계 다지기","2027-01-25",add(fd,-7),"var(--tile-now)"],["첫 시험 주간",add(fd,-6),fd,"var(--tile-mock)"],["시험 기간",add(fd,1),END,"var(--accent)"]].filter(x=>x[1]<=x[2]);
+  const pos=diff(START,cd)/(tot-1)*100,curP=ph.find(x=>cd>=x[1]&&cd<=x[2])||ph[0];
+  return `<section class="card"><div class="row"><h2 class="grow">전체 여정</h2><span class="sub num">${diff(START,cd)+1}일째 / ${tot}일</span></div>
+  <div class="jbar" role="img" aria-label="지금 ${esc(curP[0])}, 전체 ${tot}일 중 ${diff(START,cd)+1}일째">${ph.map(x=>`<span style="flex:${diff(x[1],x[2])+1};background:${x[3]}"></span>`).join("")}<i class="jnow" style="left:${pos.toFixed(1)}%"></i>${EXAMS.filter(examOn).map(e=>`<i class="jex" style="left:${(diff(START,e.date)/(tot-1)*100).toFixed(1)}%"></i>`).join("")}</div>
+  <p class="jcur"><b>${esc(curP[0])}</b> <span class="sub">${esc(short(curP[1]))} ~ ${esc(short(curP[2]))}</span></p>
+  <div class="jleg">${ph.map(x=>`<span><i style="background:${x[3]}"></i>${esc(x[0])}</span>`).join("")}<span><i class="tk"></i>정기시험</span></div></section>`}
 function vCal(){
   const first=month+"-01",lead=dow(first);let d=add(first,-lead);const td=todayStr();
-  const [yy,mm]=month.split("-");
-  const ne=EXAMS.find(e=>examOn(e)&&e.date>=td);let h=ne?`<p class="sub" style="margin:0 0 8px">다음 시험 <b>${ne.no}회 ${short(ne.date)}</b> · 정기 접수 ${short(ne.reg[0])}~${short(ne.reg[1])}</p>`:"";h+=`<div class="cal-head"><button class="btn small" id="pv" aria-label="이전 달">‹ 이전</button><h2 style="text-align:center">${yy}년 ${Number(mm)}월</h2><button class="btn small" id="nx" aria-label="다음 달">다음 ›</button></div>
-  <div class="wk" aria-hidden="true">${WD.map(w=>`<div>${w}</div>`).join("")}</div><div class="grid" aria-label="${yy}년 ${Number(mm)}월 계획">`;
+  const [yy,mm]=month.split("-"),ne=EXAMS.find(e=>examOn(e)&&e.date>=td);
+  let h=ne?`<section class="tiles"><div class="tile now"><p class="lead">다음 시험 · ${ne.no}회</p><div class="lvl num">D-${diff(td,ne.date)||"DAY"}</div><p class="tsub">${esc(label(ne.date))} 오후 2시 20분 · 정기 접수 ${esc(short(ne.reg[0]))}~${esc(short(ne.reg[1]))} · 성적 ${esc(short(ne.res))}</p></div></section>`:"";
+  h+=journeyHTML(td);
+  h+=`<section class="card calcard"><div class="cal-head"><div class="grow"><h2 class="mon">${Number(mm)}월<span class="dotp" aria-hidden="true">.</span></h2><span class="sub num">${yy}</span></div><button class="nav" id="pv" aria-label="이전 달">‹</button><button class="nav" id="nx" aria-label="다음 달">›</button></div>
+  <div class="wk" aria-hidden="true">${WD.map((w,i)=>`<div${i===0?' class="sun"':""}>${w}</div>`).join("")}</div><div class="grid" aria-label="${yy}년 ${Number(mm)}월 계획">`;
   for(let i=0;i<42;i++,d=add(d,1)){
     if(i===35&&d.slice(0,7)!==month)break;
-    const inR=d>=START&&d<=END,cls=["cell"];if(d===td)cls.push("today");
-    let inner=`<span class="d num" style="${dow(d)===0||HOL[d]?"color:var(--bad)":""}${d.slice(0,7)!==month?";color:var(--sub);font-weight:400":""}">${Number(d.slice(8))}</span>`,lab=label(d)+(HOL[d]?" "+HOL[d]:"");
-    if(inR){const t=tasksFor(d),[n,c]=dayProgress(d);const ch=t.map(chipOf).filter(Boolean);
-      for(const [k,txt] of ch.slice(0,2))inner+=`<span class="ev ${k}">${esc(txt)}</span>`;
-      inner+=`<span class="pg num${c&&n===c?" full":""}">${c&&n===c?"✓ 완료":n+"/"+c}</span>`;lab+=(ch.length?", "+ch.map(x=>x[2]||x[1]).join(", "):"")+", 할 일 "+n+"/"+c+" 완료"}
-    h+=`<button class="${cls.join(" ")}" data-d="${d}" aria-pressed="${d===sel}" aria-label="${esc(lab)}"${inR?"":" disabled"}>${inner}</button>`;
+    const inR=d>=START&&d<=END,out=d.slice(0,7)!==month,cls=["cell"];if(d===td)cls.push("today");if(out)cls.push("out");
+    let lab=label(d)+(HOL[d]?" "+HOL[d]:""),inner="",sty="";
+    if(inR){const t=tasksFor(d),[n,c]=dayProgress(d),ch=t.map(chipOf).filter(Boolean),r=c?n/c:0,ex=ch.find(x=>x[0]==="x");
+      if(ex)cls.push("exam");if(c&&n===c)cls.push("full");else if(r>0)sty=`--h:${(18+r*42).toFixed(0)}%`;
+      inner=ch.slice(0,1).map(([k,txt])=>`<span class="ev ${k}">${esc(txt)}</span>`).join("")+(c&&n===c?`<span class="ck" aria-hidden="true">✓</span>`:"");
+      lab+=(ch.length?", "+ch.map(x=>x[2]||x[1]).join(", "):"")+", 할 일 "+n+"/"+c+" 완료"}
+    if(dow(d)===0||HOL[d])cls.push("hol");
+    h+=`<button class="${cls.join(" ")}" data-d="${d}" aria-pressed="${d===sel}" aria-label="${esc(lab)}"${inR?"":" disabled"}${sty?` style="${sty}"`:""}><span class="d num">${Number(d.slice(8))}</span>${inner}</button>`;
   }
-  h+=`</div>`;
+  h+=`</div><div class="cleg"><span>완료</span><i style="--h:18%"></i><i style="--h:39%"></i><i style="--h:60%"></i><i class="f"></i><span class="gap"></span><b class="exd">●</b><span>시험</span><b class="mkd">●</b><span>실전 모의</span></div></section>`;
   const t=tasksFor(sel),[n,c]=dayProgress(sel);
-  h+=`<section class="card" style="margin-top:12px" aria-labelledby="h-s"><div class="row"><h2 id="h-s" class="grow">${esc(label(sel))}</h2><span class="sub">${esc(phaseOf(sel))}</span></div>${meter(n,c,label(sel))}${t.map(x=>taskHTML(sel,x)).join("")}</section>
+  h+=`<section class="card" aria-labelledby="h-s"><div class="row"><h2 id="h-s" class="grow">${esc(label(sel))}</h2><span class="sub">${esc(phaseOf(sel))}</span></div>${meter(n,c,label(sel))}${t.map(x=>taskHTML(sel,x)).join("")}</section>
   <section class="card"><h2>시험 일정 (공식)</h2><div class="tbl"><table><caption class="sr">정기시험 일정</caption><thead><tr><th class="l" scope="col">회차</th><th scope="col">시험일</th><th scope="col">정기 접수</th><th scope="col">성적</th></tr></thead><tbody>${EXAMS.map(e=>`<tr><td class="l">${e.no}회${examOn(e)?"":" (안 봄)"}</td><td>${short(e.date)}</td><td>${short(e.reg[0])}~${short(e.reg[1])}</td><td>${short(e.res)}</td></tr>`).join("")}</tbody></table></div><p class="sub" style="margin-top:8px">teps.or.kr 시험일정 안내에서 2026-11-26 확인. 추가 접수는 정기 접수 뒤에 따로 있어요.</p></section>`;
   M.innerHTML=h;bindTasks();
-  M.querySelectorAll(".cell:not([disabled])").forEach(e=>e.onclick=()=>{sel=e.dataset.d;if(sel.slice(0,7)!==month)month=sel.slice(0,7);render();const s=M.querySelector(`.cell[data-d="${sel}"]`);s&&s.focus()});
+  M.querySelectorAll(".cell:not([disabled])").forEach(e=>e.onclick=()=>{sel=e.dataset.d;if(sel.slice(0,7)!==month)month=sel.slice(0,7);render();const x=M.querySelector(`.cell[data-d="${sel}"]`);x&&x.focus()});
   document.getElementById("pv").onclick=()=>moveMonth(-1);document.getElementById("nx").onclick=()=>moveMonth(1);
 }
 function moveMonth(k){const [y,m]=month.split("-").map(Number);const nm=ymd(new Date(y,m-1+k,1)).slice(0,7);if(nm<START.slice(0,7)||nm>END.slice(0,7)){toast("계획 기간(11월~3월) 밖이에요");return}month=nm;render()}
 
 /* ---------- 기록 ---------- */
+function streaks(){const ds=Object.keys(S.days).filter(k=>((S.days[k].n||0)+(S.days[k].nw||0))>0).sort(),set=new Set(ds);let cur=0,x=todayStr();if(!set.has(x))x=add(x,-1);while(set.has(x)){cur++;x=add(x,-1)}let best=0,run=0,pv=null;for(const d of ds){run=pv&&add(pv,1)===d?run+1:1;best=Math.max(best,run);pv=d}return [cur,best]}
+function weekStats(off){const td=todayStr(),mon=add(td,-((dow(td)+6)%7)+7*off);let n=0,ok=0,nw=0;for(let i=0;i<7;i++){const d=add(mon,i);if(d>td)break;const x=S.days[d];if(x){n+=x.n||0;ok+=x.ok||0;nw+=x.nw||0}}return {n,ok,nw}}
+function delta(a,b,unit){const d=a-b;return d>0?`<span class="up">▲ ${d}${unit} 늘었어요</span>`:d<0?`<span class="dn">▼ ${-d}${unit} 줄었어요</span>`:`<span>지난주와 같아요</span>`}
+function scoreChart(l,tot){const W=320,H=130,P=14,vs=l.map(tot),lo=Math.min(250,...vs)-10,hi=Math.max(350,...vs)+10,x=i=>l.length<2?W/2:P+i/(l.length-1)*(W-2*P),y=v=>H-20-(v-lo)/(hi-lo)*(H-34);
+  return `<svg class="schart" viewBox="0 0 ${W} ${H}" role="img" aria-label="점수 추이 ${vs.join(", ")}점, 목표 330점"><line x1="${P}" x2="${W-P}" y1="${y(330)}" y2="${y(330)}" class="goal"/><text x="${W-P}" y="${y(330)-5}" text-anchor="end" class="tl">목표 330</text><path d="${vs.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ")}" class="ln"/>${vs.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" class="pt"/><text x="${x(i)}" y="${y(v)-9}" text-anchor="middle" class="tv">${v}</text>`).join("")}${l.map((s,i)=>`<text x="${x(i)}" y="${H-4}" text-anchor="middle" class="tl">${esc(s.date.slice(5).replace("-","/"))}</text>`).join("")}</svg>`}
 function vScore(){
   let tn=0,tc=0,pn=0,pc=0;const td=todayStr();
   for(let d=START;d<=END;d=add(d,1)){const [n,c]=dayProgress(d);tn+=n;tc+=c;if(d<=td){pn+=n;pc+=c}}
-  const l=scoresList(),last=l[l.length-1],tot=s=>["L","V","G","R"].reduce((a,k)=>a+(Number(s[k])||0),0);
-  let h=`<section class="card"><h2>진행</h2><h3 style="margin-top:0">오늘까지 할 일</h3>${pc?meter(pn,pc,"오늘까지 할 일"):"<p class=sub>11월 27일부터 세어요.</p>"}<h3>전체 계획</h3>${meter(tn,tc,"전체 계획")}<h3>단어</h3>${meter(Object.keys(S.srs).length,allWords().length,"익힌 단어")}</section>`;
-  h+=`<section class="card"><h2>${last?"최근 점수 "+tot(last)+"점 · 목표 330점":"점수 기록"}</h2>`;
-  if(last){h+=`<p class="sub">${esc(last.name)} (${esc(last.date)}) 영역별, 목표 대비</p>`+["L","V","G","R"].map(k=>{const v=Number(last[k])||0,p=Math.min(100,Math.round(v/MAXS[k]*100)),tp=Math.round(TARGET[k]/MAXS[k]*100);return `<div style="margin:10px 0"><div class="row"><b class="grow">${NAME[k]}</b><span class="num ${v>=TARGET[k]?"pass":"fail"}">${v} / 목표 ${TARGET[k]} ${v>=TARGET[k]?"✓":"✗"}</span></div><div class="bar" style="position:relative;height:14px" role="img" aria-label="${NAME[k]} ${v}점, 목표 ${TARGET[k]}점, 만점 ${MAXS[k]}점"><b style="width:${p}%;background:${v>=TARGET[k]?"var(--ok)":"var(--primary)"}"></b><span style="position:absolute;left:${tp}%;top:-3px;bottom:-3px;width:2px;background:var(--text)"></span></div></div>`}).join("")+`<p class="sub">세로선 = 목표. 목표는 참고 영상 두 편의 영역별 목표 중간값이에요. 실제 점수는 문항 난이도에 따라 환산돼서 영역 합이 같아도 달라질 수 있어요.</p>`}
+  const l=scoresList(),last=l[l.length-1],prev=l[l.length-2],tot=s=>["L","V","G","R"].reduce((a,k)=>a+(Number(s[k])||0),0),best=l.length?Math.max(...l.map(tot)):0;
+  const [cur,bst]=streaks(),w0=weekStats(0),w1=weekStats(-1),sc=stageCounts(),lrn=sc.slice(1,8).reduce((a,b)=>a+b,0),fe=firstExam();
+  const lv=last?tot(last):null,gap=lv==null?null:330-lv,acc=w=>w.n?Math.round(w.ok/w.n*100):0;
+  let h=`<section class="tiles" aria-label="내 상태">
+   <div class="tile now"><p class="lead">지금 내 수준${last?" · "+esc(last.name):""}</p>${last?`<div class="lvl num">${lv}<small>점</small></div><div class="lbar" role="img" aria-label="${lv}점, 목표 330점, 만점 600점"><b style="width:${Math.min(100,lv/600*100)}%"></b><i style="left:${330/600*100}%"></i></div><p class="tsub">${gap>0?`목표 330점까지 <b>${gap}점</b> 남았어요`:`목표보다 <b>${-gap}점</b> 높아요`}${prev?` · 지난 기록보다 ${lv-tot(prev)>=0?"+":""}${lv-tot(prev)}점`:""} · 최고 ${best}점</p>`:`<div class="lvl">진단 전</div><p class="tsub">11월 30일 기출 1회를 풀고 아래에 점수를 적으면, 지금 몇 점 수준인지와 330점까지 남은 점수가 여기 나와요.</p>`}</div>
+   <div class="tile t2 voc"><small>장기 기억 단어</small><span><b class="big num">${sc[8]}</b><small style="display:block;margin-top:4px">복습 중 ${lrn} · 330점 기준 빈출 1,000개</small></span></div>
+   <div class="tile t1 gray"><small>연속 공부</small><b class="num">${cur}일</b></div>
+   <div class="tile t1 gray"><small>가장 긴 연속</small><b class="num">${bst}일</b></div>
+   <div class="tile t2 read"><small>이번 주 푼 문제</small><span><b class="big num">${w0.n}</b><small style="display:block;margin-top:4px">${delta(w0.n,w1.n,"문제")}</small></span></div>
+   <div class="tile t2 mock"><small>이번 주 정답률</small><span><b class="big num">${acc(w0)}%</b><small style="display:block;margin-top:4px">지난주 ${acc(w1)}% · 새 단어 ${w0.nw}개</small></span></div></section>`;
+  h+=`<section class="card"><h2>지난주의 나와 겨루기</h2><div class="vs"><div><span>푼 문제</span><b class="num">${w0.n}</b><em class="num">${w1.n}</em></div><div><span>정답률</span><b class="num">${acc(w0)}%</b><em class="num">${acc(w1)}%</em></div><div><span>새 단어</span><b class="num">${w0.nw}</b><em class="num">${w1.nw}</em></div></div><p class="sub" style="margin:6px 0 0">진한 숫자 = 이번 주, 옅은 숫자 = 지난주. 월요일부터 셉니다.</p></section>`;
+  if(last)h+=`<section class="card"><h2>점수 흐름</h2>${scoreChart(l,tot)}</section>`;
+  h+=`<section class="card"><h2>${last?"영역별 · 목표 대비":"점수 기록"}</h2>`;
+  if(last){h+=["L","V","G","R"].map(k=>{const v=Number(last[k])||0,p=Math.min(100,Math.round(v/MAXS[k]*100)),tp=Math.round(TARGET[k]/MAXS[k]*100);return `<div style="margin:10px 0"><div class="row"><b class="grow">${NAME[k]}</b><span class="num ${v>=TARGET[k]?"pass":"fail"}">${v} / 목표 ${TARGET[k]} ${v>=TARGET[k]?"✓":"✗"}</span></div><div class="bar" style="position:relative;height:14px" role="img" aria-label="${NAME[k]} ${v}점, 목표 ${TARGET[k]}점, 만점 ${MAXS[k]}점"><b style="width:${p}%;background:${v>=TARGET[k]?"var(--ok)":"var(--primary)"}"></b><span style="position:absolute;left:${tp}%;top:-3px;bottom:-3px;width:2px;background:var(--text)"></span></div></div>`}).join("")+`<p class="sub">세로선 = 목표. 목표는 참고 영상 두 편의 영역별 목표 중간값이에요. 실제 점수는 문항 난이도에 따라 환산돼서 영역 합이 같아도 달라질 수 있어요.</p>`}
   h+=`<div class="tbl" style="margin-top:12px"><table><caption>모든 기록</caption><thead><tr><th class="l" scope="col">회차</th><th scope="col">청해</th><th scope="col">어휘</th><th scope="col">문법</th><th scope="col">독해</th><th scope="col">합계</th><th scope="col"><span class="sr">지우기</span></th></tr></thead><tbody>
   <tr><td class="l sub">목표</td><td class="sub">${TARGET.L}</td><td class="sub">${TARGET.V}</td><td class="sub">${TARGET.G}</td><td class="sub">${TARGET.R}</td><td class="sub">330</td><td></td></tr>
   ${l.map(s=>`<tr><td class="l" style="min-width:6.5em">${esc(s.name)}<div class="sub num">${esc(s.date.slice(5).replace("-","/"))}</div></td>${["L","V","G","R"].map(k=>`<td>${esc(s[k])}</td>`).join("")}<td class="${tot(s)>=330?"pass":"fail"}">${tot(s)} ${tot(s)>=330?"✓":"✗"}</td><td><button class="btn small" data-del="${s.id}" aria-label="${esc(s.name)} 기록 지우기" style="padding:0 8px">지우기</button></td></tr>`).join("")}
   ${!l.length?`<tr><td class="l" colspan="7">아직 기록이 없어요. 11월 30일 기출 1회 진단을 풀고 아래에 적어 주세요.</td></tr>`:""}</tbody></table></div></section>
+  <section class="card"><h2>진행</h2><h3 style="margin-top:0">오늘까지 할 일</h3>${pc?meter(pn,pc,"오늘까지 할 일"):"<p class=sub>11월 27일부터 세어요.</p>"}<h3>전체 계획</h3>${meter(tn,tc,"전체 계획")}</section>
   <form class="card" id="sform" novalidate style="display:block"><h2>새 기록</h2><label class="f" for="sn">회차 이름</label><input type="text" id="sn" placeholder="예: 기출 1회 진단"><label class="f" for="sd">날짜</label><input type="date" id="sd" value="${td}">
   <div class="score4">${["L","V","G","R"].map(k=>`<div><label class="f" for="s${k}">${NAME[k]} (0~${MAXS[k]})</label><input type="number" id="s${k}" inputmode="numeric" min="0" max="${MAXS[k]}" aria-describedby="e${k}"><div id="e${k}"></div></div>`).join("")}</div>
   <button class="btn primary" id="sadd" type="submit" style="margin-top:12px">기록 추가</button></form>`;
@@ -932,7 +1063,7 @@ document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>{fromAlarm
 /* 새 판을 받으면 시험·익히기·입력 중이 아닐 때 바로 적용 (알림을 놓쳐서 옛 화면이 남던 문제) */
 window.onUpdateReady=function(){const ae=document.activeElement;if(view==="quiz"||view==="learn"||view==="ocr"||(ae&&/INPUT|SELECT|TEXTAREA/.test(ae.tagName))){window._updLater=1;toast("새 판을 받았어요",()=>Android.applyUpdate(),"지금 적용");return}Android.applyUpdate()};
 window.onAlarm=function(){fromAlarm=true;view="today";quiz=null;learn=null;render();window.scrollTo(0,0)};
-document.addEventListener("keydown",e=>{if(view==="quiz"&&quiz&&!/INPUT/.test(e.target.tagName)){const n=Number(e.key);if(quiz.answered==null&&n>=1&&n<=4)answer(n-1);else if(quiz.answered!=null&&e.key==="Enter"&&e.target.tagName!=="BUTTON"){quiz.i++;quiz.answered=null;render()}}});
+document.addEventListener("keydown",e=>{if(view==="learn"&&learn&&learn.key&&!/INPUT|BUTTON|SUMMARY/.test(e.target.tagName)){learn.key(e);return}if(view==="quiz"&&quiz&&!/INPUT/.test(e.target.tagName)){const n=Number(e.key);if(quiz.answered==null&&n>=1&&n<=4)answer(n-1);else if(quiz.answered!=null&&e.key==="Enter"&&e.target.tagName!=="BUTTON"){quiz.i++;quiz.answered=null;render()}}});
 if("serviceWorker" in navigator&&location.protocol==="https:"&&!IS_APP)navigator.serviceWorker.register("sw.js").catch(()=>{});
 {const h=location.hash.slice(1);if(h==="alarm")fromAlarm=true;else if(TITLES[h]&&!["quiz","learn","ocr"].includes(h))view=h}
 history.replaceState({v:view},"","#"+view);
