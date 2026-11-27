@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f5f4ef" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#031c24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="TEPS 330">
@@ -13,37 +13,37 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>TEPS 330</title>
-<meta name="build" content="2026-11-27j">
+<meta name="build" content="2026-11-27k">
 <style>
 /* 토큰: 역할 이름으로 정의하고 다크 모드는 같은 토큰을 다시 정의 (다크-09, 색-28) */
 /* 색: 밝게 = 회색빛 종이 지면과 빨강 한 곳(이코노미스트 방식), 어둡게 = 깊은 물색 지면(파타고니아 방식).
    타일 넷은 같은 밝기 단계에서 갈래만 바꿔 무게를 맞춤(남색·청록·주황·자주). 구조는 키노트 방식 */
 :root{
-  --bg:#f5f4ef;--surface:#fbfaf6;--surface2:#ebe9e0;--line:#d9d6c8;--line-strong:#858275;--on-ok:#ffffff;--knob:#ffffff;
-  --text:#121212;--sub:#55534c;--faint:#55534c;
-  --primary:#1b3a6b;--on-primary:#ffffff;--primary-soft:#e3e8f1;--accent:#c8102e;
-  --ok:#17663a;--ok-soft:#e4efe4;--bad:#b3150d;--bad-soft:#f8e4e1;--warn:#7a5000;--warn-soft:#f6ecd2;
-  --sh:none;--tab:rgba(245,244,239,.97);--hero:#161616;--on-hero:#f5f4ef;
-  --tile-now:#1b3a6b;--tile-voc:#0f5c56;--tile-mock:#8a4512;--tile-read:#5b2b6e;
+  --bg:#f5f5f7;--surface:#ffffff;--surface2:#e8e8ed;--line:#d2d2d7;--line-strong:#86868b;--on-ok:#ffffff;--knob:#ffffff;
+  --text:#1d1d1f;--sub:#636366;--faint:#636366;
+  --primary:#0071e3;--on-primary:#ffffff;--primary-soft:#e8f1fc;--accent:#0071e3;
+  --ok:#1a7f37;--ok-soft:#e6f4ea;--bad:#d70015;--bad-soft:#fde8ea;--warn:#8a5a00;--warn-soft:#fdf3dc;
+  --sh:none;--tab:rgba(245,245,247,.96);--hero:#000000;--on-hero:#f5f5f7;--hero-sub:#a1a1a6;--hero-acc:#2997ff;--hero-btn:#0071e3;
+  --tile-now:#1d1d1f;--tile-voc:#1f7a4a;--tile-mock:#8a4512;--tile-read:#5b2b6e;
   --r:20px;--r-s:14px;
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
   --f-xs:.8125rem;--f-s:.875rem;--f-m:1rem;--f-l:1.125rem;--f-xl:1.375rem;--f-xxl:1.75rem;
   --t-fast:90ms;--t-med:200ms;--t-push:340ms;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme=light]){
-  --bg:#031c24;--surface:#0a2a35;--surface2:#123846;--line:#1e4a5a;--line-strong:#7f9aa4;
-  --text:#eeeeee;--sub:#a9bcc3;--faint:#a9bcc3;
-  --primary:#8cc4e6;--on-primary:#031c24;--primary-soft:#123846;--accent:#ff6b5e;
-  --ok:#63d39a;--ok-soft:#0f3a2c;--bad:#ff8a80;--bad-soft:#3d2127;--warn:#f0c060;--warn-soft:#3a3420;
-  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);--hero:#0f3d4c;--on-hero:#ffffff;
-  --tile-now:#2d5b98;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;
+  --bg:#000000;--surface:#1d1d1f;--surface2:#2c2c2e;--line:#38383a;--line-strong:#86868b;
+  --text:#f5f5f7;--sub:#a1a1a6;--faint:#a1a1a6;
+  --primary:#2997ff;--on-primary:#000000;--primary-soft:#0d2a4a;--accent:#2997ff;
+  --ok:#30d158;--ok-soft:#10301b;--bad:#ff6961;--bad-soft:#3a1d1d;--warn:#ffd60a;--warn-soft:#3a3112;
+  --sh:none;--on-ok:#04210f;--knob:#000000;--tab:rgba(22,22,23,.96);--hero:#1d1d1f;--on-hero:#f5f5f7;--hero-sub:#a1a1a6;--hero-acc:#2997ff;--hero-btn:#0071e3;
+  --tile-now:#2c2c2e;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;
 }}
-:root[data-theme=dark]{--bg:#031c24;--surface:#0a2a35;--surface2:#123846;--line:#1e4a5a;--line-strong:#7f9aa4;
-  --text:#eeeeee;--sub:#a9bcc3;--faint:#a9bcc3;
-  --primary:#8cc4e6;--on-primary:#031c24;--primary-soft:#123846;--accent:#ff6b5e;
-  --ok:#63d39a;--ok-soft:#0f3a2c;--bad:#ff8a80;--bad-soft:#3d2127;--warn:#f0c060;--warn-soft:#3a3420;
-  --sh:none;--on-ok:#04210f;--knob:#031c24;--tab:rgba(3,28,36,.97);--hero:#0f3d4c;--on-hero:#ffffff;
-  --tile-now:#2d5b98;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;color-scheme:dark}
+:root[data-theme=dark]{--bg:#000000;--surface:#1d1d1f;--surface2:#2c2c2e;--line:#38383a;--line-strong:#86868b;
+  --text:#f5f5f7;--sub:#a1a1a6;--faint:#a1a1a6;
+  --primary:#2997ff;--on-primary:#000000;--primary-soft:#0d2a4a;--accent:#2997ff;
+  --ok:#30d158;--ok-soft:#10301b;--bad:#ff6961;--bad-soft:#3a1d1d;--warn:#ffd60a;--warn-soft:#3a3112;
+  --sh:none;--on-ok:#04210f;--knob:#000000;--tab:rgba(22,22,23,.96);--hero:#1d1d1f;--on-hero:#f5f5f7;--hero-sub:#a1a1a6;--hero-acc:#2997ff;--hero-btn:#0071e3;
+  --tile-now:#2c2c2e;--tile-voc:#1b7a71;--tile-mock:#a0541b;--tile-read:#7a3e90;color-scheme:dark}
 :root[data-theme=light]{color-scheme:light}
 @media (prefers-contrast: more){:root{--sub:var(--text);--faint:var(--text);--line:var(--line-strong)}}
 @media (forced-colors: active){.toggle,.task input{border:2px solid ButtonText}.toggle:checked,.task input:checked{background:Highlight}}
@@ -293,6 +293,41 @@ body.focus header.top .meta{display:none}
 .schart .goal{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 4}
 .schart .ln{fill:none;stroke:var(--primary);stroke-width:2.5}
 .schart .pt{fill:var(--primary)}.schart .tv{font-size:11px;font-weight:700;fill:var(--text)}
+/* 검은 표지 (키노트 2절·3절): 거대한 숫자 하나 + 작은 설명 1:8 이상, 장식 없음 */
+.hero2{border-radius:28px !important;padding:28px 24px 24px !important}
+.giant{display:flex;align-items:baseline;gap:10px;margin:18px 0 6px}
+.giant b{font-size:clamp(4.25rem,23vw,6.5rem);font-weight:700;letter-spacing:-.055em;line-height:.88}
+.giant span{font-size:1.25rem;font-weight:600;letter-spacing:-.01em}
+.hero2 .tsub{color:var(--hero-sub);opacity:1}
+.hero2 .lead,.hero2 .dd{color:var(--hero-sub);opacity:1}
+.hero2 .btn{background:var(--hero-btn) !important;color:#fff !important}
+.pbars{display:grid;gap:14px;margin-top:22px}
+.pbar .t{display:flex;justify-content:space-between;font-size:var(--f-s);color:var(--hero-sub)}
+.pbar .t b{color:var(--on-hero);font-weight:700}
+.pbar .tr{height:8px;border-radius:4px;background:rgba(255,255,255,.14);margin-top:7px;overflow:hidden}
+.pbar .tr i{display:block;height:100%;border-radius:4px;background:var(--hero-acc)}
+.lbar{background:rgba(255,255,255,.14) !important;height:8px}
+.lbar b{background:var(--hero-acc) !important}
+.lbar i{background:var(--on-hero) !important}
+.lbar em{position:absolute;top:14px;transform:translateX(-50%);font-style:normal;font-size:var(--f-xs);color:var(--hero-sub)}
+.hero2 .lbar+.tsub{margin-top:26px}
+.nextcard{display:flex;align-items:center;gap:var(--s3);width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;padding:var(--s4) var(--s5)}
+.nextcard b{display:block;font-size:var(--f-l);margin-top:2px}
+.nextcard .dbig{font-size:2rem;font-weight:700;letter-spacing:-.03em}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 var(--s3)}
+.dt{background:var(--surface);border-radius:22px;padding:var(--s4)}
+.dt.wide{grid-column:1/-1}
+.dt .k{font-size:var(--f-xs);color:var(--sub);font-weight:600}
+.dt .m{font-size:var(--f-l);font-weight:700;margin-top:4px;letter-spacing:-.01em}
+.dt .v{font-size:2.75rem;font-weight:700;letter-spacing:-.04em;line-height:1.05;margin-top:6px}
+.dt .v small{font-size:1rem;margin-left:2px;letter-spacing:0}
+.dt .c{font-size:var(--f-xs);color:var(--sub);margin-top:4px}
+.dt .up{color:var(--ok);font-weight:700}.dt .dn{color:var(--bad);font-weight:700}
+.act14{display:flex;align-items:flex-end;gap:5px;height:112px;margin-top:var(--s3)}
+.act14 span{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+.act14 i{display:block;width:100%;border-radius:5px;background:var(--text);opacity:.82}
+.act14 span.on i{background:var(--primary);opacity:1}
+.act14 small{font-size:.6875rem;color:var(--sub);height:1em}
 /* 큰 카드 하나 (오늘·기록) + 숫자 칸 */
 .hero2{background:var(--hero);color:var(--on-hero);border-radius:24px;padding:var(--s5);margin:0 0 var(--s3)}
 .hero2 .hrow{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s2)}
@@ -712,8 +747,13 @@ function vToday(){
   }else{
     const rc=resumeCard();
     if(rc)h+=rc;else{const a=nextAction(d,t),due=dueList().length,nl=newLeftToday(),ne=EXAMS.find(e=>examOn(e)&&e.date>=td),nx=nextEvent(d);
-      h+=`<section class="hero2" aria-labelledby="h-na"><div class="hrow"><p class="lead">${esc(a.lead)}</p>${ne?`<span class="dd num">${ne.no}회 D-${diff(td,ne.date)||"DAY"}</span>`:""}</div><h2 id="h-na">${esc(a.h)}</h2><p class="tsub">${esc(a.sub)}</p><button class="btn block" id="na" data-act="${a.act}"${a.k?` data-k="${esc(a.k)}"`:""}>${esc(a.btn)}</button></section>
-      <section class="card nums3"><button class="nc" data-go="words"><b class="num">${due}</b><span>오늘 복습</span></button><button class="nc" data-go="words"><b class="num">${nl}</b><span>남은 새 단어</span></button><button class="nc" data-jump="h-t"><b class="num">${n}/${c}</b><span>오늘 할 일</span></button>${nx?`<button class="nextev" data-go="cal"><span class="sub">${esc(nx[0])}</span><b>${esc(nx[1])}</b><span class="chev" aria-hidden="true">›</span></button>`:""}</section>`}
+      const rvd=Object.values(S.srs).filter(x=>x.last===td&&x.first<td).length,lnd=learnedToday(td),G=a.act==="study"?(due?[due,"복습할 단어"]:[Math.min(nl,CHUNK),"새 단어"]):a.act==="done"?[n+"/"+c,"오늘 할 일"]:["✓","오늘 끝"];
+      const pb=(lab,v,tot,cmp)=>{const p=tot?Math.round(v/tot*100):0;return `<div class="pbar"><div class="t"><span>${lab}</span><b class="num">${v} / ${tot}</b></div><div class="tr" role="img" aria-label="${lab} ${v}/${tot}, ${p}%"><i style="width:${p}%"></i></div>${cmp?`<div class="cmp">${cmp}</div>`:""}</div>`};
+      h+=`<section class="hero2" aria-labelledby="h-na"><div class="hrow"><p class="lead">${esc(a.lead)}</p>${ne?`<span class="dd num">${ne.no}회 D-${diff(td,ne.date)||"DAY"}</span>`:""}</div>
+      <div class="giant"><b class="num">${G[0]}</b><span>${G[1]}</span></div><h2 id="h-na" class="sr">${esc(a.h)}</h2><p class="tsub">${esc(a.sub)}</p>
+      <div class="pbars">${pb("복습",rvd,rvd+due)}${pb("새 단어",lnd,lnd+nl)}${pb("할 일",n,c)}</div>
+      <button class="btn block" id="na" data-act="${a.act}"${a.k?` data-k="${esc(a.k)}"`:""}>${esc(a.btn)}</button></section>
+      ${nx?`<button class="card nextcard" data-go="cal"><span class="grow"><span class="sub">다음 일정 · ${esc(nx[0])}</span><b>${esc(nx[1])}</b></span><span class="dbig num">D-${diff(td,nextEventDate(d))}</span></button>`:""}`}
   }
   h+=`<section class="card" aria-labelledby="h-t"><div class="row"><h2 id="h-t" class="grow">${esc(label(d))}</h2><span class="sub">${esc(phaseOf(d))}</span></div>${meter(n,c,"오늘 할 일")}${t.map(x=>taskHTML(d,x)).join("")}</section>`;
   const miss=[];for(let x=START;x<td&&x<=END;x=add(x,1)){const r=tasksFor(x).filter(y=>!isDone(key(x,y.id))&&y.id!=="quiz");if(r.length)miss.push([x,r])}
@@ -727,6 +767,7 @@ function vToday(){
   document.getElementById("mth").onclick=()=>go("method");
 }
 /* 다음 날부터 30일 안의 첫 일정: [「내일 · 11/28(토)」, 이름] */
+function nextEventDate(d){for(let i=1;i<=30;i++){const x=add(d,i);if(x>END)break;if(tasksFor(x).map(chipOf).filter(Boolean).length)return x}return d}
 function nextEvent(d){for(let i=1;i<=30;i++){const x=add(d,i);if(x>END)break;const ch=tasksFor(x).map(chipOf).filter(Boolean);if(ch.length)return [(i===1?"내일 · ":"")+short(x),ch[0][2]||ch[0][1]]}return null}
 function startStudy(){if(quiz&&quiz.i<quiz.qs.length){go("quiz");return}if(learn&&learn.i<learn.list.length){go("learn");return}const due=dueList().length;if(due){startQuiz(Math.min(due,20));return}const nl=newLeftToday();if(nl){const q=newQueue().slice(0,CHUNK);if(q.length){quiz=null;learn={list:q,i:0};go("learn",{keep:1});return}}startQuiz(Number(cfg("quizSize"))||5)}
 function startQuiz(n){
@@ -918,7 +959,7 @@ function journeyHTML(td){
 function vCal(){
   const first=month+"-01",lead=dow(first);let d=add(first,-lead);const td=todayStr();
   const [yy,mm]=month.split("-"),ne=EXAMS.find(e=>examOn(e)&&e.date>=td);
-  let h=ne?`<section class="hero2"><p class="lead">다음 시험 · ${ne.no}회</p><div class="lvl num">D-${diff(td,ne.date)||"DAY"}</div><p class="tsub">${esc(label(ne.date))} 오후 2시 20분 · 정기 접수 ${esc(short(ne.reg[0]))}~${esc(short(ne.reg[1]))} · 성적 ${esc(short(ne.res))}</p></section>`:"";
+  let h=ne?`<section class="hero2"><p class="lead">다음 시험 · ${ne.no}회</p><div class="giant"><b class="num">D-${diff(td,ne.date)||"DAY"}</b></div><p class="tsub">${esc(label(ne.date))} 오후 2시 20분 · 정기 접수 ${esc(short(ne.reg[0]))}~${esc(short(ne.reg[1]))} · 성적 ${esc(short(ne.res))}</p></section>`:"";
   h+=journeyHTML(td);
   h+=`<section class="card calcard"><div class="cal-head"><div class="grow"><h2 class="mon">${Number(mm)}월<span class="dotp" aria-hidden="true">.</span></h2><span class="sub num">${yy}</span></div><button class="nav" id="pv" aria-label="이전 달">‹</button><button class="nav" id="nx" aria-label="다음 달">›</button></div>
   <div class="wk" aria-hidden="true">${WD.map((w,i)=>`<div${i===0?' class="sun"':""}>${w}</div>`).join("")}</div><div class="grid" aria-label="${yy}년 ${Number(mm)}월 계획">`;
@@ -955,10 +996,17 @@ function vScore(){
   const l=scoresList(),last=l[l.length-1],prev=l[l.length-2],tot=s=>["L","V","G","R"].reduce((a,k)=>a+(Number(s[k])||0),0),best=l.length?Math.max(...l.map(tot)):0;
   const [cur,bst]=streaks(),w0=weekStats(0),w1=weekStats(-1),sc=stageCounts(),lrn=sc.slice(1,8).reduce((a,b)=>a+b,0),fe=firstExam();
   const lv=last?tot(last):null,gap=lv==null?null:330-lv,acc=w=>w.n?Math.round(w.ok/w.n*100):0;
-  const dl=(a,b)=>a>b?`<span class="up">▲ ${a-b}</span>`:a<b?`<span class="dn">▼ ${b-a}</span>`:"같음";
-  let h=`<section class="hero2"><p class="lead">지금 내 수준${last?" · "+esc(last.name):""}</p>${last?`<div class="lvl num">${lv}<small>점</small></div><div class="lbar" role="img" aria-label="${lv}점, 목표 330점, 만점 600점"><b style="width:${Math.min(100,lv/600*100)}%"></b><i style="left:${330/600*100}%"></i></div><p class="tsub">${gap>0?`목표 330점까지 <b>${gap}점</b>`:`목표보다 <b>${-gap}점</b> 높아요`}${prev?` · 지난 기록 ${lv-tot(prev)>=0?"+":""}${lv-tot(prev)}점`:""} · 최고 ${best}점</p>`:`<div class="lvl">진단 전</div><p class="tsub">11월 30일 기출 1회를 풀고 아래에 점수를 적으면, 지금 몇 점 수준인지와 330점까지 남은 점수가 여기 나와요.</p>`}</section>
-  <section class="card"><div class="nums2"><div><b class="num">${sc[8]}</b><span>장기 기억 단어</span><em>복습 중 ${lrn}개 · 330점엔 빈출 1,000개</em></div><div><b class="num">${cur}<small>일</small></b><span>연속 공부</span><em>가장 긴 연속 ${bst}일</em></div></div></section>
-  <section class="card"><h2>이번 주 vs 지난주</h2><div class="vs"><div><span>푼 문제</span><b class="num">${w0.n}</b><em class="num">지난주 ${w1.n} · ${dl(w0.n,w1.n)}</em></div><div><span>정답률</span><b class="num">${acc(w0)}%</b><em class="num">지난주 ${acc(w1)}% · ${dl(acc(w0),acc(w1))}</em></div><div><span>새 단어</span><b class="num">${w0.nw}</b><em class="num">지난주 ${w1.nw} · ${dl(w0.nw,w1.nw)}</em></div></div></section>`;
+  const dl=(a,b)=>a>b?`<span class="up">▲ ${a-b}</span>`:a<b?`<span class="dn">▼ ${b-a}</span>`:"· 같음";
+  const days14=[...Array(14)].map((_,k)=>add(td,k-13)),v14=days14.map(x=>(S.days[x]||{}).n||0),m14=Math.max(1,...v14);
+  const msg=w0.n===w1.n?`이번 주 ${w0.n}문제 · 지난주와 같아요`:`이번 주 ${w0.n}문제 · 지난주보다 ${Math.abs(w0.n-w1.n)}문제 ${w0.n>w1.n?"더":"덜"}`;
+  let h=`<section class="hero2"><div class="hrow"><p class="lead">지금 내 수준${last?" · "+esc(last.name):""}</p>${fe?`<span class="dd num">${fe.no}회 D-${diff(td,fe.date)||"DAY"}</span>`:""}</div>
+  ${last?`<div class="giant"><b class="num">${lv}</b><span>점</span></div><div class="lbar" role="img" aria-label="${lv}점, 목표 330점, 만점 600점"><b style="width:${Math.min(100,lv/600*100)}%"></b><i style="left:${330/600*100}%"></i><em style="left:${330/600*100}%">330</em></div><p class="tsub">${gap>0?`목표까지 <b>${gap}점</b>`:`목표보다 <b>${-gap}점</b> 높아요`}${prev?` · 지난 기록보다 ${lv-tot(prev)>=0?"+":""}${lv-tot(prev)}점`:""} · 최고 ${best}점</p>`:`<div class="giant"><b>진단 전</b></div><p class="tsub">11월 30일 기출 1회를 풀고 아래에 점수를 적으면, 지금 몇 점 수준인지와 330점까지 남은 점수가 여기 나와요.</p>`}</section>
+  <section class="dgrid" aria-label="나와의 승부">
+   <div class="dt wide"><div class="k">최근 14일 푼 문제</div><div class="m">${esc(msg)}</div><div class="act14" role="img" aria-label="최근 14일 푼 문제 ${v14.join(", ")}">${v14.map((v,k)=>`<span class="${k===13?"on":""}"><i style="height:${v?Math.max(6,Math.round(v/m14*84)):3}px"></i><small>${k%2===1||k===13?Number(days14[k].slice(8)):""}</small></span>`).join("")}</div></div>
+   <div class="dt"><div class="k">장기 기억 단어</div><div class="v num">${sc[8]}</div><div class="c">복습 중 ${lrn} · 목표 빈출 1,000</div></div>
+   <div class="dt"><div class="k">연속 공부</div><div class="v num">${cur}<small>일</small></div><div class="c">가장 긴 연속 ${bst}일</div></div>
+   <div class="dt"><div class="k">이번 주 정답률</div><div class="v num">${acc(w0)}<small>%</small></div><div class="c">지난주 ${acc(w1)}% ${dl(acc(w0),acc(w1))}</div></div>
+   <div class="dt"><div class="k">이번 주 새 단어</div><div class="v num">${w0.nw}</div><div class="c">지난주 ${w1.nw} ${dl(w0.nw,w1.nw)}</div></div></section>`;
   if(last)h+=`<section class="card"><h2>점수 흐름</h2>${scoreChart(l,tot)}</section>`;
   h+=`<section class="card"><h2>${last?"영역별 · 목표 대비":"점수 기록"}</h2>`;
   if(last){h+=["L","V","G","R"].map(k=>{const v=Number(last[k])||0,p=Math.min(100,Math.round(v/MAXS[k]*100)),tp=Math.round(TARGET[k]/MAXS[k]*100);return `<div style="margin:10px 0"><div class="row"><b class="grow">${NAME[k]}</b><span class="num ${v>=TARGET[k]?"pass":"fail"}">${v} / 목표 ${TARGET[k]} ${v>=TARGET[k]?"✓":"✗"}</span></div><div class="bar" style="position:relative;height:14px" role="img" aria-label="${NAME[k]} ${v}점, 목표 ${TARGET[k]}점, 만점 ${MAXS[k]}점"><b style="width:${p}%;background:${v>=TARGET[k]?"var(--ok)":"var(--primary)"}"></b><span style="position:absolute;left:${tp}%;top:-3px;bottom:-3px;width:2px;background:var(--text)"></span></div></div>`}).join("")+`<p class="sub">세로선 = 목표. 목표는 참고 영상 두 편의 영역별 목표 중간값이에요. 실제 점수는 문항 난이도에 따라 환산돼서 영역 합이 같아도 달라질 수 있어요.</p>`}
